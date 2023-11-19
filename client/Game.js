@@ -2,7 +2,8 @@ import Phaser from 'phaser';
 import io from 'socket.io-client';
 import { setUpArena } from './Components/Arena';
 import Player from './Components/Player';
-
+import Seed from './Components/Seed';
+import Egg from './Components/Egg';
 class Game extends Phaser.Scene {
     constructor() {
         super({ key: 'Game' });
