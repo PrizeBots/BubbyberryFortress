@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { setUpArena } from './Components/Arena';
 import Player from './Components/Player';
 import Seed from './Components/Seed';
-import Egg from './Components/Egg';
+//import Egg from './Components/Egg';
 class Game extends Phaser.Scene {
     constructor() {
         super({ key: 'Game' });
@@ -43,6 +43,29 @@ class Game extends Phaser.Scene {
             }
         });
 
+
+        this.events.on('seedButtonDown', () => {
+            console.log('seedButtonDown.');
+            const seed = new Seed(this, 50, 50); 
+    
+
+            seed.setInteractive();
+            seed.input.setDraggable(true);
+
+            seed.on('pointerdown', () => {
+                seed.setTint(0xff0000); 
+            });
+    
+            seed.on('pointerup', () => {
+                seed.clearTint(); 
+                if (isWithinValidDropZone(seed.x, seed.y)) {
+ 
+                    console.log('Seed dropped into the game.');
+                }
+            });
+    
+            this.add.existing(seed);
+        });
         this.socket.on('connect', () => {
             this.socket.emit('getPlayersList', { x: this.player.x, y: this.player.y });
             this.events.emit('updateCoins', this.playerCoins);

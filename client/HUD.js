@@ -24,7 +24,7 @@ class HUD extends Phaser.Scene {
         const button1 = this.add.text(screenWidth - 300, 10, 'Seed', buttonStyle);
         button1.setInteractive();
         button1.on('pointerdown', () => {
-            console.log('Button 1 clicked');
+            this.events.emit('seedButtonDown');
         });
 
         const button2 = this.add.text(screenWidth - 200, 10, 'Egg', buttonStyle);

@@ -17,3 +17,4 @@ export class Seed {
 
     // Additional methods specific to the Seed
 }
+export default Seed;
