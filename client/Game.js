@@ -32,8 +32,8 @@ class Game extends Phaser.Scene {
         });
 
         this.arena = setUpArena(this, this.arenaWidth, this.screenWidth, this.screenHeight);
-        //this.socket = io('http://localhost:3000');
-        this.socket = io('3.134.238.10');
+       // this.socket = io('http://localhost:3000');
+        this.socket = io('https://bbf-kn8o.onrender.com');
       
         this.cursors = this.input.keyboard.createCursorKeys();
         this.keysWASD = this.input.keyboard.addKeys('W,A,S,D');
@@ -43,7 +43,6 @@ class Game extends Phaser.Scene {
                 this.sound.context.resume();
             }
         });
-
 
         this.events.on('seedButtonDown', () => {
             console.log('seedButtonDown.');
