@@ -32,8 +32,9 @@ class Game extends Phaser.Scene {
         });
 
         this.arena = setUpArena(this, this.arenaWidth, this.screenWidth, this.screenHeight);
-        this.socket = io('http://localhost:3000');
-
+        //this.socket = io('http://localhost:3000');
+        this.socket = io('3.134.238.10');
+      
         this.cursors = this.input.keyboard.createCursorKeys();
         this.keysWASD = this.input.keyboard.addKeys('W,A,S,D');
 
