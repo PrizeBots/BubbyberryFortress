@@ -1,5 +1,4 @@
-const screenWidth = 1031;
-const screenHeight = 580;
+import Phaser from 'phaser';
 
 class HUD extends Phaser.Scene {
     constructor() {
@@ -21,27 +20,32 @@ class HUD extends Phaser.Scene {
             padding: { x: 10, y: 5 },
         };
 
-        const button1 = this.add.text(screenWidth - 300, 10, 'Seed', buttonStyle);
+        const button1 = this.add.text(this.game.config.width - 300, 10, 'Seed', buttonStyle);
         button1.setInteractive();
         button1.on('pointerdown', () => {
-            this.events.emit('seedButtonDown');
+            this.game.events.emit('seedButtonDown');
         });
 
-        const button2 = this.add.text(screenWidth - 200, 10, 'Egg', buttonStyle);
+        const button2 = this.add.text(
+            this.game.config.width - 200,
+            10,
+            'Egg',
+            buttonStyle
+        );
         button2.setInteractive();
         button2.on('pointerdown', () => {
-            console.log('Button 2 clicked');
+            this.game.events.emit('eggButtonDown'); // Emitting event on the global event emitter
+
         });
 
-        const button3 = this.add.text(screenWidth - 100, 10, 'Build', buttonStyle);
+        const button3 = this.add.text(this.game.config.width - 100, 10, 'Build', buttonStyle);
         button3.setInteractive();
         button3.on('pointerdown', () => {
-            console.log('Button 3 clicked');
+          
         });
     }
 
     updateCoins(coins) {
-        console.log(coins)
         this.playerCoinsText.setText('Coins: ' + coins.toString());
     }
 }

@@ -1,7 +1,15 @@
 Welcome to Bubby Berry Fortress!
 
-Bubbies are soft body creatures that eat berries 
-and battle 
+Bubbies are soft body creatures that depend on the players for survival and leadership.
+
+Players must raise baby bubbies from eggs and grow them into strong bubbies and big bubbies to defend themselves from the opposing force.
+
+Feed your baby bubbies seeds and berries to grow them into bubbies.
+
+bubbies are able to battle, mine metal, harvest berries, repair towers, 
+
+
+
 Players click and farm resources to power up their teams 
 creatures to battle against the opposing team.
 The food the players grow is based on their team color.
