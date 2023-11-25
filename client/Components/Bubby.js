@@ -2,11 +2,13 @@ import Phaser from 'phaser';
 import HealthBar from './HealthBar';
 
 export default class Bubby extends Phaser.GameObjects.Container {
-    constructor(scene, team, id, x, y, phase,maxHealth) {
+    constructor(scene, team, id, x, y, phase, maxHealth) {
         super(scene, x, y);
         this.scene = scene;
         this.x = x;
         this.y = y;
+        this.prevX = x; // Store the previous X position
+        this.prevY = y; // Store the previous Y position
         this.phase = phase;
         this.maxHealth = maxHealth;
         this.health = maxHealth;
@@ -19,7 +21,6 @@ export default class Bubby extends Phaser.GameObjects.Container {
         this.healthBarContainer = null; // Container for the health bar
         this.create();
         this.scene.add.existing(this);
-
     }
 
     create() {
@@ -27,50 +28,54 @@ export default class Bubby extends Phaser.GameObjects.Container {
         if (this.phase === 'egg') {
             this.sprite = this.scene.add.sprite(0, 0, 'egg');
         } else if (this.phase === 'babyBubby') {
-            this.sprite = this.scene.add.sprite(0, 0, 'babyBubby');
-        }
-        //give it health bar
-        this.healthBar = new HealthBar(this.scene, this.sprite.height, this.maxHealth);
-        this.add(this.healthBar);
-        //set up bubby and interactions
-        this.add(this.sprite);
-        this.scene.bubbies.push(this);
-        this.sprite.setInteractive();
-        this.scene.input.setDraggable(this.sprite);
-        this.sprite.on('drag', (pointer, dragX, dragY) => {
-            console.log('dragggin ' , this.id)
-            this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
-        });
-    }
-
-    changePhase(newPhase) {
-        this.sprite.destroy();
-        this.healthBar.destroy();
-        if (newPhase === 'egg') {
-          //  this.sprite = this.scene.add.sprite(0, 0, 'egg');
-        } else if (newPhase === 'babyBubby') {
-          //  this.sprite = this.scene.add.sprite(0, 0, 'babyBubby');
-        }
-        this.create();
-        // this.add(this.sprite);
-        // this.sprite.setInteractive();
-        // this.scene.input.setDraggable(this.sprite);
-        // this.sprite.on('drag', (pointer, dragX, dragY) => {
-        //     this.scene.socket.emit('moveObject', { bubbyId: this.id, x: pointer.worldX, y: pointer.worldY });
-        // });
-    }
-
-    update() {
-        if (this.sprite) {
-            if (this.team == "blue") {
-                this.sprite.setFlipX(false);
+            if (this.team === 'blue') {
+                this.sprite = this.scene.add.sprite(0, 0, 'babyBubbyBlue');
             } else {
-                this.sprite.setFlipX(true);
+                this.sprite = this.scene.add.sprite(0, 0, 'babyBubbyRed');
+
             }
         }
-    }
+            // if (this.team == "blue") {
+            //     this.sprite.setTint(0x0000ff); // Tint to blue
+            // } else {
+            //     this.sprite.setTint(0xff0000); // Tint to red
+            // }
 
-    updateHealth(health) {
-        this.healthBar.setHealth(health);
+            //give it health bar
+            this.healthBar = new HealthBar(this.scene, this.sprite.height, this.maxHealth);
+            this.add(this.healthBar);
+            //set up bubby and interactions
+            this.add(this.sprite);
+            this.scene.bubbies.push(this);
+            this.sprite.setInteractive();
+            this.scene.input.setDraggable(this.sprite);
+            this.sprite.on('drag', (pointer, dragX, dragY) => {
+                this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
+            });
+        }
+
+        changePhase(newPhase) {
+            this.sprite.destroy();
+            this.healthBar.destroy();
+            this.create();
+        }
+
+        update() {
+            if (this.sprite) {
+                const deltaX = this.x - this.prevX;
+                const deltaY = this.y - this.prevY;
+                this.prevX = this.x;
+                this.prevY = this.y;
+                if (deltaX > 0) {
+                    this.sprite.setFlipX(false);
+                }
+                else if (deltaX < 0) {
+                    this.sprite.setFlipX(true);
+                }
+            }
+        }
+
+        updateHealth(health) {
+            this.healthBar.setHealth(health);
+        }
     }
-}

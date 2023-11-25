@@ -2,7 +2,7 @@
 
 export class Plant implements Plant {
     constructor(
-        public type:string,
+        public type: string,
         public x: number,
         public y: number,
         public team: 'blue' | 'red',
@@ -13,8 +13,8 @@ export class Plant implements Plant {
         public isUsedBy: string,
         public collisionRadius: number,
     ) {
-         //egg hatch timer
-         setTimeout(() => {
+        //egg hatch timer
+        setTimeout(() => {
             // if (this && this.phase === 'seed') {
             //     this.phase = 'sprout';
             //     this.health = 25;
@@ -30,10 +30,9 @@ export class Plant implements Plant {
     }
 
     public update() {
-       //plant life
-       if(this.y < 180){
-        this.y += 2;
-    }
-        
+        //plant life
+        if (this.y < 180) {
+            this.y += 5;
+        }
     }
 }

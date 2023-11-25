@@ -26,14 +26,14 @@ export default class HealthBar extends Phaser.GameObjects.Container {
 
     updateBar() {
         const percentage = this.currentHP / this.maxHP;
-        const barX = - this.width/2;
+        const barX = - this.maxHP/2;
         const barY = -this.objHeight;
         // Clear the graphics
         this.foreground.clear();
         this.border.clear(); // Clear the border graphics
         // Draw the border first
         this.border.lineStyle(this.borderThickness, 0x000000); // White color for the border
-        this.border.strokeRect(barX, barY, this.width, this.height);
+        this.border.strokeRect(barX, barY, this.maxHP, this.height);
         // Draw the foreground (health) bar
         if (percentage > 0) {
             this.foreground.fillStyle(0x00ff00); // Green color
@@ -41,10 +41,11 @@ export default class HealthBar extends Phaser.GameObjects.Container {
         }
         // Draw the background
         this.background.fillStyle(0x000000, 0.5); // Black color with 50% opacity
-        this.background.fillRect(barX, barY, this.width, this.height);
+        this.background.fillRect(barX, barY, this.maxHP, this.height);
     }
 
     setHealth(health) {
+        if (health > this.maxHP) this.maxHP = health;
         this.currentHP = health;
         this.updateBar();
     }

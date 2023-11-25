@@ -27,12 +27,16 @@ class Game extends Phaser.Scene {
     }
 
     preload() {
+        this.load.image('buildButton', './Assets/UI/button_build.png');
+        this.load.image('seedButton', './Assets/UI/button_seed.png');
+        this.load.image('eggButton', './Assets/UI/button_egg.png');
         this.load.image('seed', './Assets/seed.png');
-        this.load.image('seed', './Assets/sprout.png');
+       // this.load.image('seed', './Assets/sprout.png');
         this.load.image('egg', './Assets/egg.png');
-        this.load.image('babyBubby', './Assets/babyBubby.png');
+        this.load.image('babyBubbyRed', './Assets/babyBubbyRed.png');
+        this.load.image('babyBubbyBlue', './Assets/babyBubbyBlue.png');
         this.load.image('fortress', './Assets/fortress.png');
- 
+
     }
     //request to buy an egg
     handleEggButton() {
@@ -138,10 +142,11 @@ class Game extends Phaser.Scene {
                     if (bubby) {
                         bubby.x = updatedBubby.x;
                         bubby.y = updatedBubby.y;
+                        bubby.updateHealth(updatedBubby.health);
                         //catch a phase change
                         if (bubby.phase !== updatedBubby.phase) {
                             bubby.phase = updatedBubby.phase;
-                            bubby.maxHealth = updatedBubby.maxHealth;
+                           
                             if (bubby.phase === 'egg') {
                                 bubby.changePhase('egg');
                             } else if (bubby.phase === 'babyBubby') {
@@ -152,7 +157,7 @@ class Game extends Phaser.Scene {
                         // console.log(bubby.maxHealth, ' , ', updatedBubby.maxHealth)
                         ///   console.log(`Updated bubby ${bubbyID}: x=${bubby.x}, y=${bubby.y}, phase=${bubby.phase}`);
                     } else {
-                        console.log("i didnt have this bub, making it now")
+                       // console.log("i didnt have this bub, making it now")
                         const newBubby = new Bubby(this, updatedBubby.team, bubbyID, updatedBubby.x, updatedBubby.y, updatedBubby.phase, updatedBubby.maxHealth);
                     }
 
@@ -168,26 +173,23 @@ class Game extends Phaser.Scene {
                     if (plant) {
                         plant.x = updatedPlant.x;
                         plant.y = updatedPlant.y;
+                       // console.log(updatedPlant.health)
                         plant.updateHealth(updatedPlant.health);
+                        if (updatedPlant.health <= 0) {
+                            plant.destroy();
+                            return;
+                        }
                         //catch a phase change
                         if (plant.phase !== updatedPlant.phase) {
                             plant.phase = updatedPlant.phase;
-                           
                             if (plant.phase === 'egg') {
                                 plant.changePhase('egg');
                             } else if (plant.phase === 'babyBubby') {
                                 plant.changePhase('babyBubby');
                             }
                         }
-                        if(plant.health<=0) {
-                            console.log('kill plant');
-                            plant.destroy();
-                        }
-                        // console.log(bubby.health, ' , ', updatedBubby.health)
-                        // console.log(bubby.maxHealth, ' , ', updatedBubby.maxHealth)
-                        ///   console.log(`Updated bubby ${bubbyID}: x=${bubby.x}, y=${bubby.y}, phase=${bubby.phase}`);
                     } else {
-                        console.log("i didnt have this plant, making it now")
+                       // console.log("i didnt have this plant, making it now")
                         const newPlant = new Plant(this, updatedPlant.team, plantID, updatedPlant.x, updatedPlant.y, updatedPlant.phase, updatedPlant.maxHealth);
                     }
 

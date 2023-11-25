@@ -26,7 +26,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             for (const bubbyId in this.bubbies) {
                 if (this.bubbies.hasOwnProperty(bubbyId)) {
                     const bubby = this.bubbies[bubbyId];
-                  
                     bubby.update();
                     // Check for collisions with other objects (e.g., other bubbies or plants)
                     for (const objectId in this.objects) {
@@ -52,12 +51,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             this.server.emit('updateBubbiesList', this.bubbies);
             this.server.emit('updatePlants', this.plants);
         }, 30); //interval
-    }
-
-
-    bubbyAttackNotice(bubbyId: string, plantId: string) {
-        // Notify clients that a Bubby has attacked a plant
-        this.server.emit('bubbyAttack', bubbyId, plantId);
     }
     //welcome new player!
     handleConnection(client: Socket) {
@@ -97,7 +90,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 console.log('Object not found for objID:', data.objID);
             }
         });
-
         //move player hands
         client.on('mousemove', (data: { x: number; y: number }) => {
             // Update the player's position
@@ -105,11 +97,9 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             // Broadcast the player's movement
             client.broadcast.emit('playerMove', { id: client.id, x: data.x, y: data.y });
         });
-
         //player clicked
         client.on('click', (data: { x: number; y: number }) => {
         });
-
         //Shopping
         client.on('buyEgg', (data: { x: number; y: number }) => {
             let coins = this.players[client.id].coins;
@@ -129,7 +119,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     2,
                     '',
                     null,
-                    1,
+                    10,
                     1,
                     this.plants,
                 );
@@ -158,7 +148,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     5,
                     5,
                     '',
-                    1,
+                    16,
                 );
                 this.objects.push(this.plants[seedID]);
                 //trade with player
@@ -170,7 +160,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             }
         });
     }
-
     handleDisconnect(client: Socket) {
         // Release control of the bubby if the disconnecting player was controlling one
         for (const bubbyId in this.bubbies) {

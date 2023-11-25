@@ -14,6 +14,7 @@ var config = {
             debug: false,
         },
     },
+    pixelArt: true,
     scene: [Game, HUD] // Array of scene classes
 
 };
