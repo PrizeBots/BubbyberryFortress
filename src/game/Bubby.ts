@@ -46,7 +46,7 @@ export class Bubby {
             for (const plantId in plants) {
                 const plant = plants[plantId];
                 const distance = Math.sqrt((this.x - plant.x) ** 2 + (this.y - plant.y) ** 2);
-                if (distance < nearestDistance) {
+                if (distance < nearestDistance && distance < 400) {
                     nearestPlant = plant;
                     nearestDistance = distance;
                 }
@@ -82,7 +82,7 @@ export class Bubby {
             if (object instanceof Plant) {
                 // Handle collision with a Plant (attack and deplete HP)
                 if (this.phase === 'babyBubby' && object.health > 0) {
-                    console.log('eating!')
+                  ///  console.log('eating!')
                     // Check if enough time has passed since the last attack
                     const currentTime = Date.now();
                     if (currentTime - this.lastAttackTime >= this.attackCooldown) {
@@ -160,7 +160,7 @@ export class Bubby {
         } else if (this.phase === 'egg') {
 
         }
-        if (this.y <= 180) {
+        if (this.y <= 200) {
             this.y += 5;
         } else if (this.y >= 580) {
             this.y -= 5;

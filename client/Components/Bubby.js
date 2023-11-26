@@ -35,47 +35,41 @@ export default class Bubby extends Phaser.GameObjects.Container {
 
             }
         }
-            // if (this.team == "blue") {
-            //     this.sprite.setTint(0x0000ff); // Tint to blue
-            // } else {
-            //     this.sprite.setTint(0xff0000); // Tint to red
-            // }
+        //give it health bar
+        this.healthBar = new HealthBar(this.scene, this.sprite.height, this.maxHealth);
+        this.add(this.healthBar);
+        //set up bubby and interactions
+        this.add(this.sprite);
+        this.scene.bubbies.push(this);
+        this.sprite.setInteractive();
+        this.scene.input.setDraggable(this.sprite);
+        this.sprite.on('drag', (pointer, dragX, dragY) => {
+            this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
+        });
+    }
 
-            //give it health bar
-            this.healthBar = new HealthBar(this.scene, this.sprite.height, this.maxHealth);
-            this.add(this.healthBar);
-            //set up bubby and interactions
-            this.add(this.sprite);
-            this.scene.bubbies.push(this);
-            this.sprite.setInteractive();
-            this.scene.input.setDraggable(this.sprite);
-            this.sprite.on('drag', (pointer, dragX, dragY) => {
-                this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
-            });
-        }
+    changePhase(newPhase) {
+        this.sprite.destroy();
+        this.healthBar.destroy();
+        this.create();
+    }
 
-        changePhase(newPhase) {
-            this.sprite.destroy();
-            this.healthBar.destroy();
-            this.create();
-        }
-
-        update() {
-            if (this.sprite) {
-                const deltaX = this.x - this.prevX;
-                const deltaY = this.y - this.prevY;
-                this.prevX = this.x;
-                this.prevY = this.y;
-                if (deltaX > 0) {
-                    this.sprite.setFlipX(false);
-                }
-                else if (deltaX < 0) {
-                    this.sprite.setFlipX(true);
-                }
+    update() {
+        if (this.sprite) {
+            const deltaX = this.x - this.prevX;
+            const deltaY = this.y - this.prevY;
+            this.prevX = this.x;
+            this.prevY = this.y;
+            if (deltaX > 0) {
+                this.sprite.setFlipX(false);
+            }
+            else if (deltaX < 0) {
+                this.sprite.setFlipX(true);
             }
         }
-
-        updateHealth(health) {
-            this.healthBar.setHealth(health);
-        }
     }
+
+    updateHealth(health) {
+        this.healthBar.setHealth(health);
+    }
+}

@@ -13,19 +13,19 @@ class HUD extends Phaser.Scene {
 
         this.events.on('updateCoins', this.updateCoins, this);
 
-        const seedButton = this.add.image(this.game.config.width - 300, 25, 'seedButton');
+        const seedButton = this.add.image(this.game.config.width - 300, 30, 'seedButton');
         seedButton.setInteractive();
         seedButton.on('pointerdown', () => {
             this.game.events.emit('seedButtonDown');
         });
         seedButton.setScale(2)
-        const eggButton = this.add.image(this.game.config.width - 200, 25, 'eggButton');
+        const eggButton = this.add.image(this.game.config.width - 200, 30, 'eggButton');
         eggButton.setInteractive();
         eggButton.on('pointerdown', () => {
             this.game.events.emit('eggButtonDown');
         });
         eggButton.setScale(2)
-        const buildButton = this.add.image(this.game.config.width - 100, 25, 'buildButton');
+        const buildButton = this.add.image(this.game.config.width - 100, 30, 'buildButton');
         buildButton.setInteractive();
         buildButton.on('pointerdown', () => {
             // Handle the 'Build' button click

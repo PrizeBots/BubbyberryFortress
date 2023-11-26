@@ -19,7 +19,6 @@ export default class Seed extends Phaser.GameObjects.Container {
         this.healthBarContainer = null; // Container for the health bar
         this.create();
         this.scene.add.existing(this);
-
     }
 
     create() {
@@ -61,7 +60,6 @@ export default class Seed extends Phaser.GameObjects.Container {
     updateHealth(health) {
         this.healthBar.setHealth(health);
         if(health<=0) this.destroy();
-        
     }
 }
 

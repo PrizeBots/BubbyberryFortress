@@ -11,14 +11,11 @@ export class PlayerUpdater {
     private plants: Record<string, Plant>;
     private objects: (Bubby | Plant)[]; // Add objects property
 
-
     constructor(server: Server, players: Record<string, Player>, bubbies: Record<string, Bubby>, plants: Record<string, Plant>) {
         this.server = server;
         this.players = players;
         this.bubbies = bubbies;
         this.plants = plants;
-
-
     }
     // Batch update function
     public updateGame() {

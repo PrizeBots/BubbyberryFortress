@@ -31,8 +31,15 @@ export class Plant implements Plant {
 
     public update() {
         //plant life
-        if (this.y < 180) {
+        if (this.y <= 200) {
             this.y += 5;
+        } else if (this.y >= 580) {
+            this.y -= 5;
+        }
+        if (this.x <= 0) {
+            this.x += 5;
+        } else if (this.x >= 3093) {
+            this.x -= 5;
         }
     }
 }

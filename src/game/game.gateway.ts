@@ -50,6 +50,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             }
             this.server.emit('updateBubbiesList', this.bubbies);
             this.server.emit('updatePlants', this.plants);
+            //emit player updates - current when mouse moves
         }, 30); //interval
     }
     //welcome new player!

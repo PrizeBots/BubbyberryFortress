@@ -4,6 +4,7 @@ import { setUpArena } from './Components/Arena';
 import Player from './Components/Player';
 import Plant from './Components/Plant';
 import Bubby from './Components/Bubby';
+import Arena from './Components/Arena';
 
 class Game extends Phaser.Scene {
     constructor() {
@@ -31,7 +32,7 @@ class Game extends Phaser.Scene {
         this.load.image('seedButton', './Assets/UI/button_seed.png');
         this.load.image('eggButton', './Assets/UI/button_egg.png');
         this.load.image('seed', './Assets/seed.png');
-       // this.load.image('seed', './Assets/sprout.png');
+        // this.load.image('seed', './Assets/sprout.png');
         this.load.image('egg', './Assets/egg.png');
         this.load.image('babyBubbyRed', './Assets/babyBubbyRed.png');
         this.load.image('babyBubbyBlue', './Assets/babyBubbyBlue.png');
@@ -61,7 +62,7 @@ class Game extends Phaser.Scene {
             this.game.events.on('eggButtonDown', this.handleEggButton, this);
         });
 
-        this.arena = setUpArena(this, this.arenaWidth, this.screenWidth, this.screenHeight);
+        this.arena = new Arena (this, this.arenaWidth, this.screenWidth, this.screenHeight);
         //this.socket = io('http://localhost:3000');
         this.socket = io('https://bbf-kn8o.onrender.com');
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -146,21 +147,15 @@ class Game extends Phaser.Scene {
                         //catch a phase change
                         if (bubby.phase !== updatedBubby.phase) {
                             bubby.phase = updatedBubby.phase;
-                           
                             if (bubby.phase === 'egg') {
                                 bubby.changePhase('egg');
                             } else if (bubby.phase === 'babyBubby') {
                                 bubby.changePhase('babyBubby');
                             }
                         }
-                        // console.log(bubby.health, ' , ', updatedBubby.health)
-                        // console.log(bubby.maxHealth, ' , ', updatedBubby.maxHealth)
-                        ///   console.log(`Updated bubby ${bubbyID}: x=${bubby.x}, y=${bubby.y}, phase=${bubby.phase}`);
                     } else {
-                       // console.log("i didnt have this bub, making it now")
                         const newBubby = new Bubby(this, updatedBubby.team, bubbyID, updatedBubby.x, updatedBubby.y, updatedBubby.phase, updatedBubby.maxHealth);
                     }
-
                 }
             }
         });
@@ -173,7 +168,7 @@ class Game extends Phaser.Scene {
                     if (plant) {
                         plant.x = updatedPlant.x;
                         plant.y = updatedPlant.y;
-                       // console.log(updatedPlant.health)
+                        // console.log(updatedPlant.health)
                         plant.updateHealth(updatedPlant.health);
                         if (updatedPlant.health <= 0) {
                             plant.destroy();
@@ -189,10 +184,9 @@ class Game extends Phaser.Scene {
                             }
                         }
                     } else {
-                       // console.log("i didnt have this plant, making it now")
+                        // console.log("i didnt have this plant, making it now")
                         const newPlant = new Plant(this, updatedPlant.team, plantID, updatedPlant.x, updatedPlant.y, updatedPlant.phase, updatedPlant.maxHealth);
                     }
-
                 }
             }
         });
@@ -222,10 +216,11 @@ class Game extends Phaser.Scene {
     }
 
     update() {
+        //console.log(this.arena.clouds);
+        this.arena.update();
         for (const bubby of this.bubbies) {
             bubby.update();
         }
-
         if (this.cursors.left.isDown || this.keysWASD.A.isDown) {
             if (this.cameras.main.scrollX > 0) {
                 this.cameras.main.scrollX -= 4;
