@@ -99,8 +99,8 @@ class Game extends Phaser.Scene {
         this.arena = new Arena(this, this.arenaWidth, this.screenWidth, this.screenHeight);
         this.placementSprite = this.add.sprite(500, 500, 'towerFoundation');
         this.placementSprite.visible = false;
-        //this.socket = io('http://localhost:3000');
-        this.socket = io('https://bbf-kn8o.onrender.com');
+        this.socket = io('http://localhost:3000');
+        ///this.socket = io('https://bbf-kn8o.onrender.com');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.keysWASD = this.input.keyboard.addKeys('W,A,S,D');
 
