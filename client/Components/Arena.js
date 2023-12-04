@@ -71,13 +71,11 @@ export default class Arena extends Phaser.GameObjects.Container {
         for (const cloudContainer of cloudContainers) {
             cloudContainer.x -= .1;
             if (cloudContainer.x  < -300) {
-                console.log(cloudContainer.x, " < ",-cloudContainer.displayWidth*2, " : ",cloudContainer.displayWidth)
                 cloudContainer.destroy();
                 this.createCloud();
             }
         }
     }
-
 }
 
 

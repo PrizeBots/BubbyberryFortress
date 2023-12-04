@@ -8,6 +8,8 @@ export class Bubby {
     private walkDuration: number = 0;
     private pauseDuration: number = 0;
     private babyBubbyWidth: number = 16;
+    private lastKnownState: Partial<Bubby> = {}; // Store the last known state
+
     constructor(
         public type: string,
         public x: number,
@@ -117,6 +119,26 @@ export class Bubby {
         // Generate a random pause duration between 1 and 3 seconds
         this.pauseDuration = Math.floor(Math.random() * 40) + 1;
     }
+    public getUpdates(): Partial<Bubby> {
+        const updates: Partial<Bubby> = {};
+
+        // Compare current state with last known state
+        if (this.x !== this.lastKnownState.x || this.y !== this.lastKnownState.y) {
+            updates.x = this.x;
+            updates.y = this.y;
+        }
+
+        if (this.health !== this.lastKnownState.health) {
+            updates.health = this.health;
+        }
+
+        // Add more properties to compare as needed
+
+        // Update the last known state with the current values
+        this.lastKnownState = { ...this };
+
+        return updates;
+    }
     public update() {
         if (this.health <= 0) {
             return;
@@ -138,11 +160,6 @@ export class Bubby {
                     this.y += unitY * this.speed;
                 }
             } else {
-                //wander waddle around as cutely as possible
-                // this.x += randomX;
-                // this.y += randomY;
-
-
                 if (this.pauseDuration > 0) {
                     // Bubby is currently paused, decrement pause duration
                     this.pauseDuration -= 1;

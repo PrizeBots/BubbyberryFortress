@@ -5,6 +5,7 @@ import HUD from './HUD';
 
 var config = {
     type: Phaser.AUTO,
+    backgroundColor: 0x333333,
     width: 1031,
     height: 580,
     physics: {
@@ -16,6 +17,5 @@ var config = {
     },
     pixelArt: true,
     scene: [Game, HUD] // Array of scene classes
-
 };
 var game = new Phaser.Game(config);

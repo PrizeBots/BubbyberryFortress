@@ -4,6 +4,7 @@ import { Server, Socket } from 'socket.io';
 import { Player } from './Player';
 import { Bubby } from './Bubby';
 import { Plant } from './Plant';
+import { Tower } from './Tower';
 import { Game } from './Game';
 
 @WebSocketGateway()
@@ -13,11 +14,14 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private players: Record<string, Player> = {}; // Track players by their socket ID
     private bubbies: Record<string, Bubby> = {}; // Track bubbies by their UID
     private plants: Record<string, Plant> = {};
+    private towers: Record<string, Plant> = {};
     private teamCounts: Record<'blue' | 'red', number> = { blue: 0, red: 0 }; // Track team counts
     private eggPrice: number = 10;
     private eggsSpawned: number = 0;
     private seedPrice: number = 2;
     private seedsSpawned: number = 0;
+    private towerPrice: number = 100;
+    private towersSpawned: number = 0;
     public objects: (Bubby | Plant)[] = []; // Specify the type explicitly
     constructor() {
         this.objects = [];
@@ -60,7 +64,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const team = blueTeamCount <= redTeamCount ? 'blue' : 'red';
         let coins = 1000;
         // Add the new player to the list with the determined team
-        this.players[client.id] = { x: 0, y: 0, team, coins }; // Initialize with default position and team
+        this.players[client.id] = { x: 0, y: 0, team, coins, isBuilding: false }; // Initialize with default position and team
         if (team === 'blue') {
             this.teamCounts.blue++;
         } else {
@@ -160,6 +164,43 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 console.log("no coin!")
             }
         });
+        client.on('buyTower', (data: { x: number; y: number }) => {
+            console.log('buy a tower')
+            let coins = this.players[client.id].coins;
+            if (coins >= this.towerPrice) {
+                this.players[client.id].isBuilding = true;
+                // Trade with the player
+                this.players[client.id].coins -= this.towerPrice;
+                this.server.to(client.id).emit('updateCoins', this.players[client.id].coins);
+                this.server.emit('placeBuilding');
+            } else {
+                console.log("no coin!");
+            }
+        });
+        client.on('placeTower', (data: { x: number; y: number }) => {
+            if (this.players[client.id].isBuilding) {
+                console.log("place tower");
+                this.players[client.id].isBuilding = false;
+                const towerID = `tower_${client.id}_${this.towersSpawned}`;
+                this.towersSpawned++;
+                // Use the static factory method to create the Bubby instance
+                const newTower = Tower.createTower(
+                    data.x,
+                    data.y,
+                    this.players[client.id].team,
+                    towerID,
+                    'arrow',
+                    50,//health
+                    this.plants
+                );
+                this.towers[towerID] = newTower;
+                this.objects.push(newTower);
+                this.server.emit('buildTower', newTower);
+            } else {
+                console.log("no tower for you");
+            }
+        });
+
     }
     handleDisconnect(client: Socket) {
         // Release control of the bubby if the disconnecting player was controlling one

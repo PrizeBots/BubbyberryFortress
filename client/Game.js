@@ -2,9 +2,12 @@ import Phaser from 'phaser';
 import io from 'socket.io-client';
 import { setUpArena } from './Components/Arena';
 import Player from './Components/Player';
-import Plant from './Components/Plant';
+
 import Bubby from './Components/Bubby';
+import Plant from './Components/Plant';
+import Tower from './Components/Tower';
 import Arena from './Components/Arena';
+import HUD from './HUD';
 
 class Game extends Phaser.Scene {
     constructor() {
@@ -12,19 +15,27 @@ class Game extends Phaser.Scene {
         this.playerManager = new Player(this);
         this.screenWidth = 1031;
         this.screenHeight = 580;
-        this.arenaWidth = 3093;
+        this.arena = null;
+        this.arenaWidth = 2600;
         //network
         this.socket = null;
-        //components
+        //players
         this.players = {};
         this.player = {};
+        this.placementSprite = null;
+        this.pendingBuilding = null;
+        this.isBuilding = false;
+        //objects
         this.bubbies = [];
         this.plants = [];
-        this.berryBushes = [];
-        this.arena = null;
+        this.towers = [];
         //controls
         this.cursors = null;
         this.keysWASD = null;
+        //loop
+        this.lastUpdateTime = 0;
+        this.updateInterval = 30;
+
     }
 
     preload() {
@@ -32,6 +43,8 @@ class Game extends Phaser.Scene {
         this.load.image('seedButton', './Assets/UI/button_seed.png');
         this.load.image('eggButton', './Assets/UI/button_egg.png');
         this.load.image('seed', './Assets/seed.png');
+        this.load.image('tower', './Assets/tower.png');
+        this.load.image('towerFoundation', './Assets/towerFoundation.png');
         // this.load.image('seed', './Assets/sprout.png');
         this.load.image('egg', './Assets/egg.png');
         this.load.image('babyBubbyRed', './Assets/babyBubbyRed.png');
@@ -47,24 +60,47 @@ class Game extends Phaser.Scene {
         this.socket.emit('buyEgg', { x: worldX, y: worldY });
     }
 
-    handleSeedButton(x, y) {
+    handleSeedButton() {
         const cameraView = this.cameras.main.worldView;
         const worldX = cameraView.x + this.player.x;
         const worldY = cameraView.y + this.player.y;
         this.socket.emit('buySeed', { x: worldX, y: worldY });
     };
 
+    handleBuildButton() {
+        const cameraView = this.cameras.main.worldView;
+        const worldX = cameraView.x + this.player.x;
+        const worldY = cameraView.y + this.player.y;
+        this.socket.emit('buyTower', { x: worldX, y: worldY });
+    };
+
+
+    calculateFPS() {
+        const currentTime = performance.now();
+        const deltaTime = currentTime - this.lastUpdateTime;
+        const fps = 1000 / deltaTime; // Calculate FPS based on deltaTime
+
+        console.log("FPS: ", fps); // Log FPS to the console
+
+        this.lastUpdateTime = currentTime;
+    }
+
     create() {
+
         this.scene.launch('HUD');
+        this.fpsText = this.add.text(10, 10, 'FPS: ', { font: '16px Arial', fill: '#ffffff' });
         this.time.delayedCall(0, () => {
             this.scene.get('HUD').events.emit('updateCoins', 0);
             this.game.events.on('seedButtonDown', this.handleSeedButton, this);
             this.game.events.on('eggButtonDown', this.handleEggButton, this);
+            this.game.events.on('buildButtonDown', this.handleBuildButton, this);
         });
 
-        this.arena = new Arena (this, this.arenaWidth, this.screenWidth, this.screenHeight);
-        //this.socket = io('http://localhost:3000');
-        this.socket = io('https://bbf-kn8o.onrender.com');
+        this.arena = new Arena(this, this.arenaWidth, this.screenWidth, this.screenHeight);
+        this.placementSprite = this.add.sprite(500, 500, 'towerFoundation');
+        this.placementSprite.visible = false;
+        this.socket = io('http://localhost:3000');
+        ///this.socket = io('https://bbf-kn8o.onrender.com');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.keysWASD = this.input.keyboard.addKeys('W,A,S,D');
 
@@ -106,9 +142,20 @@ class Game extends Phaser.Scene {
         this.input.on('pointermove', (pointer) => {
             this.player.x = pointer.worldX;
             this.player.y = pointer.worldY;
+            if (this.isBuilding) {
+                console.log(this.isBuilding)
+                this.placementSprite.x = this.player.x;
+                this.placementSprite.y = this.player.y;
+            }
         });
 
         this.input.on('pointerdown', (pointer) => {
+            if (this.isBuilding) {
+                this.isBuilding = false;
+                this.placementSprite.visible = false;
+                this.socket.emit('placeTower', { x: this.player.x, y: this.player.y });
+
+            }
             console.log('Click x: ', pointer.worldX, 'y: ', pointer.worldY);
             if (this.sound.context.state === 'suspended') {
                 this.sound.context.resume();
@@ -135,6 +182,19 @@ class Game extends Phaser.Scene {
         this.socket.on('spawnSeed', (newSeed) => {
             const newPlant = new Plant(this, newSeed.team, newSeed.id, newSeed.x, newSeed.y, 'seed', newSeed.maxHealth);
         });
+
+        this.socket.on('placeBuilding', () => {
+            console.log('placeBuilding')
+
+            this.isBuilding = true;
+            this.placementSprite.visible = true;
+
+        });
+
+        this.socket.on('buildTower', (newTower) => {
+            const newArrowTower = new Tower(this, newTower.team, newTower.id, newTower.x, newTower.y, 'tower', newTower.maxHealth);
+        });
+
         this.socket.on('updateBubbiesList', (bubbiesList) => {
             for (const bubbyID in bubbiesList) {
                 if (bubbiesList.hasOwnProperty(bubbyID)) {
@@ -201,7 +261,7 @@ class Game extends Phaser.Scene {
         });
 
         this.socket.on('playerMove', ({ id, x, y }) => {
-            if (this.players[id]) {
+            if (this.players[id] && this.players[id] != this.player) {
                 this.players[id].x = x;
                 this.players[id].y = y;
             }
@@ -214,31 +274,39 @@ class Game extends Phaser.Scene {
             }
         });
     }
-
     update() {
-        //console.log(this.arena.clouds);
-        this.arena.update();
-        for (const bubby of this.bubbies) {
-            bubby.update();
-        }
-        if (this.cursors.left.isDown || this.keysWASD.A.isDown) {
-            if (this.cameras.main.scrollX > 0) {
-                this.cameras.main.scrollX -= 4;
-            }
-        } else if (this.cursors.right.isDown || this.keysWASD.D.isDown) {
-            if (this.cameras.main.scrollX < this.arenaWidth - this.screenWidth) {
-                this.cameras.main.scrollX += 4;
-            }
-        }
+        this.scene.get('HUD').events.emit('updateFPS');
 
         const pointer = this.input.activePointer;
         if (this.player && pointer) {
             this.player.x = pointer.worldX;
             this.player.y = pointer.worldY;
-            //  console.log('UPDATE x: ', pointer.worldX, 'y: ', pointer.worldY);
+
+        }
+
+        if (this.cursors.left.isDown || this.keysWASD.A.isDown) {
+            if (this.cameras.main.scrollX > 0) {
+                this.cameras.main.scrollX -= .01;
+            }
+        } else if (this.cursors.right.isDown || this.keysWASD.D.isDown) {
+            if (this.cameras.main.scrollX < this.arenaWidth - this.screenWidth) {
+                this.cameras.main.scrollX += .01;
+            }
+        }
+        this.arena.update();
+        if (this.isBuilding) {
+            //build sprite follows mouse for placement instructions
+        }
+        //console.log(this.arena.clouds);
+
+        for (const bubby of this.bubbies) {
+            bubby.update();
+        }
+
+        //const pointer = this.input.activePointer;
+        if (this.player && pointer) {
             this.socket.emit('mousemove', { x: this.player.x, y: this.player.y });
         }
     }
 }
-
 export default Game;
