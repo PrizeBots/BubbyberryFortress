@@ -15,14 +15,19 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private bubbies: Record<string, Bubby> = {}; // Track bubbies by their UID
     private plants: Record<string, Plant> = {};
     private towers: Record<string, Plant> = {};
+
     private teamCounts: Record<'blue' | 'red', number> = { blue: 0, red: 0 }; // Track team counts
+
     private eggPrice: number = 10;
     private eggsSpawned: number = 0;
+
     private seedPrice: number = 2;
     private seedsSpawned: number = 0;
+
     private towerPrice: number = 100;
     private towersSpawned: number = 0;
-    public objects: (Bubby | Plant)[] = []; // Specify the type explicitly
+
+    public objects: (Bubby | Plant | Tower)[] = [];
     constructor() {
         this.objects = [];
         setInterval(() => {
@@ -52,8 +57,16 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     plant.update();
                 }
             }
+            //update towers
+            for (const towerID in this.towers) {
+                if (this.towers.hasOwnProperty(towerID)) {
+                    const tower = this.towers[towerID];
+                    tower.update();
+                }
+            }
             this.server.emit('updateBubbiesList', this.bubbies);
             this.server.emit('updatePlants', this.plants);
+            this.server.emit('updateTowers', this.towers);
             //emit player updates - current when mouse moves
         }, 30); //interval
     }
@@ -191,7 +204,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     towerID,
                     'arrow',
                     50,//health
-                    this.plants
+                    this.bubbies
+            
                 );
                 this.towers[towerID] = newTower;
                 this.objects.push(newTower);
@@ -200,8 +214,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 console.log("no tower for you");
             }
         });
-
     }
+
     handleDisconnect(client: Socket) {
         // Release control of the bubby if the disconnecting player was controlling one
         for (const bubbyId in this.bubbies) {

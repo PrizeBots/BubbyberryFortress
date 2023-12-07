@@ -24,6 +24,10 @@ export default class Bubby extends Phaser.GameObjects.Container {
     }
 
     create() {
+        this.createSprites();
+        this.scene.bubbies.push(this);
+    }
+    createSprites() {
         //See which kind of bubby we are creating
         if (this.phase === 'egg') {
             this.sprite = this.scene.add.sprite(0, 0, 'egg');
@@ -40,20 +44,17 @@ export default class Bubby extends Phaser.GameObjects.Container {
         this.add(this.healthBar);
         //set up bubby and interactions
         this.add(this.sprite);
-        this.scene.bubbies.push(this);
         this.sprite.setInteractive();
         this.scene.input.setDraggable(this.sprite);
         this.sprite.on('drag', (pointer, dragX, dragY) => {
             this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
         });
     }
-
     changePhase(newPhase) {
         this.sprite.destroy();
         this.healthBar.destroy();
-        this.create();
+        this.createSprites();
     }
-
     update() {
         if (this.sprite) {
             const deltaX = this.x - this.prevX;
@@ -68,7 +69,6 @@ export default class Bubby extends Phaser.GameObjects.Container {
             }
         }
     }
-
     updateHealth(health) {
         this.healthBar.setHealth(health);
     }

@@ -1,8 +1,6 @@
 // Tower.ts
-
 import { Bubby } from './Bubby';
 import { Plant } from './Plant';
-
 export class Tower {
     private lastAttackTime: number = 0;
     private attackCooldown: number = 2000;
@@ -13,7 +11,6 @@ export class Tower {
     private shooting: boolean = false;
     private arrowCooldown: number = 1000; // Adjust the arrow cooldown time (in milliseconds)
     private lastArrowTime: number = 0;
-
     constructor(
         public type: string,
         public x: number,
@@ -31,24 +28,17 @@ export class Tower {
         public plants: Record<string, Plant>,
         public updateReady: boolean,
         public ammo: number,
-        
     ) {
         setTimeout(() => {
-            if (this && this.phase === 'egg') {
-                this.phase = 'babyBubby';
-                this.health = 10;
-                this.maxHealth = 10;
-                this.collisionRadius = this.babyBubbyWidth;
+            if (this.target){
+                this.shooting = true;
+                this.ammo=-1;
             }
-        }, 1000);
-
-        setTimeout(() => {
-            // ...
         }, 14000);
     }
 
     public setTargetBubby(Bubbies: Record<string, Bubby>) {
-        if (this.phase === 'babyBubby') {
+        if (this.phase === 'arrow') {
             let nearestBubby: Bubby | null = null;
             let nearestDistance = Infinity;
             for (const BubbyID in Bubbies) {
@@ -63,22 +53,8 @@ export class Tower {
         }
     }
 
-    public handleCollision(object: Tower | Plant) {
-        // ... (collision handling logic)
-    }
-
-    private randomizeDirectionAndDuration() {
-        // ... (randomize direction and duration logic)
-    }
-
     public update() {
-        //shoot at targets
-        if (this.target){
-            this.shooting = true;
-            this.ammo=-1;
-            
-        }
-        // ... (update logic)
+     
     }
 
     // Static factory method for creating a Bubby instance
@@ -89,10 +65,9 @@ export class Tower {
         id: string,
         phase: string,
         maxHealth: number,
-        plants: Record<string, Plant>
+        bubbies: Record<string, Bubby>
     ): Tower {
         const babyBubbyWidth = 16;
-
         return new Tower(
             'Tower',
             x,
@@ -107,7 +82,7 @@ export class Tower {
             null,
             babyBubbyWidth, // Set initial collision radius
             1, // Set initial attack power (you can adjust this as needed)
-            plants,
+            bubbies,
             false, // Set initial updateReady flag (modify as needed)
             10,
         );

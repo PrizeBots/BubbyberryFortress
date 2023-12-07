@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import io from 'socket.io-client';
 import { setUpArena } from './Components/Arena';
+import SocketManager from './Components/SocketManager';
 import Player from './Components/Player';
-
 import Bubby from './Components/Bubby';
 import Plant from './Components/Plant';
 import Tower from './Components/Tower';
@@ -35,7 +35,6 @@ class Game extends Phaser.Scene {
         //loop
         this.lastUpdateTime = 0;
         this.updateInterval = 30;
-
     }
 
     preload() {
@@ -50,7 +49,6 @@ class Game extends Phaser.Scene {
         this.load.image('babyBubbyRed', './Assets/babyBubbyRed.png');
         this.load.image('babyBubbyBlue', './Assets/babyBubbyBlue.png');
         this.load.image('fortress', './Assets/fortress.png');
-
     }
     //request to buy an egg
     handleEggButton() {
@@ -74,19 +72,10 @@ class Game extends Phaser.Scene {
         this.socket.emit('buyTower', { x: worldX, y: worldY });
     };
 
-
-    calculateFPS() {
-        const currentTime = performance.now();
-        const deltaTime = currentTime - this.lastUpdateTime;
-        const fps = 1000 / deltaTime; // Calculate FPS based on deltaTime
-
-        console.log("FPS: ", fps); // Log FPS to the console
-
-        this.lastUpdateTime = currentTime;
-    }
-
     create() {
-
+        this.socket = io('http://localhost:3000');
+        // this.socket = io('https://bbf-kn8o.onrender.com');
+        this.socketManager = new SocketManager(this);
         this.scene.launch('HUD');
         this.fpsText = this.add.text(10, 10, 'FPS: ', { font: '16px Arial', fill: '#ffffff' });
         this.time.delayedCall(0, () => {
@@ -99,8 +88,6 @@ class Game extends Phaser.Scene {
         this.arena = new Arena(this, this.arenaWidth, this.screenWidth, this.screenHeight);
         this.placementSprite = this.add.sprite(500, 500, 'towerFoundation');
         this.placementSprite.visible = false;
-        //this.socket = io('http://localhost:3000');
-        this.socket = io('https://bbf-kn8o.onrender.com');
         this.cursors = this.input.keyboard.createCursorKeys();
         this.keysWASD = this.input.keyboard.addKeys('W,A,S,D');
 
@@ -110,40 +97,11 @@ class Game extends Phaser.Scene {
             }
         });
 
-        this.socket.on('bubbyControlGranted', ({ bubbyId, clientId }) => {
-            // Check if the granted control is for a bubby controlled by this client
-            const bubby = this.bubbies.find((b) => b.id === bubbyId);
-        });
-
-        this.socket.on('controlRequestRejected', (bubbyId) => {
-            console.log("YOU CANT TOUCH THIS RIGHT NOW!")
-        });
-
-        this.socket.on('updateCoins', (coins) => {
-            this.scene.get('HUD').events.emit('updateCoins', coins);
-        });
-
-        this.socket.on('connect', () => {
-            this.socket.emit('getPlayersList', { x: this.player.x, y: this.player.y });
-        });
-
-        this.socket.on('initialize', (data) => {
-            const team = data.team;
-            let coins = data.coins;
-            const circleColor = team === 'blue' ? 0x0000ff : 0xff0000;
-            this.player = this.add.circle(400, 300, 10, circleColor);
-            this.player.playerId = this.socket.id;
-            this.player.team = team;
-            this.player.coins = coins;
-            this.players[this.socket.id] = this.player;
-            this.scene.get('HUD').events.emit('updateCoins', coins);
-        });
-
         this.input.on('pointermove', (pointer) => {
             this.player.x = pointer.worldX;
             this.player.y = pointer.worldY;
             if (this.isBuilding) {
-                console.log(this.isBuilding)
+               /// console.log(this.isBuilding)
                 this.placementSprite.x = this.player.x;
                 this.placementSprite.y = this.player.y;
             }
@@ -154,101 +112,17 @@ class Game extends Phaser.Scene {
                 this.isBuilding = false;
                 this.placementSprite.visible = false;
                 this.socket.emit('placeTower', { x: this.player.x, y: this.player.y });
-
             }
-            console.log('Click x: ', pointer.worldX, 'y: ', pointer.worldY);
+
+           // console.log('Click x: ', pointer.worldX, 'y: ', pointer.worldY);
             if (this.sound.context.state === 'suspended') {
                 this.sound.context.resume();
             }
         });
-
-        this.socket.on('updatePlayersList', (playerList) => {
-            for (const playerId in playerList) {
-                if (!this.players[playerId]) {
-                    const { x, y, team } = playerList[playerId];
-                    const circleColor = team === 'blue' ? 0x0000ff : 0xff0000;
-                    const otherPlayer = this.add.circle(x, y, 10, circleColor);
-                    otherPlayer.playerId = playerId;
-                    otherPlayer.team = team;
-                    this.players[playerId] = otherPlayer;
-                }
-            }
-        });
-
-        this.socket.on('spawnEgg', (newEgg) => {
-            const newBubby = new Bubby(this, newEgg.team, newEgg.id, newEgg.x, newEgg.y, 'egg', newEgg.maxHealth);
-        });
-
-        this.socket.on('spawnSeed', (newSeed) => {
-            const newPlant = new Plant(this, newSeed.team, newSeed.id, newSeed.x, newSeed.y, 'seed', newSeed.maxHealth);
-        });
-
+        //player is ready to build
         this.socket.on('placeBuilding', () => {
-            console.log('placeBuilding')
-
             this.isBuilding = true;
             this.placementSprite.visible = true;
-
-        });
-
-        this.socket.on('buildTower', (newTower) => {
-            const newArrowTower = new Tower(this, newTower.team, newTower.id, newTower.x, newTower.y, 'tower', newTower.maxHealth);
-        });
-
-        this.socket.on('updateBubbiesList', (bubbiesList) => {
-            for (const bubbyID in bubbiesList) {
-                if (bubbiesList.hasOwnProperty(bubbyID)) {
-                    const updatedBubby = bubbiesList[bubbyID];
-                    const bubby = this.bubbies.find((b) => b.id === bubbyID);
-                    if (bubby) {
-                        bubby.x = updatedBubby.x;
-                        bubby.y = updatedBubby.y;
-                        bubby.updateHealth(updatedBubby.health);
-                        //catch a phase change
-                        if (bubby.phase !== updatedBubby.phase) {
-                            bubby.phase = updatedBubby.phase;
-                            if (bubby.phase === 'egg') {
-                                bubby.changePhase('egg');
-                            } else if (bubby.phase === 'babyBubby') {
-                                bubby.changePhase('babyBubby');
-                            }
-                        }
-                    } else {
-                        const newBubby = new Bubby(this, updatedBubby.team, bubbyID, updatedBubby.x, updatedBubby.y, updatedBubby.phase, updatedBubby.maxHealth);
-                    }
-                }
-            }
-        });
-
-        this.socket.on('updatePlants', (plants) => {
-            for (const plantID in plants) {
-                if (plants.hasOwnProperty(plantID)) {
-                    const updatedPlant = plants[plantID];
-                    const plant = this.plants.find((p) => p.id === plantID);
-                    if (plant) {
-                        plant.x = updatedPlant.x;
-                        plant.y = updatedPlant.y;
-                        // console.log(updatedPlant.health)
-                        plant.updateHealth(updatedPlant.health);
-                        if (updatedPlant.health <= 0) {
-                            plant.destroy();
-                            return;
-                        }
-                        //catch a phase change
-                        if (plant.phase !== updatedPlant.phase) {
-                            plant.phase = updatedPlant.phase;
-                            if (plant.phase === 'egg') {
-                                plant.changePhase('egg');
-                            } else if (plant.phase === 'babyBubby') {
-                                plant.changePhase('babyBubby');
-                            }
-                        }
-                    } else {
-                        // console.log("i didnt have this plant, making it now")
-                        const newPlant = new Plant(this, updatedPlant.team, plantID, updatedPlant.x, updatedPlant.y, updatedPlant.phase, updatedPlant.maxHealth);
-                    }
-                }
-            }
         });
 
         this.socket.on('bubbyControlReleased', ({ bubbyId }) => {
@@ -275,34 +149,30 @@ class Game extends Phaser.Scene {
         });
     }
     update() {
-        this.scene.get('HUD').events.emit('updateFPS');
-
+        this.arena.update();
+        this.scene.get('HUD').events.emit('updateHUD');
         const pointer = this.input.activePointer;
         if (this.player && pointer) {
             this.player.x = pointer.worldX;
             this.player.y = pointer.worldY;
-
         }
-
+       // console.log('this.cursors.left.isDown: ', this.cursors.left.isDown)
         if (this.cursors.left.isDown || this.keysWASD.A.isDown) {
             if (this.cameras.main.scrollX > 0) {
-                this.cameras.main.scrollX -= .01;
+                this.cameras.main.scrollX -= 10;
             }
         } else if (this.cursors.right.isDown || this.keysWASD.D.isDown) {
             if (this.cameras.main.scrollX < this.arenaWidth - this.screenWidth) {
-                this.cameras.main.scrollX += .01;
+                this.cameras.main.scrollX += 10;
             }
         }
-        this.arena.update();
         if (this.isBuilding) {
             //build sprite follows mouse for placement instructions
         }
         //console.log(this.arena.clouds);
-
         for (const bubby of this.bubbies) {
             bubby.update();
         }
-
         //const pointer = this.input.activePointer;
         if (this.player && pointer) {
             this.socket.emit('mousemove', { x: this.player.x, y: this.player.y });

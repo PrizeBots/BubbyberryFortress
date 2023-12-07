@@ -4,9 +4,11 @@ Bubbies are soft body creatures that depend on the players for survival and lead
 
 Players must raise baby bubbies from eggs and grow them into strong bubbies and big bubbies to defend themselves from the opposing force.
 
-Feed your baby bubbies seeds and berries to grow them into bubbies.
+Feed your baby bubbies berries to grow them into bubbies.
+The color of the berry the bubby eats will determine the it's alliance to the team of players.
 
-bubbies are able to battle, mine metal, harvest berries, repair towers, 
+
+Bubbies are able to battle, mine metal, harvest berries, repair towers, 
 
 
 
@@ -53,3 +55,4 @@ change color based on fruit eaten
 attack other bubbies
 breed with like bubbies
 attack objects
+bigger bubbies push smaller bubbies

@@ -20,8 +20,11 @@ export default class Seed extends Phaser.GameObjects.Container {
         this.create();
         this.scene.add.existing(this);
     }
-
     create() {
+        this.createSprites();
+        this.scene.plants.push(this);
+    }
+    createSprites() {
         //See which kind of bubby we are creating
         if (this.phase === 'seed') {
             this.sprite = this.scene.add.sprite(0, 0, 'seed');
@@ -33,7 +36,7 @@ export default class Seed extends Phaser.GameObjects.Container {
         this.add(this.healthBar);
         //set up bubby and interactions
         this.add(this.sprite);
-        this.scene.plants.push(this);
+ 
         this.sprite.setInteractive();
         this.scene.input.setDraggable(this.sprite);
         this.sprite.on('drag', (pointer, dragX, dragY) => {
@@ -44,7 +47,7 @@ export default class Seed extends Phaser.GameObjects.Container {
     changePhase(newPhase) {
         this.sprite.destroy();
         this.healthBar.destroy();
-        this.create();
+        this.createSprites();
     }
 
     update() {

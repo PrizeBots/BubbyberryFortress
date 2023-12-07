@@ -21,14 +21,15 @@ export default class Tower extends Phaser.GameObjects.Container {
         this.healthBarContainer = null; // Container for the health bar
         this.create();
         this.scene.add.existing(this);
+        this.ammo = 0;
     }
 
     create() {
-        console.log(this.phase)
+        //console.log(this.phase)
         //See which kind of bubby we are creating
-        if (this.phase === 'tower') {
+        if (this.phase === 'arrow') {
             this.sprite = this.scene.add.sprite(0, 0, 'tower');
-           // this.sprite = this.scene.add.sprite(0, 0, 'tower');
+            // this.sprite = this.scene.add.sprite(0, 0, 'tower');
         } else if (this.phase === 'bombTower') {
             if (this.team === 'blue') {
                 // this.sprite = this.scene.add.sprite(0, 0, 'bomb');
@@ -36,16 +37,17 @@ export default class Tower extends Phaser.GameObjects.Container {
             }
         }
         //give it health bar
-        this.healthBar = new HealthBar(this.scene, this.sprite.height/2+20, this.maxHealth);
-        this.add(this.healthBar);
+
         //set up bubby and interactions
         this.add(this.sprite);
-        this.scene.bubbies.push(this);
-        this.sprite.setInteractive();
-        this.scene.input.setDraggable(this.sprite);
-        this.sprite.on('drag', (pointer, dragX, dragY) => {
-            this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
-        });
+        // this.healthBar = new HealthBar(this.scene, this.sprite.height / 2 + 20, this.maxHealth);
+        // this.add(this.healthBar);
+        // this.scene.towers.push(this);
+       // this.sprite.setInteractive();
+       // this.scene.input.setDraggable(this.sprite);
+        // this.sprite.on('drag', (pointer, dragX, dragY) => {
+        //     this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
+        // });
     }
 
     changePhase(newPhase) {
@@ -70,6 +72,6 @@ export default class Tower extends Phaser.GameObjects.Container {
     }
 
     updateHealth(health) {
-        this.healthBar.setHealth(health);
+       // this.healthBar.setHealth(health);
     }
 }
