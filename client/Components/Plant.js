@@ -22,15 +22,12 @@ export default class Seed extends Phaser.GameObjects.Container {
     }
 
     create() {
-<<<<<<< Updated upstream
-=======
         this.createSprites();
         this.scene.plants.push(this);
 
         console.log('plant phase? ' , this.phase)
     }
     createSprites() {
->>>>>>> Stashed changes
         //See which kind of bubby we are creating
         if (this.phase === 'seed') {
             this.sprite = this.scene.add.sprite(0, 0, 'seed');

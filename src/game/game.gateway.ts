@@ -18,22 +18,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private players: Record<string, Player> = {}; // Track players by their socket ID
     private bubbies: Record<string, Bubby> = {}; // Track bubbies by their UID
     private plants: Record<string, Plant> = {};
-<<<<<<< Updated upstream
-    private towers: Record<string, Plant> = {};
-    private teamCounts: Record<'blue' | 'red', number> = { blue: 0, red: 0 }; // Track team counts
-    private eggPrice: number = 10;
-    private eggsSpawned: number = 0;
-    private seedPrice: number = 2;
-    private seedsSpawned: number = 0;
-    private towerPrice: number = 100;
-    private towersSpawned: number = 0;
-    public objects: (Bubby | Plant)[] = []; // Specify the type explicitly
-=======
     private towers: Record<string, Tower> = {};
     private bullets: Record<string, Bullet> = {};
     private teamCounts: Record<'blue' | 'red', number> = { blue: 0, red: 0 }; // Track team counts
     public objects: (Bubby | Plant | Tower | Bullet)[] = [];
->>>>>>> Stashed changes
     constructor() {
         eventBus.on('towerShot', (bullet: Bullet) => {
             //console.log(bullet);
@@ -78,10 +66,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     }
                 }
             }
-<<<<<<< Updated upstream
-            this.server.emit('updateBubbiesList', this.bubbies);
-            this.server.emit('updatePlants', this.plants);
-=======
             
             //update towers
             for (const towerID in this.towers) {
@@ -107,7 +91,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             this.server.emit('updatePlants', this.plants);
             this.server.emit('updateTowers', this.towers);
             this.server.emit('updateBullets', this.bullets);
->>>>>>> Stashed changes
             //emit player updates - current when mouse moves
         }, 40); //interval
     }
@@ -198,32 +181,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         });
         client.on('placeTower', (data: { x: number; y: number }) => {
             if (this.players[client.id].isBuilding) {
-<<<<<<< Updated upstream
-                console.log("place tower");
-                this.players[client.id].isBuilding = false;
-                const towerID = `tower_${client.id}_${this.towersSpawned}`;
-                this.towersSpawned++;
-                // Use the static factory method to create the Bubby instance
-                const newTower = Tower.createTower(
-                    data.x,
-                    data.y,
-                    this.players[client.id].team,
-                    towerID,
-                    'arrow',
-                    50,//health
-                    this.plants
-                );
-                this.towers[towerID] = newTower;
-                this.objects.push(newTower);
-                this.server.emit('buildTower', newTower);
-            } else {
-                console.log("no tower for you");
-=======
                 const newTower = this.shop.placeTower(client.id, data.x, data.y);
             }
             else {
                 console.log("hacker!");
->>>>>>> Stashed changes
             }
         });
 

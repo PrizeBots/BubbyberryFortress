@@ -22,12 +22,6 @@ export default class Tower extends Phaser.GameObjects.Container {
         this.healthBarContainer = null; // Container for the health bar
         this.create();
         this.scene.add.existing(this);
-<<<<<<< Updated upstream
-    }
-
-    create() {
-        console.log(this.phase)
-=======
         this.ammo = 0;
         this.target = null;
         this.targetLine = new Phaser.GameObjects.Graphics(this.scene); // Graphics object for drawing the line
@@ -37,16 +31,11 @@ export default class Tower extends Phaser.GameObjects.Container {
     create() {
  
         //console.log(this.phase)
->>>>>>> Stashed changes
         //See which kind of bubby we are creating
         if (this.phase === 'tower') {
             this.sprite = this.scene.add.sprite(0, 0, 'tower');
-<<<<<<< Updated upstream
-           // this.sprite = this.scene.add.sprite(0, 0, 'tower');
-=======
             
             // this.sprite = this.scene.add.sprite(0, 0, 'tower');
->>>>>>> Stashed changes
         } else if (this.phase === 'bombTower') {
             if (this.team === 'blue') {
                 // this.sprite = this.scene.add.sprite(0, 0, 'bomb');
@@ -59,14 +48,6 @@ export default class Tower extends Phaser.GameObjects.Container {
         this.add(this.healthBar);
         //set up bubby and interactions
         this.add(this.sprite);
-<<<<<<< Updated upstream
-        this.scene.bubbies.push(this);
-        this.sprite.setInteractive();
-        this.scene.input.setDraggable(this.sprite);
-        this.sprite.on('drag', (pointer, dragX, dragY) => {
-            this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
-        });
-=======
         // this.healthBar = new HealthBar(this.scene, this.sprite.height / 2 + 20, this.maxHealth);
         // this.add(this.healthBar);
        this.scene.towers.push(this);
@@ -75,7 +56,6 @@ export default class Tower extends Phaser.GameObjects.Container {
         // this.sprite.on('drag', (pointer, dragX, dragY) => {
         //     this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
         // });
->>>>>>> Stashed changes
     }
 
     changePhase(newPhase) {

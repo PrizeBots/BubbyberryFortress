@@ -30,6 +30,7 @@ export class Tower {
         public bubbies: Record<string, Bubby>,
         public updateReady: boolean,
         public ammo: number,
+        public shouldRemove: boolean,
     ) {
         setTimeout(() => {
             if (this.target){
@@ -93,7 +94,7 @@ export class Tower {
             null, //target
             babyBubbyWidth, // Set initial collision radius
             1, // Set initial attack power (you can adjust this as needed)
-            plants,
+            bubbies,
             false, // Set initial updateReady flag (modify as needed)
             10000, //ammo
             false,

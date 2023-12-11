@@ -101,6 +101,7 @@ class SocketManager {
             }
         });
         this.socket.on('updateBubbies', (bubbiesList) => {
+            console.log('update bubbies')
             for (const bubbyID in bubbiesList) {
                 if (bubbiesList.hasOwnProperty(bubbyID)) {
                     const updatedBubby = bubbiesList[bubbyID];
