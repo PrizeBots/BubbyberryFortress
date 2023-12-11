@@ -47,7 +47,6 @@ export class GameObject {
         if (this.health <= 0) {
             this.destroy();
         }
-    
         //Boundaries
         if (this.y <= 200) {
             this.y += 5;

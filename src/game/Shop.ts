@@ -63,6 +63,7 @@ export class Shop {
                 player.team,  // Use the player's team
                 seedId,
                 'seed',
+                20,
                 false,//hp
        
             );

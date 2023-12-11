@@ -11,6 +11,7 @@ export class Plant extends GameObject {
         public team: 'blue' | 'red',
         public id: string,
         public phase: string,
+        public maxHealth: 20,
         public shouldRemove: boolean = false,
         
     ) {
@@ -26,7 +27,7 @@ export class Plant extends GameObject {
             0, // Set speed
             '', // Set isUsedBy
             null, // Set target
-            32, // Set collisionRadius
+            16, // Set collisionRadius
             0, // Set attackPower
             0, // Set lastAttackTime
             1000, // Set attackCooldown
@@ -48,6 +49,5 @@ export class Plant extends GameObject {
   
     public update() {
         super.update();
-   
     }
 }

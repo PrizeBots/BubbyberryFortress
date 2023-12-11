@@ -101,7 +101,7 @@ class SocketManager {
             }
         });
         this.socket.on('updateBubbies', (bubbiesList) => {
-            console.log('update bubbies')
+           // console.log('update bubbies')
             for (const bubbyID in bubbiesList) {
                 if (bubbiesList.hasOwnProperty(bubbyID)) {
                     const updatedBubby = bubbiesList[bubbyID];
@@ -130,7 +130,7 @@ class SocketManager {
                 if (plants.hasOwnProperty(plantID)) {
                     const updatedPlant = plants[plantID];
                     const plant = this.game.plants.find((p) => p.id === plantID);
-                    if (plant) {
+                    if (plant && updatedPlant) {
                         plant.x = updatedPlant.x;
                         plant.y = updatedPlant.y;
                         // console.log(updatedPlant.health)
@@ -140,17 +140,19 @@ class SocketManager {
                             return;
                         }
                         //catch a phase change
-                        if (plant.phase !== updatedPlant.phase) {
-                            plant.phase = updatedPlant.phase;
-                            if (plant.phase === 'egg') {
-                                plant.changePhase('egg');
-                            } else if (plant.phase === 'babyBubby') {
-                                plant.changePhase('babyBubby');
-                            }
-                        }
+                        // if (plant.phase !== updatedPlant.phase) {
+                        //     plant.phase = updatedPlant.phase;
+                        //     if (plant.phase === 'egg') {
+                        //         plant.changePhase('egg');
+                        //     } else if (plant.phase === 'babyBubby') {
+                        //         plant.changePhase('babyBubby');
+                        //     }
+                        // }
                     } else {
-                        // console.log("i didnt have this plant, making it now")
-                        const newPlant = new Plant(this.game, updatedPlant.team, plantID, updatedPlant.x, updatedPlant.y, updatedPlant.phase, updatedPlant.maxHealth);
+                        console.log("i didnt have this plant, making it now")
+                        console.log(updatedPlant)
+                        const newPlant = new Plant(this.game, updatedPlant.team, plantID, 
+                            updatedPlant.x, updatedPlant.y, updatedPlant.phase, updatedPlant.maxHealth);
                     }
                 }
             }

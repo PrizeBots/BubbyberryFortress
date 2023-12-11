@@ -37,36 +37,25 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             for (const bubbyId in this.bubbies) {
                 if (this.bubbies.hasOwnProperty(bubbyId)) {
                     const bubby = this.bubbies[bubbyId];
-                    bubby.update();
-                    // Check for collisions with other objects (e.g., other bubbies or plants)
-                    for (const objectId in this.objects) {
-                        if (this.objects.hasOwnProperty(objectId)) {
-                            const object = this.objects[objectId];
-                            if (object !== bubby) {
-                                // Avoid self-collision
-                                //    bubby.handleCollision(object);
-                            }
-                        }
-                    }
-                    // Set the target plant for the bubby
                     bubby.setTargetPlant(this.plants);
+                    bubby.update();
                 }
             }
             //update plants
             for (const plantID in this.plants) {
                 if (this.plants.hasOwnProperty(plantID)) {
                     const plant = this.plants[plantID];
-                    plant.update();
-                    if (plant.shouldRemove === true) {
+                    if (plant && plant.shouldRemove === true) {
                         // Remove the plant from the plants object
                         delete this.plants[plantID];
                         console.log('delete plant')
                         // Optionally, set the reference to null to destroy the plant object
-                        this.plants[plantID] = null;
+                        //this.plants[plantID] = null;
                     }
+                    if (plant) plant.update();
+
                 }
             }
-            
             //update towers
             for (const towerID in this.towers) {
                 if (this.towers.hasOwnProperty(towerID)) {

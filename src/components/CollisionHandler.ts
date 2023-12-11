@@ -27,6 +27,7 @@ export class CollisionHandler {
       //remove from objects pool
       const index = objects.indexOf(objToRemove);
       if (index !== -1) {
+        console.log('remove from obj pool')
         objects.splice(index, 1);
 
       }
@@ -72,24 +73,28 @@ export class CollisionHandler {
 
         obj2.x -= overlapX / 2;
         obj2.y -= overlapY / 2;
-      }
-
-      if (obj1.phase === 'babyBubby' && obj2.health > 0) {
-        const currentTime = Date.now();
-        if (currentTime - obj1.lastAttackTime >= obj1.attackCooldown) {
-          obj2.health -= obj1.attackPower;
-          obj1.health += obj1.attackPower;
-          //bubby ate it!
-          if (obj2.health <= 0) {
-            // this.objectsToRemove.push(obj2);
+        if (obj1.phase === 'babyBubby' && obj2.health > 0) {
+          const currentTime = Date.now();
+          if (currentTime - obj1.lastAttackTime >= obj1.attackCooldown) {
+            obj2.health -= obj1.attackPower;
+            obj1.health += obj1.attackPower;
+            console.log('obj1 hp:', obj1.health);
+            console.log(' obj2 hp:', obj2.health);
+  
+            //bubby ate it!
+            if (obj2.health <= 0) {
+             this.objectsToRemove.push(obj2);
+            }
+            //Advance to bubby phase
+            if (obj1.maxHealth >= 50) {
+              // this.phase = 'bubby';
+            }
+            obj1.lastAttackTime = currentTime;
           }
-          //Advance to bubby phase
-          if (obj1.maxHealth >= 50) {
-            // this.phase = 'bubby';
-          }
-          obj1.lastAttackTime = currentTime;
         }
       }
+
+
     }
     // obj1.takeDamage(obj2.getDamage());
     // obj2.takeDamage(obj1.getDamage());
