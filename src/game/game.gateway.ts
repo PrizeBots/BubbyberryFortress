@@ -37,7 +37,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             for (const bubbyId in this.bubbies) {
                 if (this.bubbies.hasOwnProperty(bubbyId)) {
                     const bubby = this.bubbies[bubbyId];
-                    bubby.setTargetPlant(this.plants);
+                   // bubby.setTargetPlant(this.plants);
                     bubby.update();
                 }
             }
@@ -104,7 +104,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         client.on('moveObject', (data: { objID: string; x: number; y: number }) => {
             const obj = this.objects.find((obj) => obj.id === data.objID);
             if (obj) {
-                console.log(obj.type)
+                //console.log(obj.type)
                 // Check the type of the object (buddy or plant) and handle accordingly
                 if (obj instanceof Bubby) {
                     // Handle moving a Bubby
@@ -112,7 +112,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     obj.y = data.y;
                     this.server.emit('updateBubbiesList', this.bubbies);
                 } else if (obj instanceof Plant) {
-                    console.log('got a plant here')
+                 //   console.log('got a plant here')
                     // Handle moving a Plant
                     obj.x = data.x;
                     obj.y = data.y;

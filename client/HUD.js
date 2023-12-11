@@ -15,7 +15,7 @@ class HUD extends Phaser.Scene {
             fill: '#000000',
         });
         this.events.on('updateCoins', this.updateCoins, this);
-        this.events.on('updateFPS', this.updateFPS, this);
+        this.events.on('updateHUD', this.updateHUD, this);
         const seedButton = this.add.image(this.game.config.width/2, 30, 'seedButton');
         seedButton.setInteractive();
         seedButton.on('pointerdown', () => {
@@ -39,7 +39,7 @@ class HUD extends Phaser.Scene {
     updateCoins(coins) {
         this.playerCoinsText.setText('Coins: ' + coins.toString());
     }
-    updateFPS() {
+    updateHUD() {
         const fps = Math.round(this.game.loop.actualFps);
         this.FPSText.setText('FPS: ' + fps);
     }

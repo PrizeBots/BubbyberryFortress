@@ -78,8 +78,8 @@ export class CollisionHandler {
           if (currentTime - obj1.lastAttackTime >= obj1.attackCooldown) {
             obj2.health -= obj1.attackPower;
             obj1.health += obj1.attackPower;
-            console.log('obj1 hp:', obj1.health);
-            console.log(' obj2 hp:', obj2.health);
+           // console.log('obj1 hp:', obj1.health);
+          //  console.log(' obj2 hp:', obj2.health);
   
             //bubby ate it!
             if (obj2.health <= 0) {

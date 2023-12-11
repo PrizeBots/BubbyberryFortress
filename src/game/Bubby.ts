@@ -44,20 +44,19 @@ export class Bubby {
         // }, 14000)
     }
     public setTargetPlant(plants: Record<string, Plant>) {
-        if (this.phase === "babyBubby" && this.target) {
-            const deltaX = this.target.x - this.x;
-            const deltaY = this.target.y - this.y;
-            const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
-            if (distanceToTarget > 0) {
-                // Calculate the unit vector toward the target
-                const unitX = deltaX / distanceToTarget;
-                const unitY = deltaY / distanceToTarget;
-                // Move towards the target
-                this.x += unitX * this.speed;
-                this.y += unitY * this.speed;
+        if (this.phase === 'babyBubby') {
+            let nearestPlant: Plant | null = null;
+            let nearestDistance = Infinity;
+            for (const plantId in plants) {
+                const plant = plants[plantId];
+                const distance = Math.sqrt((this.x - plant.x) ** 2 + (this.y - plant.y) ** 2);
+                if (distance < nearestDistance && distance < 400) {
+                    nearestPlant = plant;
+                    nearestDistance = distance;
+                }
             }
+            this.target = nearestPlant;
         }
-        
     }
     public destroy(){
         
@@ -99,7 +98,7 @@ export class Bubby {
         if (this.health <= 0) {
             return;
         }
-
+        this.setTargetPlant(this.plants);
         const randomX = Math.random() * 4 - 2; // Generates a number between -10 and 10
         const randomY = Math.random() * 4 - 2; // Generates a number between -10 and 10
         if (this.phase === "babyBubby") {
@@ -107,7 +106,9 @@ export class Bubby {
                 const deltaX = this.target.x - this.x;
                 const deltaY = this.target.y - this.y;
                 const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+                console.log('bubby target')
                 if (distanceToTarget > 0) {
+                    console.log('bubby moving to target')
                     // Calculate the unit vector toward the target
                     const unitX = deltaX / distanceToTarget;
                     const unitY = deltaY / distanceToTarget;
