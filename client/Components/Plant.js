@@ -13,8 +13,8 @@ export default class Seed extends Phaser.GameObjects.Container {
         this.team = team;
         this.id = id;
         this.isUsedBy = "";
-        this.egg = null; // Placeholder for the seed sprite
-        this.babyBubby = null; // Placeholder for the babyBubby sprite
+        this.seed = null; // Placeholder for the seed sprite
+     
         this.timer = null; // Timer for the egg
         this.healthBarContainer = null; // Container for the health bar
         this.create();
@@ -22,6 +22,15 @@ export default class Seed extends Phaser.GameObjects.Container {
     }
 
     create() {
+<<<<<<< Updated upstream
+=======
+        this.createSprites();
+        this.scene.plants.push(this);
+
+        console.log('plant phase? ' , this.phase)
+    }
+    createSprites() {
+>>>>>>> Stashed changes
         //See which kind of bubby we are creating
         if (this.phase === 'seed') {
             this.sprite = this.scene.add.sprite(0, 0, 'seed');

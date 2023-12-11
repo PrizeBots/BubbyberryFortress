@@ -28,10 +28,10 @@ export class PlayerUpdater {
                 for (const objectId in this.plants) {
                     if (this.plants.hasOwnProperty(objectId)) {
                         const object = this.plants[objectId];
-                        if (object !== bubby) {
-                            // Avoid self-collision
-                            bubby.handleCollision(object);
-                        }
+                        // if (object !== bubby) {
+                        //     // Avoid self-collision
+                        //  //   bubby.handleCollision(object);
+                        // }
                     }
                 }
                 // Set the target plant for the bubby

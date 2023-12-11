@@ -29,6 +29,7 @@ class Game extends Phaser.Scene {
         this.bubbies = [];
         this.plants = [];
         this.towers = [];
+        this.projectiles = [];
         //controls
         this.cursors = null;
         this.keysWASD = null;
@@ -45,6 +46,8 @@ class Game extends Phaser.Scene {
         this.load.image('seed', './Assets/seed.png');
         this.load.image('tower', './Assets/tower.png');
         this.load.image('towerFoundation', './Assets/towerFoundation.png');
+        this.load.image('ball', './Assets/ball.png'); // Replace 'bullet' with the actual bullet image file
+
         // this.load.image('seed', './Assets/sprout.png');
         this.load.image('egg', './Assets/egg.png');
         this.load.image('babyBubbyRed', './Assets/babyBubbyRed.png');
@@ -184,8 +187,12 @@ class Game extends Phaser.Scene {
         });
 
         this.socket.on('placeBuilding', () => {
+<<<<<<< Updated upstream
             console.log('placeBuilding')
 
+=======
+            console.log("we made it")
+>>>>>>> Stashed changes
             this.isBuilding = true;
             this.placementSprite.visible = true;
 
@@ -274,8 +281,28 @@ class Game extends Phaser.Scene {
             }
         });
     }
+    sortAllObjectsByDepth() {
+        // Create an array of all objects that need sorting
+        const allObjects = [...this.bubbies, ...this.towers, ...this.plants]; // Add other arrays as needed
+
+        // Sort the array based on the y-coordinate of the objects
+        allObjects.sort((a, b) => a.y - b.y);
+    
+        // Set the depth based on the sorting order
+        allObjects.forEach((object, index) => {
+            object.setDepth(index);
+        });
+    }
+    
     update() {
+<<<<<<< Updated upstream
         this.scene.get('HUD').events.emit('updateFPS');
+=======
+        this.arena.update();
+        this.scene.get('HUD').events.emit('updateHUD');
+        this.sortAllObjectsByDepth();
+
+>>>>>>> Stashed changes
 
         const pointer = this.input.activePointer;
         if (this.player && pointer) {
@@ -302,7 +329,17 @@ class Game extends Phaser.Scene {
         for (const bubby of this.bubbies) {
             bubby.update();
         }
+<<<<<<< Updated upstream
 
+=======
+        for (const tower of this.towers) {
+            tower.update();
+        }
+        for (const projectile of this.projectiles) {
+            projectile.update();
+        ///    console.log(projectile)
+        }
+>>>>>>> Stashed changes
         //const pointer = this.input.activePointer;
         if (this.player && pointer) {
             this.socket.emit('mousemove', { x: this.player.x, y: this.player.y });

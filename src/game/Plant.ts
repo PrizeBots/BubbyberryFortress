@@ -1,6 +1,9 @@
 //plants.ts
 
-export class Plant implements Plant {
+import { GameObject } from "./GameObject";
+
+export class Plant extends GameObject {
+    public plants: Record<string, Plant>
     constructor(
         public type: string,
         public x: number,
@@ -8,12 +11,31 @@ export class Plant implements Plant {
         public team: 'blue' | 'red',
         public id: string,
         public phase: string,
-        public maxHealth: number = 5,
-        public health: number = maxHealth,
-        public isUsedBy: string,
-        public collisionRadius: number,
+        public shouldRemove: boolean = false,
+        
     ) {
-        //egg hatch timer
+        super(
+            type,
+            x,
+            y,
+            team,
+            id,
+            phase,
+            5, // Set maxHealth
+            5, // Set health
+            0, // Set speed
+            '', // Set isUsedBy
+            null, // Set target
+            32, // Set collisionRadius
+            0, // Set attackPower
+            0, // Set lastAttackTime
+            1000, // Set attackCooldown
+            false,
+        );
+        
+        // ...
+    
+        //growth timer
         setTimeout(() => {
             // if (this && this.phase === 'seed') {
             //     this.phase = 'sprout';
@@ -22,24 +44,10 @@ export class Plant implements Plant {
             // }
         }, 4000)
 
-
-        //death timer
-        setTimeout(() => {
-            //delete this.bubbies[this.id];
-        }, 14000)
     }
-
+  
     public update() {
-        //plant life
-        if (this.y <= 200) {
-            this.y += 5;
-        } else if (this.y >= 580) {
-            this.y -= 5;
-        }
-        if (this.x <= 0) {
-            this.x += 5;
-        } else if (this.x >= 3093) {
-            this.x -= 5;
-        }
+        super.update();
+   
     }
 }

@@ -1,9 +1,8 @@
 //Bubby.ts
-import { Plant } from './Plant'; // Import the Plant class from the appropriate file
-
+import { Plant } from './Plant';
+import { Bullet } from './Bullet'; // Import the Plant class from the appropriate file
 export class Bubby {
-    private lastAttackTime: number = 0;
-    private attackCooldown: number = 2000; // Adjust the attack cooldown time (in milliseconds)
+  // Adjust the attack cooldown time (in milliseconds)
     private walkingDirection: { x: number, y: number } = { x: 0, y: 0 };
     private walkDuration: number = 0;
     private pauseDuration: number = 0;
@@ -22,9 +21,12 @@ export class Bubby {
         public speed: number = 1,
         public isUsedBy: string,
         public target: Plant | null,
-        public collisionRadius: number,
+        public collisionRadius: number = 32,
         public attackPower: number,
         public plants: Record<string, Plant>, // Add this parameter
+        public lastAttackTime: number = 0,
+        public attackCooldown: number = 1000,
+        public shouldRemove: boolean,
 
     ) {
         //egg hatch timer
@@ -35,11 +37,11 @@ export class Bubby {
                 this.maxHealth = 10;
                 this.collisionRadius = this.babyBubbyWidth;
             }
-        }, 1000)
+        }, 200)
         //death timer
-        setTimeout(() => {
-            //delete this.bubbies[this.id];
-        }, 14000)
+        // setTimeout(() => {
+        // delete this;
+        // }, 14000)
     }
     public setTargetPlant(plants: Record<string, Plant>) {
         if (this.phase === 'babyBubby') {
@@ -56,55 +58,8 @@ export class Bubby {
             this.target = nearestPlant;
         }
     }
-
-    // Inside your Bubby class
-    public handleCollision(object: Bubby | Plant) {
-        const dx = this.x - object.x;
-        const dy = this.y - object.y;
-        const distance = Math.sqrt(dx ** 2 + dy ** 2);
-        const minDistance = this.collisionRadius + object.collisionRadius;
-
-        if (distance < minDistance) {
-            // Calculate the overlap amount
-            const overlap = minDistance - distance;
-            const overlapX = (overlap / distance) * dx;
-            const overlapY = (overlap / distance) * dy;
-
-            // Push the objects apart
-            this.x += overlapX / 2;
-            this.y += overlapY / 2;
-
-            // If the other object is also a Bubby, push it in the opposite direction
-            if (object instanceof Bubby) {
-                object.x -= overlapX / 2;
-                object.y -= overlapY / 2;
-            }
-        }
-        if (distance <= object.collisionRadius *2) {
-            if (object instanceof Plant) {
-                // Handle collision with a Plant (attack and deplete HP)
-                if (this.phase === 'babyBubby' && object.health > 0) {
-                  ///  console.log('eating!')
-                    // Check if enough time has passed since the last attack
-                    const currentTime = Date.now();
-                    if (currentTime - this.lastAttackTime >= this.attackCooldown) {
-                        // Reduce plant HP
-                        object.health -= this.attackPower;
-                        this.health += 1;
-                        if (object.health <= 0) {
-                            setTimeout(() => {
-                                delete this.plants[object.id];
-                            }, 1000)
-                        }
-                        //Advance to bubby phase
-                        if (this.maxHealth >= 50) {
-                            // this.phase = 'bubby';
-                        }
-                        this.lastAttackTime = currentTime;
-                    }
-                }
-            }
-        }
+    public destroy(){
+        
     }
 
     private randomizeDirectionAndDuration() {
@@ -174,9 +129,8 @@ export class Bubby {
                 }
             }
 
-        } else if (this.phase === 'egg') {
-
-        }
+        } 
+        //Boundaries
         if (this.y <= 200) {
             this.y += 5;
         } else if (this.y >= 580) {

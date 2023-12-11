@@ -1,4 +1,4 @@
-Welcome to Bubby Berry Fortress!
+Welcome to Bubby Berry Fortress! lofi chill vibes to you, bubby bros!
 
 Bubbies are soft body creatures that depend on the players for survival and leadership.
 
@@ -53,3 +53,8 @@ change color based on fruit eaten
 attack other bubbies
 breed with like bubbies
 attack objects
+<<<<<<< Updated upstream
+=======
+bigger bubbies push smaller bubbies
+Hungry bubbies will eat eggs
+>>>>>>> Stashed changes

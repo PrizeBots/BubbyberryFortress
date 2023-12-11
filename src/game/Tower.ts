@@ -2,9 +2,9 @@
 
 import { Bubby } from './Bubby';
 import { Plant } from './Plant';
-
 export class Tower {
     private lastAttackTime: number = 0;
+    private bulletSpeed: number = 1;
     private attackCooldown: number = 2000;
     private walkingDirection: { x: number, y: number } = { x: 0, y: 0 };
     private walkDuration: number = 0;
@@ -13,7 +13,6 @@ export class Tower {
     private shooting: boolean = false;
     private arrowCooldown: number = 1000; // Adjust the arrow cooldown time (in milliseconds)
     private lastArrowTime: number = 0;
-
     constructor(
         public type: string,
         public x: number,
@@ -25,25 +24,18 @@ export class Tower {
         public health: number = maxHealth,
         public speed: number = 1,
         public isUsedBy: string,
-        public target: Plant | null,
+        public target: Bubby | null,
         public collisionRadius: number,
         public attackPower: number,
-        public plants: Record<string, Plant>,
+        public bubbies: Record<string, Bubby>,
         public updateReady: boolean,
         public ammo: number,
-        
     ) {
         setTimeout(() => {
-            if (this && this.phase === 'egg') {
-                this.phase = 'babyBubby';
-                this.health = 10;
-                this.maxHealth = 10;
-                this.collisionRadius = this.babyBubbyWidth;
+            if (this.target){
+                this.shooting = true;
+                this.ammo=-1;
             }
-        }, 1000);
-
-        setTimeout(() => {
-            // ...
         }, 14000);
     }
 
@@ -54,7 +46,7 @@ export class Tower {
             for (const BubbyID in Bubbies) {
                 const bubby = Bubbies[BubbyID];
                 const distance = Math.sqrt((this.x - bubby.x) ** 2 + (this.y - bubby.y) ** 2);
-                if (distance < nearestDistance && distance < 400) {
+                if (bubby.team !== this.team && distance < nearestDistance && distance < 400) {
                     nearestBubby = bubby;
                     nearestDistance = distance;
                 }
@@ -72,13 +64,7 @@ export class Tower {
     }
 
     public update() {
-        //shoot at targets
-        if (this.target){
-            this.shooting = true;
-            this.ammo=-1;
-            
-        }
-        // ... (update logic)
+     
     }
 
     // Static factory method for creating a Bubby instance
@@ -89,7 +75,7 @@ export class Tower {
         id: string,
         phase: string,
         maxHealth: number,
-        plants: Record<string, Plant>
+        bubbies: Record<string, Bubby>
     ): Tower {
         const babyBubbyWidth = 16;
 
@@ -103,13 +89,14 @@ export class Tower {
             maxHealth,
             maxHealth, // Set initial health to maxHealth
             1, // Set initial speed (you can adjust this as needed)
-            '',
-            null,
+            '', //used by player ID
+            null, //target
             babyBubbyWidth, // Set initial collision radius
             1, // Set initial attack power (you can adjust this as needed)
             plants,
             false, // Set initial updateReady flag (modify as needed)
-            10,
+            10000, //ammo
+            false,
         );
     }
 }
