@@ -32,16 +32,15 @@ export class Tower {
         public ammo: number,
         public shouldRemove: boolean,
     ) {
-        setTimeout(() => {
-            if (this.target){
-                this.shooting = true;
-                this.ammo=-1;
-            }
-        }, 14000);
+        // setTimeout(() => {
+        //     if (this.target){
+        //         this.shooting = true;
+        //         this.ammo=-1;
+        //     }
+        // }, 14000);
     }
 
     public setTargetBubby(Bubbies: Record<string, Bubby>) {
-        if (this.phase === 'babyBubby') {
             let nearestBubby: Bubby | null = null;
             let nearestDistance = Infinity;
             for (const BubbyID in Bubbies) {
@@ -53,19 +52,10 @@ export class Tower {
                 }
             }
             this.target = nearestBubby;
-        }
-    }
-
-    public handleCollision(object: Tower | Plant) {
-        // ... (collision handling logic)
-    }
-
-    private randomizeDirectionAndDuration() {
-        // ... (randomize direction and duration logic)
     }
 
     public update() {
-     
+     this.setTargetBubby(this.bubbies)
     }
 
     // Static factory method for creating a Bubby instance

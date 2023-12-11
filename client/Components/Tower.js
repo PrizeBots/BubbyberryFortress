@@ -29,10 +29,7 @@ export default class Tower extends Phaser.GameObjects.Container {
     }
 
     create() {
- 
-        //console.log(this.phase)
-        //See which kind of bubby we are creating
-        if (this.phase === 'tower') {
+        if (this.phase === 'arrow') {
             this.sprite = this.scene.add.sprite(0, 0, 'tower');
             
             // this.sprite = this.scene.add.sprite(0, 0, 'tower');
@@ -44,8 +41,8 @@ export default class Tower extends Phaser.GameObjects.Container {
         }
         console.log('phase? ' , this.phase)
         //give it health bar
-        this.healthBar = new HealthBar(this.scene, this.sprite.height/2+20, this.maxHealth);
-        this.add(this.healthBar);
+        //this.healthBar = new HealthBar(this.scene, this.sprite.height/2+20, this.maxHealth);
+       // this.add(this.healthBar);
         //set up bubby and interactions
         this.add(this.sprite);
         // this.healthBar = new HealthBar(this.scene, this.sprite.height / 2 + 20, this.maxHealth);
@@ -102,11 +99,11 @@ export default class Tower extends Phaser.GameObjects.Container {
             this.targetLine.strokePath();
         }
         else {
-            console.log('no target');
+           // console.log('no target');
         }
     }
     
     updateHealth(health) {
-        this.healthBar.setHealth(health);
+     ///   this.healthBar.setHealth(health);
     }
 }

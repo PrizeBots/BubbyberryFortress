@@ -61,6 +61,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 if (this.towers.hasOwnProperty(towerID)) {
                     const tower = this.towers[towerID];
                     tower.update();
+                    //console.log(tower.target)
                 }
             }
             for (const bulletID in this.bullets) {

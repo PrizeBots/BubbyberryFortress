@@ -106,9 +106,9 @@ export class Bubby {
                 const deltaX = this.target.x - this.x;
                 const deltaY = this.target.y - this.y;
                 const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
-                console.log('bubby target')
+               // console.log('bubby target')
                 if (distanceToTarget > 0) {
-                    console.log('bubby moving to target')
+                    //console.log('bubby moving to target')
                     // Calculate the unit vector toward the target
                     const unitX = deltaX / distanceToTarget;
                     const unitY = deltaY / distanceToTarget;

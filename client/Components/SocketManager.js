@@ -167,6 +167,7 @@ class SocketManager {
                         tower.x = updatedTower.x;
                         tower.y = updatedTower.y;
                         tower.target = updatedTower.target;
+                        ///console.log(tower.target, ' is the target')
                         // console.log(updatedPlant.health)
                         tower.updateHealth(updatedTower.health);
                         if (updatedTower.health <= 0) {
@@ -174,16 +175,16 @@ class SocketManager {
                             return;
                         }
                         //catch a phase change
-                        if (tower.phase !== updatedTower.phase) {
-                            tower.phase = updatedTower.phase;
-                            if (tower.phase === 'egg') {
-                                tower.changePhase('egg');
-                            } else if (plant.phase === 'babyBubby') {
-                                tower.changePhase('babyBubby');
-                            }
-                        }
+                        // if (tower.phase !== updatedTower.phase) {
+                        //     tower.phase = updatedTower.phase;
+                        //     if (tower.phase === 'egg') {
+                        //         tower.changePhase('egg');
+                        //     } else if (plant.phase === 'babyBubby') {
+                        //         tower.changePhase('babyBubby');
+                        //     }
+                        // }
                     } else {
-                        console.log("i didnt have this Tower, making it now")
+                     //   console.log("i didnt have this Tower, making it now")
                         const newTower = new Tower(this.game, updatedTower.team, towerID, updatedTower.x, updatedTower.y, updatedTower.phase, updatedTower.maxHealth);
                     }
                 }
