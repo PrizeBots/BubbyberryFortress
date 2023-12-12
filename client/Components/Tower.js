@@ -39,7 +39,7 @@ export default class Tower extends Phaser.GameObjects.Container {
 
             }
         }
-        console.log('phase? ' , this.phase)
+        //console.log('phase? ' , this.phase)
         //give it health bar
         //this.healthBar = new HealthBar(this.scene, this.sprite.height/2+20, this.maxHealth);
        // this.add(this.healthBar);

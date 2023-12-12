@@ -37,7 +37,7 @@ export class Bubby {
                 this.maxHealth = 10;
                 this.collisionRadius = this.babyBubbyWidth;
             }
-        }, 200)
+        }, 1000)
         //death timer
         // setTimeout(() => {
         // delete this;

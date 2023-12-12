@@ -50,10 +50,10 @@ class SocketManager {
         });
         this.socket.on('buildTower', (newTower) => {
             //console.log('newTower.team ', newTower.team, "newTower.id ",newTower.id )
-
             const newArrowTower = new Tower(this.game, newTower.team, newTower.id, newTower.x, newTower.y, 'tower', newTower.maxHealth);
         });
         this.socket.on('towerShot', (shot) => {
+            console.log('new shot!')
             const projectile = new Projectile(this.game, shot.x, shot.y, shot.phase);
         });
         //Game Server Updates

@@ -55,7 +55,7 @@ export class Shop {
         const player = this.players[playerId];
         if (player && player.coins >= this.seedPrice) {
             player.coins -= this.seedPrice;
-            const seedId = `seed_${playerId}_${this.seedsSpawned++}`;
+            const seedId = `plant_${playerId}_${this.seedsSpawned++}`;
             const newSeed = new Plant(
                 'plant',
                 x,
@@ -67,7 +67,7 @@ export class Shop {
                 false,//hp
        
             );
-            console.log(seedId)
+           // console.log(seedId)
             this.plants[seedId] = newSeed;
             return newSeed;
         }

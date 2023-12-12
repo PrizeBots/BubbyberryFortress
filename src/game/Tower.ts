@@ -1,7 +1,7 @@
 // Tower.ts
-
 import { Bubby } from './Bubby';
-import { Plant } from './Plant';
+import { eventBus } from '../Components/EventBus'; // Import the event bus
+
 export class Tower {
     private lastAttackTime: number = 0;
     private bulletSpeed: number = 1;
@@ -32,32 +32,49 @@ export class Tower {
         public ammo: number,
         public shouldRemove: boolean,
     ) {
-        // setTimeout(() => {
-        //     if (this.target){
-        //         this.shooting = true;
-        //         this.ammo=-1;
-        //     }
-        // }, 14000);
+     
+        setInterval(() => {
+            if (this.target && this.ammo > 0) {
+                this.shoot();
+            }
+        }, 1000);
     }
 
     public setTargetBubby(Bubbies: Record<string, Bubby>) {
-            let nearestBubby: Bubby | null = null;
-            let nearestDistance = Infinity;
-            for (const BubbyID in Bubbies) {
-                const bubby = Bubbies[BubbyID];
-                const distance = Math.sqrt((this.x - bubby.x) ** 2 + (this.y - bubby.y) ** 2);
-                if (bubby.team !== this.team && distance < nearestDistance && distance < 400) {
-                    nearestBubby = bubby;
-                    nearestDistance = distance;
-                }
+        let nearestBubby: Bubby | null = null;
+        let nearestDistance = Infinity;
+        for (const BubbyID in Bubbies) {
+            const bubby = Bubbies[BubbyID];
+            const distance = Math.sqrt((this.x - bubby.x) ** 2 + (this.y - bubby.y) ** 2);
+            if (bubby.team !== this.team && distance < nearestDistance && distance < 400) {
+                nearestBubby = bubby;
+                nearestDistance = distance;
             }
-            this.target = nearestBubby;
+        }
+        this.target = nearestBubby;
     }
 
     public update() {
-     this.setTargetBubby(this.bubbies)
+        this.setTargetBubby(this.bubbies)
     }
 
+    private shoot() {
+        //console.log('Shooting conditions:', this.target, this.ammo);
+
+        if (this.target && this.ammo > 0) {
+            this.ammo--;
+            // console.log('bang!')
+            // Logic to calculate the trajectory of the shot
+            const shotDirection = { x: this.target.x - this.x, y: this.target.y - this.y };
+            // Emit an event to notify the gateway about the shot
+            eventBus.emit('towerShot', {
+                towerId: this.id,
+                x: this.x,
+                y: this.y,
+                shotDirection,
+            });
+        }
+    }
     // Static factory method for creating a Bubby instance
     public static createTower(
         x: number,

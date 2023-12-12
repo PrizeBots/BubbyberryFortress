@@ -23,36 +23,18 @@ export class CollisionHandler {
       if (objToRemove.type === 'plant') {
 
       }
-     
+
       //remove from objects pool
       const index = objects.indexOf(objToRemove);
       if (index !== -1) {
-        console.log('remove from obj pool')
+        //console.log('remove from obj pool')
         objects.splice(index, 1);
 
       }
     }
   }
-  private static bumpObjects(obj1: Bubby | Plant | Tower | Bullet,
-    obj2: Bubby | Plant | Tower | Bullet) {
-    const dx = obj1.x - obj2.x;
-    const dy = obj1.y - obj2.y;
-    const distance = Math.sqrt(dx ** 2 + dy ** 2);
-    const minDistance = obj1.collisionRadius + obj2.collisionRadius;
-    if (distance < minDistance) {
-      // Calculate the overlap amount
-      const overlap = minDistance - distance;
-      const overlapX = (overlap / distance) * dx;
-      const overlapY = (overlap / distance) * dy;
-      // Push the objects apart
-      // obj1.x += overlapX / 2;
-      // obj1.y += overlapY / 2;
-    }
-  }
-
   private static checkCollision(obj1: Bubby | Plant | Tower | Bullet,
     obj2: Bubby | Plant | Tower | Bullet) {
-
     if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
       console.log(obj1, 'HAS BEEN SHOT!')
     }
@@ -70,20 +52,20 @@ export class CollisionHandler {
         // Push the objects apart
         obj1.x += overlapX / 2;
         obj1.y += overlapY / 2;
-
         obj2.x -= overlapX / 2;
         obj2.y -= overlapY / 2;
+        //Bubby eats plant
         if (obj1.phase === 'babyBubby' && obj2.health > 0) {
           const currentTime = Date.now();
           if (currentTime - obj1.lastAttackTime >= obj1.attackCooldown) {
             obj2.health -= obj1.attackPower;
             obj1.health += obj1.attackPower;
-           // console.log('obj1 hp:', obj1.health);
-          //  console.log(' obj2 hp:', obj2.health);
-  
+            //console.log('obj1 hp:', obj1.health);
+            //console.log(' obj2 hp:', obj2.health);
+
             //bubby ate it!
             if (obj2.health <= 0) {
-             this.objectsToRemove.push(obj2);
+              this.objectsToRemove.push(obj2);
             }
             //Advance to bubby phase
             if (obj1.maxHealth >= 50) {
@@ -93,8 +75,6 @@ export class CollisionHandler {
           }
         }
       }
-
-
     }
     // obj1.takeDamage(obj2.getDamage());
     // obj2.takeDamage(obj1.getDamage());

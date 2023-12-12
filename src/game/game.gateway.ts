@@ -1,7 +1,7 @@
 // src/game/game.gateway.ts
 import { WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { eventBus } from '../components/EventBus'; // Import the event bus
+import { eventBus } from '../Components/EventBus'; // Correct the case here
 import { CollisionHandler } from '../components/CollisionHandler'; // Import the event bus
 import { Player } from './Player';
 import { Bubby } from './Bubby';
@@ -23,13 +23,19 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private teamCounts: Record<'blue' | 'red', number> = { blue: 0, red: 0 }; // Track team counts
     public objects: (Bubby | Plant | Tower | Bullet)[] = [];
     constructor() {
-        eventBus.on('towerShot', (bullet: Bullet) => {
-            //console.log(bullet);
-            const bulletID = `bullet${this.bullets.length}`
-            bullet.id = bulletID;
-            this.objects.push(this.bullets[bullet.id]);
-            this.server.emit('towerShot', bullet);
+        eventBus.on('towerShot', (data: any) => {
+           // console.log('tower is shooting',data)
+
+           this.server.emit('towerShot', data);
         });
+        // eventBus.on('towerShot', (bullet: Bullet) => {
+        //     //console.log(bullet);
+        //     console.log('tower is shooting')
+        //     const bulletID = `bullet${this.bullets.length}`
+        //     bullet.id = bulletID;
+        //     this.objects.push(this.bullets[bullet.id]);
+        //     this.server.emit('towerShot', bullet);
+        // });
         this.shop = new Shop(this.players, this.bubbies, this.plants, this.towers);
         this.objects = [];
         setInterval(() => {
@@ -48,12 +54,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     if (plant && plant.shouldRemove === true) {
                         // Remove the plant from the plants object
                         delete this.plants[plantID];
-                        console.log('delete plant')
+                       // console.log('delete plant')
                         // Optionally, set the reference to null to destroy the plant object
                         //this.plants[plantID] = null;
                     }
                     if (plant) plant.update();
-
                 }
             }
             //update towers
@@ -158,9 +163,9 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         });
         client.on('buyTower', (data: { x: number; y: number }) => {
             const buyTower = this.shop.buyTower(client.id);
-            console.log('buy tower0 ', buyTower)
+           // console.log('buy tower0 ', buyTower)
             if (buyTower) {
-                console.log('this.players[client.id].isBuilding')
+               // console.log('this.players[client.id].isBuilding')
                 this.players[client.id].isBuilding = true;
                 //this.objects.push(this.plants[newTower.id]);
                 this.server.emit('placeBuilding');

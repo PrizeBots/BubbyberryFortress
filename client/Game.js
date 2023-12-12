@@ -121,7 +121,7 @@ class Game extends Phaser.Scene {
         });
         //player is ready to build
         this.socket.on('placeBuilding', () => {
-            console.log("we made it")
+          //  console.log("we made it")
             this.isBuilding = true;
             this.placementSprite.visible = true;
         });
