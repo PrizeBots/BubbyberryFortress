@@ -60,18 +60,23 @@ export class Tower {
 
     private shoot() {
         //console.log('Shooting conditions:', this.target, this.ammo);
-
         if (this.target && this.ammo > 0) {
             this.ammo--;
-            // console.log('bang!')
+          //console.log('bang!',this.id)
             // Logic to calculate the trajectory of the shot
             const shotDirection = { x: this.target.x - this.x, y: this.target.y - this.y };
             // Emit an event to notify the gateway about the shot
+            //console.log('team shooting ', this.team)
+            this.attackPower =5;
             eventBus.emit('towerShot', {
-                towerId: this.id,
+                id: this.id,
+                team: this.team,
+                attack: this.attackPower,
+                speed: .1,
                 x: this.x,
                 y: this.y,
                 shotDirection,
+                phase: 'ball'
             });
         }
     }

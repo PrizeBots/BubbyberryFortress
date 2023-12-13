@@ -53,40 +53,41 @@ class SocketManager {
             const newArrowTower = new Tower(this.game, newTower.team, newTower.id, newTower.x, newTower.y, 'tower', newTower.maxHealth);
         });
         this.socket.on('towerShot', (shot) => {
-            console.log('new shot!')
-            const projectile = new Projectile(this.game, shot.x, shot.y, shot.phase);
+          //console.log('new shot!',shot.team, shot.x, ' ',shot.y)
+            const projectile = new Projectile(this.game, shot.x, shot.y, shot.phase, shot.team, shot.id);
         });
         //Game Server Updates
-        this.socket.on('updateBullets', (bullets) => {
-          //  console.log(bullets)
-            // for (const projectile in this.scene.projectiles) {
-            //     if (!this.game.projectiles[projectile]) {
-            //         console.log('need to make some projectiles')
-            //         //   const { x, y, team } = playerList[playerId];
+        this.socket.on('updateProjectiles', (projectiles) => {
+            const serverProjectileIDs = new Set(Object.keys(projectiles));
 
-            //     }
-            // }
+            // Iterate through the client's projectiles
+            for (let i = this.game.projectiles.length - 1; i >= 0; i--) {
+                const projectile = this.game.projectiles[i];
+                
+                // Check if the projectile's ID is not in the server's updated array
+                if (!serverProjectileIDs.has(projectile.id)) {
+                    // The projectile is not in the updated array, so remove it
+                    projectile.destroy();
+                    this.game.projectiles.splice(i, 1); // Remove it from the client's array
+                }
+            }
+
+            // let i =1;
+            for (const projectileID in projectiles) {
+                if (projectiles.hasOwnProperty(projectileID)) {
+                    const updatedProjectile = projectiles[projectileID];
+                    const projectile = this.game.projectiles.find((p) => p.id === projectileID);
+                    if (projectile) {
+                 //       console.log('updatedProjectile x y: ',updatedProjectile.team)
+                        projectile.x = updatedProjectile.x;
+                        projectile.y = updatedProjectile.y;
+                    } else {
+                   //     console.log('make new one')
+                        const projectile = new Projectile(this.game, updatedProjectile.x, updatedProjectile.y, updatedProjectile.phase,updatedProjectile.team, updatedProjectile.id);
+                    }
+                }
+            }
         });
-        // if (bubbiesList.hasOwnProperty(bubbyID)) {
-        //     const updatedBubby = bubbiesList[bubbyID];
-        //     const bubby = this.game.bubbies.find((b) => b.id === bubbyID);
-        //     if (bubby) {
-        //         bubby.x = updatedBubby.x;
-        //         bubby.y = updatedBubby.y;
-        //         bubby.updateHealth(updatedBubby.health);
-        //         //catch a phase change
-        //         if (bubby.phase !== updatedBubby.phase) {
-        //             bubby.phase = updatedBubby.phase;
-        //             if (bubby.phase === 'egg') {
-        //                 bubby.changePhase('egg');
-        //             } else if (bubby.phase === 'babyBubby') {
-        //                 bubby.changePhase('babyBubby');
-        //             }
-        //         }
-        //     } else {
-        //         const projectile = new Projectile(this.game, shot.x, shot.y, shot.phase);
-        //     }
-        // }
 
         this.socket.on('updatePlayersList', (playerList) => {
             for (const playerId in playerList) {
@@ -101,7 +102,7 @@ class SocketManager {
             }
         });
         this.socket.on('updateBubbies', (bubbiesList) => {
-           // console.log('update bubbies')
+            // console.log('update bubbies')
             for (const bubbyID in bubbiesList) {
                 if (bubbiesList.hasOwnProperty(bubbyID)) {
                     const updatedBubby = bubbiesList[bubbyID];
@@ -110,6 +111,7 @@ class SocketManager {
                         bubby.x = updatedBubby.x;
                         bubby.y = updatedBubby.y;
                         bubby.updateHealth(updatedBubby.health);
+                        console.log('hp: ',updatedBubby.health)
                         //catch a phase change
                         if (bubby.phase !== updatedBubby.phase) {
                             bubby.phase = updatedBubby.phase;
@@ -151,7 +153,7 @@ class SocketManager {
                     } else {
                         console.log("i didnt have this plant, making it now")
                         console.log(updatedPlant)
-                        const newPlant = new Plant(this.game, updatedPlant.team, plantID, 
+                        const newPlant = new Plant(this.game, updatedPlant.team, plantID,
                             updatedPlant.x, updatedPlant.y, updatedPlant.phase, updatedPlant.maxHealth);
                     }
                 }
@@ -184,7 +186,7 @@ class SocketManager {
                         //     }
                         // }
                     } else {
-                     //   console.log("i didnt have this Tower, making it now")
+                        //   console.log("i didnt have this Tower, making it now")
                         const newTower = new Tower(this.game, updatedTower.team, towerID, updatedTower.x, updatedTower.y, updatedTower.phase, updatedTower.maxHealth);
                     }
                 }

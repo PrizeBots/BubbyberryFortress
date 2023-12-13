@@ -35,8 +35,9 @@ export default class Bubby extends Phaser.GameObjects.Container {
 
             }
         }
+        this.sprite.setScale(2);
         //give it health bar
-        this.healthBar = new HealthBar(this.scene, this.sprite.height, this.maxHealth);
+        this.healthBar = new HealthBar(this.scene, this.sprite.height*1.8, this.maxHealth);
         this.add(this.healthBar);
         //set up bubby and interactions
         this.add(this.sprite);

@@ -14,7 +14,14 @@ export class CollisionHandler {
     for (const obj1 of objects) {
       for (const obj2 of objects) {
         if (obj1 !== obj2) {
+          if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
+            console.log( 'obj1 instanceof Bullet!')
+            //CollisionHandler.checkCollision(obj1, obj2);
+           
+          }
           CollisionHandler.checkCollision(obj1, obj2);
+       
+      
         }
       }
     }
@@ -33,27 +40,39 @@ export class CollisionHandler {
       }
     }
   }
-  private static checkCollision(obj1: Bubby | Plant | Tower | Bullet,
-    obj2: Bubby | Plant | Tower | Bullet) {
-    if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
-      console.log(obj1, 'HAS BEEN SHOT!')
+  private static checkHits(obj1: Bubby, obj2:  Bullet) {
+      if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
+        console.log(obj1, 'Bubby HAS BEEN SHOT!')
+        //obj2.health = obj2.health - obj1.attackPower;
+       
+      }
     }
 
-    if (obj1 instanceof Bubby && obj2 instanceof Plant) {
-      const dx = obj1.x - obj2.x;
-      const dy = obj1.y - obj2.y;
-      const distance = Math.sqrt(dx ** 2 + dy ** 2);
-      const minDistance = obj1.collisionRadius + obj2.collisionRadius;
-      if (distance < minDistance) {
-        // Calculate the overlap amount
-        const overlap = minDistance - distance;
-        const overlapX = (overlap / distance) * dx;
-        const overlapY = (overlap / distance) * dy;
-        // Push the objects apart
-        obj1.x += overlapX / 2;
-        obj1.y += overlapY / 2;
-        obj2.x -= overlapX / 2;
-        obj2.y -= overlapY / 2;
+
+  private static checkCollision(obj1: Bubby | Plant | Tower | Bullet,
+    obj2: Bubby | Plant | Tower | Bullet) {
+    const dx = obj1.x - obj2.x;
+    const dy = obj1.y - obj2.y;
+    const distance = Math.sqrt(dx ** 2 + dy ** 2);
+    const minDistance = obj1.collisionRadius + obj2.collisionRadius;
+    if (distance < minDistance) {
+      //console.log('obj1', obj1)
+      // Calculate the overlap amount
+      const overlap = minDistance - distance;
+      const overlapX = (overlap / distance) * dx;
+      const overlapY = (overlap / distance) * dy;
+      // Push the objects apart
+      obj1.x += overlapX / 2;
+      obj1.y += overlapY / 2;
+      obj2.x -= overlapX / 2;
+      obj2.y -= overlapY / 2;
+      if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
+        console.log(obj1, 'Bubby HAS BEEN SHOT!')
+        obj2.health = obj2.health - obj1.attackPower;
+       
+      }
+
+      else if (obj1 instanceof Bubby && obj2 instanceof Plant) {
         //Bubby eats plant
         if (obj1.phase === 'babyBubby' && obj2.health > 0) {
           const currentTime = Date.now();
@@ -75,37 +94,36 @@ export class CollisionHandler {
           }
         }
       }
-    }
-    // obj1.takeDamage(obj2.getDamage());
-    // obj2.takeDamage(obj1.getDamage());
-    else if (obj1 instanceof Bubby && obj2 instanceof Bullet) {
-      // Handle collision between Bubby and Bullet
-      // Example collision logic:
+
       // obj1.takeDamage(obj2.getDamage());
-      // obj2.destroy();
-    }
+      // obj2.takeDamage(obj1.getDamage());
+      else if (obj1 instanceof Bubby && obj2 instanceof Bullet) {
+        console.log(obj1, 'Bullet HAS BEEN SHOT!')        // Example collision logic:
+        // obj1.takeDamage(obj2.getDamage());
+        // obj2.destroy();
+      }
+      else if (obj1 instanceof Bubby && obj2 instanceof Bubby) {
+        const dx = obj1.x - obj2.x;
+        const dy = obj1.y - obj2.y;
+        const distance = Math.sqrt(dx ** 2 + dy ** 2);
+        const minDistance = obj1.collisionRadius + obj2.collisionRadius;
 
-    else if (obj1 instanceof Bubby && obj2 instanceof Bubby) {
-      const dx = obj1.x - obj2.x;
-      const dy = obj1.y - obj2.y;
-      const distance = Math.sqrt(dx ** 2 + dy ** 2);
-      const minDistance = obj1.collisionRadius + obj2.collisionRadius;
+        if (distance < minDistance) {
+          //  console.log('ooops bump time')
+          // Calculate the overlap amount
+          const overlap = minDistance - distance;
+          const overlapX = (overlap / distance) * dx;
+          const overlapY = (overlap / distance) * dy;
 
-      if (distance < minDistance) {
-        //  console.log('ooops bump time')
-        // Calculate the overlap amount
-        const overlap = minDistance - distance;
-        const overlapX = (overlap / distance) * dx;
-        const overlapY = (overlap / distance) * dy;
+          // Push the objects apart
+          obj1.x += overlapX / 2;
+          obj1.y += overlapY / 2;
 
-        // Push the objects apart
-        obj1.x += overlapX / 2;
-        obj1.y += overlapY / 2;
-
-        // If the other object is also a Bubby, push it in the opposite direction
-        if (obj1 instanceof Bubby) {
-          obj2.x -= overlapX / 2;
-          obj2.y -= overlapY / 2;
+          // If the other object is also a Bubby, push it in the opposite direction
+          if (obj1 instanceof Bubby) {
+            obj2.x -= overlapX / 2;
+            obj2.y -= overlapY / 2;
+          }
         }
       }
     }
