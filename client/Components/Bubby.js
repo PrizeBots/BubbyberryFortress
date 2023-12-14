@@ -34,8 +34,9 @@ export default class Bubby extends Phaser.GameObjects.Container {
                 this.sprite = this.scene.add.sprite(0, 0, 'babyBubbyRed');
 
             }
+            this.sprite.setScale(2);
         }
-        this.sprite.setScale(2);
+  
         //give it health bar
         this.healthBar = new HealthBar(this.scene, this.sprite.height*1.8, this.maxHealth);
         this.add(this.healthBar);

@@ -3,7 +3,7 @@ import { Bubby } from './Bubby';
 export class Bullet {
     private position: { x: number; y: number };
     private creationTime: number;
-    private bulletLifetime: number; 
+    private bulletLifetime: number;
     constructor(
         public type: string,
         public x: number,
@@ -19,30 +19,30 @@ export class Bullet {
         public shouldRemove: boolean,
     ) {
         this.creationTime = Date.now();
-      
+
         setInterval(() => {
-            shouldRemove =true;
+            shouldRemove = true;
         }, 1000);
     }
-    public test(){
+    public test() {
         //console.log('bullet test');
     }
     public destroy() {
         this.shouldRemove = true;
 
     }
-  
-     
+
+
     public update() {
-   
+
         const currentTime = Date.now();
         const deltaTime = (currentTime - this.creationTime) / 1000; // Convert milliseconds to seconds
 
         this.x += this.direction.x * this.speed * deltaTime;
         this.y += this.direction.y * this.speed * deltaTime;
-    ///    console.log('x: ', this.x,'y: ', this.y);
-           //Boundaries
-           if (this.y <= 0) {
+        ///    console.log('x: ', this.x,'y: ', this.y);
+        // Boundaries
+        if (this.y <= 0) {
             this.destroy();
         } else if (this.y >= 580) {
             this.destroy();
@@ -55,5 +55,5 @@ export class Bullet {
 
     }
 
- 
+
 }

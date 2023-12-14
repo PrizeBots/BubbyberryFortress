@@ -40,11 +40,11 @@ export class Shop {
                 null, //target
                 32,//collison radius
                 1,//attack 
-                //this.plants,
                 0,
                 1000,
                 false,
-            
+                this.plants,
+
             );
             this.bubbies[eggId] = newEgg;
             return newEgg;
@@ -65,9 +65,9 @@ export class Shop {
                 'seed',
                 20,
                 false,//hp
-       
+
             );
-           // console.log(seedId)
+            // console.log(seedId)
             this.plants[seedId] = newSeed;
             return newSeed;
         }

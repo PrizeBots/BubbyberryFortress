@@ -31,6 +31,7 @@ export default class HealthBar extends Phaser.GameObjects.Container {
         // Clear the graphics
         this.foreground.clear();
         this.border.clear(); // Clear the border graphics
+        this.background.clear();
         // Draw the border first
         this.border.lineStyle(this.borderThickness, 0x000000); // White color for the border
         this.border.strokeRect(barX, barY, this.maxHP, this.height);
@@ -40,7 +41,7 @@ export default class HealthBar extends Phaser.GameObjects.Container {
             this.foreground.fillRect(barX, barY, this.maxHP * percentage, this.height);
         }
         // Draw the background
-        this.background.fillStyle(0x000000, 0.5); // Black color with 50% opacity
+        this.background.fillStyle(0x000000, 0.3); // Black color with 50% opacity
         this.background.fillRect(barX, barY, this.maxHP, this.height);
     }
 

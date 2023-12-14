@@ -153,14 +153,16 @@ class SocketManager {
                             return;
                         }
                         //catch a phase change
-                        // if (plant.phase !== updatedPlant.phase) {
-                        //     plant.phase = updatedPlant.phase;
-                        //     if (plant.phase === 'egg') {
-                        //         plant.changePhase('egg');
-                        //     } else if (plant.phase === 'babyBubby') {
-                        //         plant.changePhase('babyBubby');
-                        //     }
-                        // }
+                        if (plant.phase !== updatedPlant.phase) {
+                            plant.phase = updatedPlant.phase;
+                            if (plant.phase === 'germinating') {
+                                plant.changePhase('germinating');
+                            } else if (plant.phase === 'sprout') {
+                                plant.changePhase('sprout');
+                            }else if (plant.phase === 'babyBush') {
+                                plant.changePhase('babyBush');
+                            }
+                        }
                     } else {
                         console.log("i didnt have this plant, making it now")
                         console.log(updatedPlant)

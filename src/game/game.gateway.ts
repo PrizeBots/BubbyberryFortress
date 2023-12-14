@@ -55,12 +55,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             for (const bubbyId in this.bubbies) {
                 if (this.bubbies.hasOwnProperty(bubbyId)) {
                     const bubby = this.bubbies[bubbyId];
-                   
+                    bubby.update();
                     if (bubby && bubby.shouldRemove) {
-                        console.log('you gotta bub to remove!')
+                      //  console.log('you gotta bub to remove!')
                         delete this.bubbies[bubbyId];
                     }
-                    bubby.update();
+                 
                 }
             }
             //update plants
@@ -86,7 +86,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     const bullet = this.bullets[bulletID];
                     bullet.update();
                     if (bullet.shouldRemove) {
-                        // console.log('remove bullet')
+                     //  console.log('remove bullet')
                         // Flag or remove the expired bullet from the array or the game
                         delete this.bullets[bulletID];
                     }

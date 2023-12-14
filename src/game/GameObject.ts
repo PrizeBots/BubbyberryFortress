@@ -23,27 +23,27 @@ export class GameObject {
         public attackCooldown: number = 1000,
 
         public shouldRemove: boolean = false,
-        
     ) {
 
     }
     //set target
-    public targetClosest(objects: Record<string, GameObject>) {
-     
-            let nearestObj: GameObject | null = null;
-            let nearestDistance = Infinity;
-            for (const objID in objects) {
-                const object = objects[objID];
+    public targetClosest(objects: Record<string, GameObject>, targetPhase: string) {
+        let nearestObj: GameObject | null = null;
+        let nearestDistance = Infinity;
+        // console.log(nearestObj)
+        for (const objID in objects) {
+            const object = objects[objID];
+            if (object.phase === targetPhase) {
                 const distance = Math.sqrt((this.x - object.x) ** 2 + (this.y - object.y) ** 2);
                 if (distance < nearestDistance && distance < 400) {
                     nearestObj = object;
                     nearestDistance = distance;
                 }
             }
-            this.target = nearestObj;
-           // console.log(this.target)
-        
+        }
+        return nearestObj;
     }
+
     public destroy() {
         this.shouldRemove = true;
         console.log('an obj has been marked for removal')

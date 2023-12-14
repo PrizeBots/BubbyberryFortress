@@ -27,7 +27,7 @@ export class CollisionHandler {
       //remove from objects pool
       const index = objects.indexOf(objToRemove);
       if (index !== -1) {
-       /// console.log('remove from obj pool ', objects.indexOf(objToRemove));
+        /// console.log('remove from obj pool ', objects.indexOf(objToRemove));
         objects.splice(index, 1);
       }
     }
@@ -44,22 +44,26 @@ export class CollisionHandler {
       const overlap = minDistance - distance;
       const overlapX = (overlap / distance) * dx;
       const overlapY = (overlap / distance) * dy;
+
       // Push the objects apart
       obj1.x += overlapX / 2;
       obj1.y += overlapY / 2;
       obj2.x -= overlapX / 2;
       obj2.y -= overlapY / 2;
+
+      //Projectile hits a bubby
       if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
-        // console.log(obj1, 'Bubby HAS BEEN SHOT!')
         obj2.health -= obj1.attackPower;
         this.objectsToRemove.push(obj1);
+        obj1.shouldRemove = true;
         if (obj2.health <= 0) {
           this.objectsToRemove.push(obj2);
         }
       }
+
+      //Bubby eats plant
       else if (obj1 instanceof Bubby && obj2 instanceof Plant) {
-        //Bubby eats plant
-        if (obj1.phase === 'babyBubby' && obj2.health > 0) {
+        if (obj1.phase === 'babyBubby' && obj2.health > 0 && obj2.phase != 'germinating') {
           const currentTime = Date.now();
           if (currentTime - obj1.lastAttackTime >= obj1.attackCooldown) {
             obj2.health -= obj1.attackPower;

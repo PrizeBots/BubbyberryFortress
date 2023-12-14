@@ -8,7 +8,7 @@ export class Bubby extends GameObject {
     private pauseDuration: number = 0;
     private babyBubbyWidth: number = 16;
     private lastKnownState: Partial<Bubby> = {}; // Store the last known state
-    private plants: Record<string, Plant>; // Add a property for plants
+   // private plants: Record<string, Plant>; // Add a property for plants
 
     constructor(
         public type: string,
@@ -21,15 +21,13 @@ export class Bubby extends GameObject {
         public health: number = maxHealth,
         public speed: number = 1,
         public isUsedBy: string,
-        public target: null,
+        public target: any,
         public collisionRadius: number = 32,
         public attackPower: number,
         public lastAttackTime: number = 0,
         public attackCooldown: number = 1000,
         public shouldRemove: boolean = false,
-
-     //   public plants: Record<string, Plant>, 
-
+        public plants: Record<string, Plant>, 
     ) {
         super(
             type,
@@ -62,26 +60,7 @@ export class Bubby extends GameObject {
                 this.collisionRadius = this.babyBubbyWidth;
             }
         }, 1000)
-        //death timer
-        // setTimeout(() => {
-        // delete this;
-        // }, 14000)
     }
-    // public setTargetPlant(plants: Record<string, Plant>) {
-    //     if (this.phase === 'babyBubby') {
-    //         let nearestPlant: Plant | null = null;
-    //         let nearestDistance = Infinity;
-    //         for (const plantId in plants) {
-    //             const plant = plants[plantId];
-    //             const distance = Math.sqrt((this.x - plant.x) ** 2 + (this.y - plant.y) ** 2);
-    //             if (distance < nearestDistance && distance < 400) {
-    //                 nearestPlant = plant;
-    //                 nearestDistance = distance;
-    //             }
-    //         }
-    //         this.target = nearestPlant;
-    //     }
-    // }
     private randomizeDirectionAndDuration() {
         // Generate a random walking direction
         const randomAngle = Math.random() * 2 * Math.PI;
@@ -108,26 +87,25 @@ export class Bubby extends GameObject {
     }
     public update() {
         super.update();
-        super.targetClosest(this.plants);
+        this.target = super.targetClosest(this.plants, 'seed');
         const randomX = Math.random() * 4 - 2; // Generates a number between -10 and 10
         const randomY = Math.random() * 4 - 2; // Generates a number between -10 and 10
         if (this.phase === "babyBubby") {
             if (this.target) {
-                console.log('got target: ',this.target)
-
-                //     const deltaX = this.target.x - this.x;
-                //     const deltaY = this.target.y - this.y;
-                //     const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
-                //    // console.log('bubby target')
-                //     if (distanceToTarget > 0) {
-                //         //console.log('bubby moving to target')
-                //         // Calculate the unit vector toward the target
-                //         const unitX = deltaX / distanceToTarget;
-                //         const unitY = deltaY / distanceToTarget;
-                //         // Move towards the target
-                //         this.x += unitX * this.speed;
-                //         this.y += unitY * this.speed;
-                //     }
+             //   console.log('got target: ',this.target)
+                    const deltaX = this.target.x - this.x;
+                    const deltaY = this.target.y - this.y;
+                    const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+                   // console.log('bubby target')
+                    if (distanceToTarget > 0) {
+                        //console.log('bubby moving to target')
+                        // Calculate the unit vector toward the target
+                        const unitX = deltaX / distanceToTarget;
+                        const unitY = deltaY / distanceToTarget;
+                        // Move towards the target
+                        this.x += unitX * this.speed;
+                        this.y += unitY * this.speed;
+                    }
             } else {
                 if (this.pauseDuration > 0) {
                     // Bubby is currently paused, decrement pause duration

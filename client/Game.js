@@ -42,12 +42,17 @@ class Game extends Phaser.Scene {
         this.load.image('buildButton', './Assets/UI/button_build.png');
         this.load.image('seedButton', './Assets/UI/button_seed.png');
         this.load.image('eggButton', './Assets/UI/button_egg.png');
+        //Plants
         this.load.image('seed', './Assets/seed.png');
+        this.load.image('germinating', './Assets/germinating.png');
+        this.load.image('sprout', './Assets/sprout.png');
+        this.load.image('babyBush', './Assets/babyBush.png');
+        //Towers
         this.load.image('tower', './Assets/tower.png');
         this.load.image('towerFoundation', './Assets/towerFoundation.png');
         this.load.image('ballRed', './Assets/ballRed.png');
         this.load.image('ballBlue', './Assets/ballBlue.png');
-        // this.load.image('seed', './Assets/sprout.png');
+        //
         this.load.image('egg', './Assets/egg.png');
         this.load.image('babyBubbyRed', './Assets/babyBubbyRed.png');
         this.load.image('babyBubbyBlue', './Assets/babyBubbyBlue.png');
