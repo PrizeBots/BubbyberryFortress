@@ -22,7 +22,7 @@ export class Bullet {
       
         setInterval(() => {
             shouldRemove =true;
-        }, 3000);
+        }, 1000);
     }
     public test(){
         //console.log('bullet test');

@@ -111,7 +111,7 @@ class SocketManager {
                         bubby.x = updatedBubby.x;
                         bubby.y = updatedBubby.y;
                         bubby.updateHealth(updatedBubby.health);
-                        console.log('hp: ',updatedBubby.health)
+                      //  console.log('hp: ',updatedBubby.health)
                         //catch a phase change
                         if (bubby.phase !== updatedBubby.phase) {
                             bubby.phase = updatedBubby.phase;

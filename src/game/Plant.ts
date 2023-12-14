@@ -19,15 +19,19 @@ export class Plant extends GameObject {
             type,
             x,
             y,
+
             team,
             id,
             phase,
+
             5, // Set maxHealth
             5, // Set health
             0, // Set speed
+
             '', // Set isUsedBy
             null, // Set target
             16, // Set collisionRadius
+            
             0, // Set attackPower
             0, // Set lastAttackTime
             1000, // Set attackCooldown

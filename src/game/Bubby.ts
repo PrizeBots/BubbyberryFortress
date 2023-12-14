@@ -1,7 +1,7 @@
 //Bubby.ts
 import { Plant } from './Plant';
-import { Bullet } from './Bullet'; // Import the Plant class from the appropriate file
-export class Bubby {
+import { GameObject } from "./GameObject";
+export class Bubby extends GameObject {
   // Adjust the attack cooldown time (in milliseconds)
     private walkingDirection: { x: number, y: number } = { x: 0, y: 0 };
     private walkDuration: number = 0;
@@ -20,15 +20,37 @@ export class Bubby {
         public health: number = maxHealth,
         public speed: number = 1,
         public isUsedBy: string,
-        public target: Plant | null,
+        public target: null,
         public collisionRadius: number = 32,
         public attackPower: number,
-        public plants: Record<string, Plant>, // Add this parameter
+      //  public plants: Record<string, Plant>, // Add this parameter
         public lastAttackTime: number = 0,
         public attackCooldown: number = 1000,
-        public shouldRemove: boolean,
+        public shouldRemove: boolean = false,
 
     ) {
+        super(
+            type,
+            x,
+            y,
+
+            team,
+            id,
+            phase,
+
+            maxHealth, // Set maxHealth
+            health, // Set health
+            speed, // Set speed
+
+            isUsedBy, // Set isUsedBy
+            null, // Set target
+            collisionRadius, // Set collisionRadius
+
+            attackPower, // Set attackPower
+            0, // Set lastAttackTime
+            1000, // Set attackCooldown
+            false,
+        );
         //egg hatch timer
         setTimeout(() => {
             if (this && this.phase === 'egg') {
@@ -43,25 +65,21 @@ export class Bubby {
         // delete this;
         // }, 14000)
     }
-    public setTargetPlant(plants: Record<string, Plant>) {
-        if (this.phase === 'babyBubby') {
-            let nearestPlant: Plant | null = null;
-            let nearestDistance = Infinity;
-            for (const plantId in plants) {
-                const plant = plants[plantId];
-                const distance = Math.sqrt((this.x - plant.x) ** 2 + (this.y - plant.y) ** 2);
-                if (distance < nearestDistance && distance < 400) {
-                    nearestPlant = plant;
-                    nearestDistance = distance;
-                }
-            }
-            this.target = nearestPlant;
-        }
-    }
-    public destroy(){
-        
-    }
-
+    // public setTargetPlant(plants: Record<string, Plant>) {
+    //     if (this.phase === 'babyBubby') {
+    //         let nearestPlant: Plant | null = null;
+    //         let nearestDistance = Infinity;
+    //         for (const plantId in plants) {
+    //             const plant = plants[plantId];
+    //             const distance = Math.sqrt((this.x - plant.x) ** 2 + (this.y - plant.y) ** 2);
+    //             if (distance < nearestDistance && distance < 400) {
+    //                 nearestPlant = plant;
+    //                 nearestDistance = distance;
+    //             }
+    //         }
+    //         this.target = nearestPlant;
+    //     }
+    // }
     private randomizeDirectionAndDuration() {
         // Generate a random walking direction
         const randomAngle = Math.random() * 2 * Math.PI;
@@ -98,24 +116,24 @@ export class Bubby {
         if (this.health <= 0) {
             return;
         }
-        this.setTargetPlant(this.plants);
+       // this.setTargetPlant(this.plants);
         const randomX = Math.random() * 4 - 2; // Generates a number between -10 and 10
         const randomY = Math.random() * 4 - 2; // Generates a number between -10 and 10
         if (this.phase === "babyBubby") {
             if (this.target) {
-                const deltaX = this.target.x - this.x;
-                const deltaY = this.target.y - this.y;
-                const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
-               // console.log('bubby target')
-                if (distanceToTarget > 0) {
-                    //console.log('bubby moving to target')
-                    // Calculate the unit vector toward the target
-                    const unitX = deltaX / distanceToTarget;
-                    const unitY = deltaY / distanceToTarget;
-                    // Move towards the target
-                    this.x += unitX * this.speed;
-                    this.y += unitY * this.speed;
-                }
+            //     const deltaX = this.target.x - this.x;
+            //     const deltaY = this.target.y - this.y;
+            //     const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+            //    // console.log('bubby target')
+            //     if (distanceToTarget > 0) {
+            //         //console.log('bubby moving to target')
+            //         // Calculate the unit vector toward the target
+            //         const unitX = deltaX / distanceToTarget;
+            //         const unitY = deltaY / distanceToTarget;
+            //         // Move towards the target
+            //         this.x += unitX * this.speed;
+            //         this.y += unitY * this.speed;
+            //     }
             } else {
                 if (this.pauseDuration > 0) {
                     // Bubby is currently paused, decrement pause duration
@@ -130,7 +148,6 @@ export class Bubby {
                     this.randomizeDirectionAndDuration();
                 }
             }
-
         } 
         //Boundaries
         if (this.y <= 200) {

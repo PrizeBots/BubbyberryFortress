@@ -26,7 +26,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     constructor() {
         eventBus.on('towerShot', (data: any) => {
             const projectileID = `projectile_${data.id}_${this.bulletsSpawned++}`;
-      // console.log(data.team)
+            // console.log(data.team)
             const newProjectile = new Bullet(
                 'bullet',
                 data.x,
@@ -42,9 +42,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 false,//remove
             );
             this.bullets[projectileID] = newProjectile;
-               console.log( 'bullet lenght: ', this.bullets.length)
+            const bulletKeys = Object.keys(this.bullets);
+            const bulletsLength = bulletKeys.length;
+            // console.log(`Number of bullets: ${bulletsLength}`);
 
-           // this.objects.push(newProjectile);
+            this.objects.push(newProjectile);
             this.server.emit('towerShot', newProjectile);
         });
 
@@ -55,8 +57,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             for (const bubbyId in this.bubbies) {
                 if (this.bubbies.hasOwnProperty(bubbyId)) {
                     const bubby = this.bubbies[bubbyId];
-                    // bubby.setTargetPlant(this.plants);
                     bubby.update();
+                    if (bubby.shouldRemove) {
+                        delete this.bubbies[bubbyId];
+                    }
                 }
             }
             //update plants
@@ -86,7 +90,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     const bullet = this.bullets[bulletID];
                     bullet.update();
                     if (bullet.shouldRemove) {
-                       // console.log('remove bullet')
+                        // console.log('remove bullet')
                         // Flag or remove the expired bullet from the array or the game
                         delete this.bullets[bulletID];
                     }

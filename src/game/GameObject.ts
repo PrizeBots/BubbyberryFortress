@@ -5,21 +5,23 @@ export class GameObject {
         public type: string,
         public x: number,
         public y: number,
+
         public team: 'blue' | 'red',
         public id: string,
         public phase: string,
+
         public maxHealth: number,
         public health: number = maxHealth,
         public speed: number,
+
         public isUsedBy: string,
         public target: null,
         public collisionRadius: number = 32,
-        public attackPower: number,
 
+        public attackPower: number,
         public lastAttackTime: number = 0,
         public attackCooldown: number = 1000,
         public shouldRemove: boolean = false,
-
     ) {
 
     }

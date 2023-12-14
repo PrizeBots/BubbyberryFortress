@@ -35,7 +35,7 @@ export class PlayerUpdater {
                     }
                 }
                 // Set the target plant for the bubby
-                bubby.setTargetPlant(this.plants);
+            //    bubby.setTargetPlant(this.plants);
             }
         }
 

@@ -40,7 +40,7 @@ export class Shop {
                 null, //target
                 32,//collison radius
                 1,//attack 
-                this.plants,
+                //this.plants,
                 0,
                 1000,
                 false,

@@ -14,14 +14,7 @@ export class CollisionHandler {
     for (const obj1 of objects) {
       for (const obj2 of objects) {
         if (obj1 !== obj2) {
-          if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
-            console.log( 'obj1 instanceof Bullet!')
-            //CollisionHandler.checkCollision(obj1, obj2);
-           
-          }
           CollisionHandler.checkCollision(obj1, obj2);
-       
-      
         }
       }
     }
@@ -30,7 +23,6 @@ export class CollisionHandler {
       if (objToRemove.type === 'plant') {
 
       }
-
       //remove from objects pool
       const index = objects.indexOf(objToRemove);
       if (index !== -1) {
@@ -40,15 +32,6 @@ export class CollisionHandler {
       }
     }
   }
-  private static checkHits(obj1: Bubby, obj2:  Bullet) {
-      if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
-        console.log(obj1, 'Bubby HAS BEEN SHOT!')
-        //obj2.health = obj2.health - obj1.attackPower;
-       
-      }
-    }
-
-
   private static checkCollision(obj1: Bubby | Plant | Tower | Bullet,
     obj2: Bubby | Plant | Tower | Bullet) {
     const dx = obj1.x - obj2.x;
@@ -67,9 +50,12 @@ export class CollisionHandler {
       obj2.x -= overlapX / 2;
       obj2.y -= overlapY / 2;
       if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
-        console.log(obj1, 'Bubby HAS BEEN SHOT!')
+        // console.log(obj1, 'Bubby HAS BEEN SHOT!')
         obj2.health = obj2.health - obj1.attackPower;
-       
+        if (obj2.health <= 0) {
+          this.objectsToRemove.push(obj2);
+        }
+
       }
 
       else if (obj1 instanceof Bubby && obj2 instanceof Plant) {
@@ -79,9 +65,6 @@ export class CollisionHandler {
           if (currentTime - obj1.lastAttackTime >= obj1.attackCooldown) {
             obj2.health -= obj1.attackPower;
             obj1.health += obj1.attackPower;
-            //console.log('obj1 hp:', obj1.health);
-            //console.log(' obj2 hp:', obj2.health);
-
             //bubby ate it!
             if (obj2.health <= 0) {
               this.objectsToRemove.push(obj2);
@@ -91,38 +74,6 @@ export class CollisionHandler {
               // this.phase = 'bubby';
             }
             obj1.lastAttackTime = currentTime;
-          }
-        }
-      }
-
-      // obj1.takeDamage(obj2.getDamage());
-      // obj2.takeDamage(obj1.getDamage());
-      else if (obj1 instanceof Bubby && obj2 instanceof Bullet) {
-        console.log(obj1, 'Bullet HAS BEEN SHOT!')        // Example collision logic:
-        // obj1.takeDamage(obj2.getDamage());
-        // obj2.destroy();
-      }
-      else if (obj1 instanceof Bubby && obj2 instanceof Bubby) {
-        const dx = obj1.x - obj2.x;
-        const dy = obj1.y - obj2.y;
-        const distance = Math.sqrt(dx ** 2 + dy ** 2);
-        const minDistance = obj1.collisionRadius + obj2.collisionRadius;
-
-        if (distance < minDistance) {
-          //  console.log('ooops bump time')
-          // Calculate the overlap amount
-          const overlap = minDistance - distance;
-          const overlapX = (overlap / distance) * dx;
-          const overlapY = (overlap / distance) * dy;
-
-          // Push the objects apart
-          obj1.x += overlapX / 2;
-          obj1.y += overlapY / 2;
-
-          // If the other object is also a Bubby, push it in the opposite direction
-          if (obj1 instanceof Bubby) {
-            obj2.x -= overlapX / 2;
-            obj2.y -= overlapY / 2;
           }
         }
       }
