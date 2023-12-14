@@ -35,6 +35,14 @@ export default class Bubby extends Phaser.GameObjects.Container {
 
             }
             this.sprite.setScale(2);
+        }else if (this.phase === 'bubby') {
+            if (this.team === 'blue') {
+                this.sprite = this.scene.add.sprite(0, 0, 'bubbyBlue');
+            } else {
+                this.sprite = this.scene.add.sprite(0, 0, 'bubbyRed');
+
+            }
+            this.sprite.setScale(2);
         }
   
         //give it health bar

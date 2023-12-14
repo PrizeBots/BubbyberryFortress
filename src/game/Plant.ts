@@ -35,27 +35,17 @@ export class Plant extends GameObject {
             0, // Set attackPower
             0, // Set lastAttackTime
             1000, // Set attackCooldown
-            false,
+
+            false, //remove
+            true, //isMoveable
         );
-
-        // ...
-
-        //growth timer
-        setTimeout(() => {
-            // if (this && this.phase === 'seed') {
-            //     this.phase = 'sprout';
-            //     this.health = 25;
-            //     this.maxHealth = 25;
-            // }
-        }, 4000)
-
     }
 
     public update() {
         super.update();
-
+        //grow the seed to a sprout
         if (this.phase === 'seed' || this.phase === 'germinating') {
-            this.health += 1;
+            this.health += .03;
             if (this.health > this.maxHealth / 2) {
                 this.phase = 'germinating';
             }
@@ -64,11 +54,30 @@ export class Plant extends GameObject {
                 this.maxHealth = 30;
             }
         }
+        //grow sprout to baby bush
         if (this.phase === 'sprout') {
-            this.health += 1;
+            this.health += .05;
             if (this.health >= 50) {
                 this.phase = 'babyBush';
                 this.maxHealth = 50;
+                this.isMovable = false;
+            }
+        }
+        // grow baby bush to bush and grow some berries
+        if (this.phase === 'babyBush') {
+            this.health += .05;
+            if (this.health >= 70) {
+                //add a berry
+            }
+            if (this.health >= 80) {
+                //add a berry
+            }
+            if (this.health >= 90) {
+                //add a berry
+            }
+            if (this.health >= 100) {
+                this.phase = 'bush';
+                this.maxHealth = 100;
             }
         }
     }

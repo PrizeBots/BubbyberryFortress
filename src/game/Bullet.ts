@@ -17,6 +17,7 @@ export class Bullet {
         public direction: { x: number; y: number },
         public collisionRadius: number = 32,
         public shouldRemove: boolean,
+        public isMovable: boolean = true,
     ) {
         this.creationTime = Date.now();
 

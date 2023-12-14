@@ -31,6 +31,7 @@ export class Tower {
         public updateReady: boolean,
         public ammo: number,
         public shouldRemove: boolean,
+        public isMovable: boolean = false,
     ) {
      
         setInterval(() => {

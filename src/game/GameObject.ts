@@ -23,6 +23,7 @@ export class GameObject {
         public attackCooldown: number = 1000,
 
         public shouldRemove: boolean = false,
+        public isMovable: boolean = true,
     ) {
 
     }
@@ -46,7 +47,7 @@ export class GameObject {
 
     public destroy() {
         this.shouldRemove = true;
-        console.log('an obj has been marked for removal')
+      //  console.log('an obj has been marked for removal')
 
     }
     public update() {

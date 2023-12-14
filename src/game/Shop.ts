@@ -30,20 +30,28 @@ export class Shop {
                 'bubby',
                 x,
                 y,
+
                 player.team,  // Use the player's team
                 eggId,
                 'egg',
+
                 10, //max hp
                 10,//hp
                 2, //speed
+
                 '', //used by
                 null, //target
                 32,//collison radius
+
                 1,//attack 
                 0,
                 1000,
+
                 false,
+                true,//isMovable
+
                 this.plants,
+    
 
             );
             this.bubbies[eggId] = newEgg;

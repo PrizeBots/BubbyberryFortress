@@ -1,5 +1,6 @@
 //Bubby.ts
 import { Plant } from './Plant';
+
 import { GameObject } from "./GameObject";
 export class Bubby extends GameObject {
     // Adjust the attack cooldown time (in milliseconds)
@@ -8,26 +9,37 @@ export class Bubby extends GameObject {
     private pauseDuration: number = 0;
     private babyBubbyWidth: number = 16;
     private lastKnownState: Partial<Bubby> = {}; // Store the last known state
-   // private plants: Record<string, Plant>; // Add a property for plants
+   // private bubbies: Record<string, Bubby>; // Add a property for bubbies
+
 
     constructor(
         public type: string,
         public x: number,
         public y: number,
+
         public team: 'blue' | 'red',
         public id: string,
         public phase: string,
+
         public maxHealth: number,
         public health: number = maxHealth,
         public speed: number = 1,
+
         public isUsedBy: string,
         public target: any,
         public collisionRadius: number = 32,
+
         public attackPower: number,
         public lastAttackTime: number = 0,
         public attackCooldown: number = 1000,
+
         public shouldRemove: boolean = false,
-        public plants: Record<string, Plant>, 
+        public isMovable: boolean = true,
+
+        public plants: Record<string, Plant>,
+ 
+
+
     ) {
         super(
             type,
@@ -49,8 +61,11 @@ export class Bubby extends GameObject {
             attackPower, // Set attackPower
             0, // Set lastAttackTime
             1000, // Set attackCooldown
-            false,
+
+            false, //remove
+            true, //isMovable
         );
+       // this.bubbies = {};
         //egg hatch timer
         setTimeout(() => {
             if (this && this.phase === 'egg') {
@@ -85,41 +100,52 @@ export class Bubby extends GameObject {
         this.lastKnownState = { ...this };
         return updates;
     }
+    public testupdate(bubbies: Record<string, Bubby>) {
+     //   this.bubbies = bubbies;
+    }
     public update() {
+   
         super.update();
-        this.target = super.targetClosest(this.plants, 'seed');
-        const randomX = Math.random() * 4 - 2; // Generates a number between -10 and 10
-        const randomY = Math.random() * 4 - 2; // Generates a number between -10 and 10
+
+        // const randomX = Math.random() * 4 - 2; // Generates a number between -10 and 10
+        // const randomY = Math.random() * 4 - 2; // Generates a number between -10 and 10
+        if (this.phase === "bubby") {
+          //  this.target = super.targetClosest(this.bubbies, 'bubby');
+
+        }
+
         if (this.phase === "babyBubby") {
-            if (this.target) {
-             //   console.log('got target: ',this.target)
-                    const deltaX = this.target.x - this.x;
-                    const deltaY = this.target.y - this.y;
-                    const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
-                   // console.log('bubby target')
-                    if (distanceToTarget > 0) {
-                        //console.log('bubby moving to target')
-                        // Calculate the unit vector toward the target
-                        const unitX = deltaX / distanceToTarget;
-                        const unitY = deltaY / distanceToTarget;
-                        // Move towards the target
-                        this.x += unitX * this.speed;
-                        this.y += unitY * this.speed;
-                    }
-            } else {
-                if (this.pauseDuration > 0) {
-                    // Bubby is currently paused, decrement pause duration
-                    this.pauseDuration -= 1;
-                } else if (this.walkDuration > 0) {
-                    // Bubby is currently walking in a random direction
-                    this.x += this.walkingDirection.x * this.speed;
-                    this.y += this.walkingDirection.y * this.speed;
-                    this.walkDuration -= 1;
-                } else {
-                    // Bubby needs a new random direction and duration
-                    this.randomizeDirectionAndDuration();
-                }
+            this.target = super.targetClosest(this.plants, 'seed');
+            if (this.health >= 20) {
+                this.phase = 'bubby';
             }
         }
+        if (this.target) {
+            const deltaX = this.target.x - this.x;
+            const deltaY = this.target.y - this.y;
+            const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+            if (distanceToTarget > 0) {
+                // Calculate the unit vector toward the target
+                const unitX = deltaX / distanceToTarget;
+                const unitY = deltaY / distanceToTarget;
+                // Move towards the target
+                this.x += unitX * this.speed;
+                this.y += unitY * this.speed;
+            }
+        } else {
+            if (this.pauseDuration > 0) {
+                // Bubby is currently paused, decrement pause duration
+                this.pauseDuration -= 1;
+            } else if (this.walkDuration > 0) {
+                // Bubby is currently walking in a random direction
+                this.x += this.walkingDirection.x * this.speed;
+                this.y += this.walkingDirection.y * this.speed;
+                this.walkDuration -= 1;
+            } else {
+                // Bubby needs a new random direction and duration
+                this.randomizeDirectionAndDuration();
+            }
+        }
+
     }
 }

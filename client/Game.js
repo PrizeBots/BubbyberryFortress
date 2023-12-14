@@ -47,6 +47,7 @@ class Game extends Phaser.Scene {
         this.load.image('germinating', './Assets/germinating.png');
         this.load.image('sprout', './Assets/sprout.png');
         this.load.image('babyBush', './Assets/babyBush.png');
+        this.load.image('bush', './Assets/bush.png');
         //Towers
         this.load.image('tower', './Assets/tower.png');
         this.load.image('towerFoundation', './Assets/towerFoundation.png');
@@ -55,7 +56,12 @@ class Game extends Phaser.Scene {
         //
         this.load.image('egg', './Assets/egg.png');
         this.load.image('babyBubbyRed', './Assets/babyBubbyRed.png');
+        this.load.image('bubbyRed', './Assets/bubbyRed.png');
+      //  this.load.image('bigBubbyRed', './Assets/babyBubbyRed.png');
         this.load.image('babyBubbyBlue', './Assets/babyBubbyBlue.png');
+        this.load.image('bubbyBlue', './Assets/bubbyBlue.png');
+      //  this.load.image('babyBubbyBlue', './Assets/babyBubbyBlue.png');
+        //
         this.load.image('fortress', './Assets/fortress.png');
     }
     //request to buy an egg

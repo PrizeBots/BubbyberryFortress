@@ -31,33 +31,21 @@ export default class Tower extends Phaser.GameObjects.Container {
     create() {
         if (this.phase === 'arrow') {
             this.sprite = this.scene.add.sprite(0, 0, 'tower');
-            
-            // this.sprite = this.scene.add.sprite(0, 0, 'tower');
         } else if (this.phase === 'bombTower') {
             if (this.team === 'blue') {
                 // this.sprite = this.scene.add.sprite(0, 0, 'bomb');
-
             }
         }
-        //console.log('phase? ' , this.phase)
-        //give it health bar
-        //this.healthBar = new HealthBar(this.scene, this.sprite.height/2+20, this.maxHealth);
-       // this.add(this.healthBar);
-        //set up bubby and interactions
         this.add(this.sprite);
+        this.healthBar = new HealthBar(this.scene, this.sprite.height / 2 + 20, this.maxHealth);
+        this.add(this.healthBar);
         // this.healthBar = new HealthBar(this.scene, this.sprite.height / 2 + 20, this.maxHealth);
-        // this.add(this.healthBar);
-       this.scene.towers.push(this);
-       // this.sprite.setInteractive();
-       // this.scene.input.setDraggable(this.sprite);
-        // this.sprite.on('drag', (pointer, dragX, dragY) => {
-        //     this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
-        // });
+        this.scene.towers.push(this);
     }
 
     changePhase(newPhase) {
         this.sprite.destroy();
-       // this.healthBar.destroy();
+        // this.healthBar.destroy();
         this.create();
     }
 
@@ -87,10 +75,10 @@ export default class Tower extends Phaser.GameObjects.Container {
                 blue: 0x0000ff, // Blue color for the blue team
                 red: 0xff0000  // Red color for the red team
             };
-    
+
             // Choose color based on the tower's team
             const lineColor = teamColors[this.team];
-    
+
             this.targetLine.lineStyle(2, lineColor, 1.0); // Set line style with team color
             this.targetLine.beginPath();
             this.targetLine.moveTo(this.x, this.y); // Start at tower's position
@@ -99,11 +87,11 @@ export default class Tower extends Phaser.GameObjects.Container {
             this.targetLine.strokePath();
         }
         else {
-           // console.log('no target');
+            // console.log('no target');
         }
     }
-    
+
     updateHealth(health) {
-     ///   this.healthBar.setHealth(health);
+        ///   this.healthBar.setHealth(health);
     }
 }

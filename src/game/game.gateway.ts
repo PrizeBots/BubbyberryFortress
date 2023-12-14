@@ -52,15 +52,18 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.objects = [];
         setInterval(() => {
             //update bubbies
+        //    const updatedBubbies: Record<string, Bubby> = {};
+
             for (const bubbyId in this.bubbies) {
                 if (this.bubbies.hasOwnProperty(bubbyId)) {
                     const bubby = this.bubbies[bubbyId];
-                    bubby.update();
                     if (bubby && bubby.shouldRemove) {
-                      //  console.log('you gotta bub to remove!')
                         delete this.bubbies[bubbyId];
+                    } else {
+                        bubby.testupdate(this.bubbies);
+
+                        bubby.update();
                     }
-                 
                 }
             }
             //update plants
@@ -68,7 +71,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 if (this.plants.hasOwnProperty(plantID)) {
                     const plant = this.plants[plantID];
                     if (plant && plant.shouldRemove) {
-                        delete this.plants[plantID];   
+                        delete this.plants[plantID];
                     }
                     if (plant) plant.update();
                 }
@@ -86,7 +89,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     const bullet = this.bullets[bulletID];
                     bullet.update();
                     if (bullet.shouldRemove) {
-                     //  console.log('remove bullet')
+                        //  console.log('remove bullet')
                         // Flag or remove the expired bullet from the array or the game
                         delete this.bullets[bulletID];
                     }
@@ -120,7 +123,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         //a player wants to move something, lets see if they are owner and if we can let them
         client.on('moveObject', (data: { objID: string; x: number; y: number }) => {
             const obj = this.objects.find((obj) => obj.id === data.objID);
-            if (obj) {
+            if (obj && obj.isMovable) {
                 //console.log(obj.type)
                 // Check the type of the object (buddy or plant) and handle accordingly
                 if (obj instanceof Bubby) {
@@ -150,9 +153,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
         //player clicked
         client.on('click', (data: { x: number; y: number }) => {
-            console.log(this.bullets.length)
-            console.log(this.objects.length)
-
+            console.log('total objects on server: ', this.objects.length)
         });
 
         //Shopping
@@ -192,6 +193,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         client.on('placeTower', (data: { x: number; y: number }) => {
             if (this.players[client.id].isBuilding) {
                 const newTower = this.shop.placeTower(client.id, data.x, data.y);
+                this.objects.push(this.towers[newTower.id]);
             }
             else {
                 console.log("hacker!");

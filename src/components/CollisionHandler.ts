@@ -46,21 +46,27 @@ export class CollisionHandler {
       const overlapY = (overlap / distance) * dy;
 
       // Push the objects apart
-      obj1.x += overlapX / 2;
-      obj1.y += overlapY / 2;
-      obj2.x -= overlapX / 2;
-      obj2.y -= overlapY / 2;
-
-      //Projectile hits a bubby
-      if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
-        obj2.health -= obj1.attackPower;
-        this.objectsToRemove.push(obj1);
-        obj1.shouldRemove = true;
-        if (obj2.health <= 0) {
-          this.objectsToRemove.push(obj2);
-        }
+      if (obj1.isMovable) {
+        obj1.x += overlapX / 2;
+        obj1.y += overlapY / 2;
+      }
+      if (obj2.isMovable) {
+        obj2.x -= overlapX / 2;
+        obj2.y -= overlapY / 2;
       }
 
+      //Projectile hits a bubby, plant, or tower
+      if (obj1 instanceof Bullet && obj2 instanceof Bubby || obj1 instanceof Bullet && obj2 instanceof Plant) {
+        this.objectsToRemove.push(obj1);
+        obj1.shouldRemove = true;
+        if (obj1.team != obj2.team) {
+          obj2.health -= obj1.attackPower;
+          if (obj2.health <= 0) {
+            this.objectsToRemove.push(obj2);
+          }
+        }
+      }
+      //    this.objectsToRemove.push(obj1);
       //Bubby eats plant
       else if (obj1 instanceof Bubby && obj2 instanceof Plant) {
         if (obj1.phase === 'babyBubby' && obj2.health > 0 && obj2.phase != 'germinating') {

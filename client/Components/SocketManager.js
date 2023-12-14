@@ -130,6 +130,8 @@ class SocketManager {
                                 bubby.changePhase('egg');
                             } else if (bubby.phase === 'babyBubby') {
                                 bubby.changePhase('babyBubby');
+                            }else if (bubby.phase === 'bubby') {
+                                bubby.changePhase('bubby');
                             }
                         }
                     } else {
@@ -161,6 +163,8 @@ class SocketManager {
                                 plant.changePhase('sprout');
                             }else if (plant.phase === 'babyBush') {
                                 plant.changePhase('babyBush');
+                            }else if (plant.phase === 'bush') {
+                                plant.changePhase('bush');
                             }
                         }
                     } else {
