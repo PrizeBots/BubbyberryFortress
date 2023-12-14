@@ -59,7 +59,6 @@ class SocketManager {
         //Game Server Updates
         this.socket.on('updateProjectiles', (projectiles) => {
             const serverProjectileIDs = new Set(Object.keys(projectiles));
-
             // Iterate through the client's projectiles
             for (let i = this.game.projectiles.length - 1; i >= 0; i--) {
                 const projectile = this.game.projectiles[i];
@@ -71,7 +70,6 @@ class SocketManager {
                     this.game.projectiles.splice(i, 1); // Remove it from the client's array
                 }
             }
-
             // let i =1;
             for (const projectileID in projectiles) {
                 if (projectiles.hasOwnProperty(projectileID)) {
@@ -102,6 +100,19 @@ class SocketManager {
             }
         });
         this.socket.on('updateBubbies', (bubbiesList) => {
+            const serverBubbyIDs = new Set(Object.keys(bubbiesList));
+            // Iterate through the client's projectiles
+            for (let i = this.game.bubbies.length - 1; i >= 0; i--) {
+                const bubby = this.game.bubbies[i];
+                
+                // Check if the projectile's ID is not in the server's updated array
+                if (!serverBubbyIDs.has(bubby.id)) {
+                    // The projectile is not in the updated array, so remove it
+                    bubby.destroy();
+                    this.game.bubbies.splice(i, 1); // Remove it from the client's array
+                }
+            }
+
             // console.log('update bubbies')
             for (const bubbyID in bubbiesList) {
                 if (bubbiesList.hasOwnProperty(bubbyID)) {

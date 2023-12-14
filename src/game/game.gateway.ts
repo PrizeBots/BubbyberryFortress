@@ -45,11 +45,9 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             const bulletKeys = Object.keys(this.bullets);
             const bulletsLength = bulletKeys.length;
             // console.log(`Number of bullets: ${bulletsLength}`);
-
             this.objects.push(newProjectile);
             this.server.emit('towerShot', newProjectile);
         });
-
         this.shop = new Shop(this.players, this.bubbies, this.plants, this.towers);
         this.objects = [];
         setInterval(() => {
@@ -57,22 +55,20 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             for (const bubbyId in this.bubbies) {
                 if (this.bubbies.hasOwnProperty(bubbyId)) {
                     const bubby = this.bubbies[bubbyId];
-                    bubby.update();
-                    if (bubby.shouldRemove) {
+                   
+                    if (bubby && bubby.shouldRemove) {
+                        console.log('you gotta bub to remove!')
                         delete this.bubbies[bubbyId];
                     }
+                    bubby.update();
                 }
             }
             //update plants
             for (const plantID in this.plants) {
                 if (this.plants.hasOwnProperty(plantID)) {
                     const plant = this.plants[plantID];
-                    if (plant && plant.shouldRemove === true) {
-                        // Remove the plant from the plants object
-                        delete this.plants[plantID];
-                        // console.log('delete plant')
-                        // Optionally, set the reference to null to destroy the plant object
-                        //this.plants[plantID] = null;
+                    if (plant && plant.shouldRemove) {
+                        delete this.plants[plantID];   
                     }
                     if (plant) plant.update();
                 }

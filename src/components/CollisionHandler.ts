@@ -23,24 +23,24 @@ export class CollisionHandler {
       if (objToRemove.type === 'plant') {
 
       }
+
       //remove from objects pool
       const index = objects.indexOf(objToRemove);
       if (index !== -1) {
-        //console.log('remove from obj pool')
+       /// console.log('remove from obj pool ', objects.indexOf(objToRemove));
         objects.splice(index, 1);
-
       }
     }
   }
   private static checkCollision(obj1: Bubby | Plant | Tower | Bullet,
     obj2: Bubby | Plant | Tower | Bullet) {
+    //distance check
     const dx = obj1.x - obj2.x;
     const dy = obj1.y - obj2.y;
     const distance = Math.sqrt(dx ** 2 + dy ** 2);
     const minDistance = obj1.collisionRadius + obj2.collisionRadius;
+    //collision check
     if (distance < minDistance) {
-      //console.log('obj1', obj1)
-      // Calculate the overlap amount
       const overlap = minDistance - distance;
       const overlapX = (overlap / distance) * dx;
       const overlapY = (overlap / distance) * dy;
@@ -51,13 +51,12 @@ export class CollisionHandler {
       obj2.y -= overlapY / 2;
       if (obj1 instanceof Bullet && obj2 instanceof Bubby) {
         // console.log(obj1, 'Bubby HAS BEEN SHOT!')
-        obj2.health = obj2.health - obj1.attackPower;
+        obj2.health -= obj1.attackPower;
+        this.objectsToRemove.push(obj1);
         if (obj2.health <= 0) {
           this.objectsToRemove.push(obj2);
         }
-
       }
-
       else if (obj1 instanceof Bubby && obj2 instanceof Plant) {
         //Bubby eats plant
         if (obj1.phase === 'babyBubby' && obj2.health > 0) {

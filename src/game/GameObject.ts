@@ -15,34 +15,38 @@ export class GameObject {
         public speed: number,
 
         public isUsedBy: string,
-        public target: null,
+        public target: GameObject | null,
         public collisionRadius: number = 32,
 
         public attackPower: number,
         public lastAttackTime: number = 0,
         public attackCooldown: number = 1000,
+
         public shouldRemove: boolean = false,
+        
     ) {
 
     }
     //set target
-    // public setTargetPlant(plants: Record<string, Plant>) {
-    //     if (this.phase === 'babyBubby') {
-    //         let nearestPlant: Plant | null = null;
-    //         let nearestDistance = Infinity;
-    //         for (const plantId in plants) {
-    //             const plant = plants[plantId];
-    //             const distance = Math.sqrt((this.x - plant.x) ** 2 + (this.y - plant.y) ** 2);
-    //             if (distance < nearestDistance && distance < 400) {
-    //                 nearestPlant = plant;
-    //                 nearestDistance = distance;
-    //             }
-    //         }
-    //         this.target = nearestPlant;
-    //     }
-    // }
+    public targetClosest(objects: Record<string, GameObject>) {
+     
+            let nearestObj: GameObject | null = null;
+            let nearestDistance = Infinity;
+            for (const objID in objects) {
+                const object = objects[objID];
+                const distance = Math.sqrt((this.x - object.x) ** 2 + (this.y - object.y) ** 2);
+                if (distance < nearestDistance && distance < 400) {
+                    nearestObj = object;
+                    nearestDistance = distance;
+                }
+            }
+            this.target = nearestObj;
+           // console.log(this.target)
+        
+    }
     public destroy() {
         this.shouldRemove = true;
+        console.log('an obj has been marked for removal')
 
     }
     public update() {

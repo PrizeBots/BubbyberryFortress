@@ -2,12 +2,13 @@
 import { Plant } from './Plant';
 import { GameObject } from "./GameObject";
 export class Bubby extends GameObject {
-  // Adjust the attack cooldown time (in milliseconds)
+    // Adjust the attack cooldown time (in milliseconds)
     private walkingDirection: { x: number, y: number } = { x: 0, y: 0 };
     private walkDuration: number = 0;
     private pauseDuration: number = 0;
     private babyBubbyWidth: number = 16;
     private lastKnownState: Partial<Bubby> = {}; // Store the last known state
+    private plants: Record<string, Plant>; // Add a property for plants
 
     constructor(
         public type: string,
@@ -23,10 +24,11 @@ export class Bubby extends GameObject {
         public target: null,
         public collisionRadius: number = 32,
         public attackPower: number,
-      //  public plants: Record<string, Plant>, // Add this parameter
         public lastAttackTime: number = 0,
         public attackCooldown: number = 1000,
         public shouldRemove: boolean = false,
+
+     //   public plants: Record<string, Plant>, 
 
     ) {
         super(
@@ -85,55 +87,47 @@ export class Bubby extends GameObject {
         const randomAngle = Math.random() * 2 * Math.PI;
         this.walkingDirection.x = Math.cos(randomAngle);
         this.walkingDirection.y = Math.sin(randomAngle);
-
         // Generate a random walk duration between 1 and 5 seconds
         this.walkDuration = Math.floor(Math.random() * 50) + 1;
-
         // Generate a random pause duration between 1 and 3 seconds
         this.pauseDuration = Math.floor(Math.random() * 40) + 1;
     }
     public getUpdates(): Partial<Bubby> {
         const updates: Partial<Bubby> = {};
-
         // Compare current state with last known state
         if (this.x !== this.lastKnownState.x || this.y !== this.lastKnownState.y) {
             updates.x = this.x;
             updates.y = this.y;
         }
-
         if (this.health !== this.lastKnownState.health) {
             updates.health = this.health;
         }
-
-        // Add more properties to compare as needed
-
         // Update the last known state with the current values
         this.lastKnownState = { ...this };
-
         return updates;
     }
     public update() {
-        if (this.health <= 0) {
-            return;
-        }
-       // this.setTargetPlant(this.plants);
+        super.update();
+        super.targetClosest(this.plants);
         const randomX = Math.random() * 4 - 2; // Generates a number between -10 and 10
         const randomY = Math.random() * 4 - 2; // Generates a number between -10 and 10
         if (this.phase === "babyBubby") {
             if (this.target) {
-            //     const deltaX = this.target.x - this.x;
-            //     const deltaY = this.target.y - this.y;
-            //     const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
-            //    // console.log('bubby target')
-            //     if (distanceToTarget > 0) {
-            //         //console.log('bubby moving to target')
-            //         // Calculate the unit vector toward the target
-            //         const unitX = deltaX / distanceToTarget;
-            //         const unitY = deltaY / distanceToTarget;
-            //         // Move towards the target
-            //         this.x += unitX * this.speed;
-            //         this.y += unitY * this.speed;
-            //     }
+                console.log('got target: ',this.target)
+
+                //     const deltaX = this.target.x - this.x;
+                //     const deltaY = this.target.y - this.y;
+                //     const distanceToTarget = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+                //    // console.log('bubby target')
+                //     if (distanceToTarget > 0) {
+                //         //console.log('bubby moving to target')
+                //         // Calculate the unit vector toward the target
+                //         const unitX = deltaX / distanceToTarget;
+                //         const unitY = deltaY / distanceToTarget;
+                //         // Move towards the target
+                //         this.x += unitX * this.speed;
+                //         this.y += unitY * this.speed;
+                //     }
             } else {
                 if (this.pauseDuration > 0) {
                     // Bubby is currently paused, decrement pause duration
@@ -148,17 +142,6 @@ export class Bubby extends GameObject {
                     this.randomizeDirectionAndDuration();
                 }
             }
-        } 
-        //Boundaries
-        if (this.y <= 200) {
-            this.y += 5;
-        } else if (this.y >= 580) {
-            this.y -= 5;
-        }
-        if (this.x <= 0) {
-            this.x += 5;
-        } else if (this.x >= 3093) {
-            this.x -= 5;
         }
     }
 }
