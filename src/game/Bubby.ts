@@ -9,7 +9,7 @@ export class Bubby extends GameObject {
     private pauseDuration: number = 0;
     private babyBubbyWidth: number = 16;
     private lastKnownState: Partial<Bubby> = {}; // Store the last known state
-   // private bubbies: Record<string, Bubby>; // Add a property for bubbies
+    private objects: Record<string, GameObject>; // Add a property for bubbies
 
 
     constructor(
@@ -110,7 +110,8 @@ export class Bubby extends GameObject {
         // const randomX = Math.random() * 4 - 2; // Generates a number between -10 and 10
         // const randomY = Math.random() * 4 - 2; // Generates a number between -10 and 10
         if (this.phase === "bubby") {
-          //  this.target = super.targetClosest(this.bubbies, 'bubby');
+       //  this.target = null;
+         this.target = super.targetClosest(this.objects, 'bubby');
 
         }
 
@@ -118,6 +119,7 @@ export class Bubby extends GameObject {
             this.target = super.targetClosest(this.plants, 'seed');
             if (this.health >= 20) {
                 this.phase = 'bubby';
+                this.attackPower=5;
             }
         }
         if (this.target) {

@@ -86,6 +86,31 @@ export class CollisionHandler {
           }
         }
       }
+      //Bubby fight
+      else if (obj1 instanceof Bubby && obj2 instanceof Bubby) {
+        if (obj1.team != obj2.team) {
+          //team 1 attack!
+          if (obj1.phase === 'bubby') {
+            const currentTime = Date.now();
+            if (currentTime - obj1.lastAttackTime >= obj1.attackCooldown) {
+              obj2.health -= obj1.attackPower;
+              obj1.lastAttackTime = currentTime;
+              if (obj2.health <= 0) {
+                this.objectsToRemove.push(obj2);
+              }
+            }
+          } else if (obj2.phase === 'bubby') {
+            const currentTime = Date.now();
+            if (currentTime - obj2.lastAttackTime >= obj2.attackCooldown) {
+              obj1.health -= obj2.attackPower;
+              obj2.lastAttackTime = currentTime;
+              if (obj1.health <= 0) {
+                this.objectsToRemove.push(obj1);
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

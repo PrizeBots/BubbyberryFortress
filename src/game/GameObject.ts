@@ -35,6 +35,7 @@ export class GameObject {
         for (const objID in objects) {
             const object = objects[objID];
             if (object.phase === targetPhase) {
+                console.log('got one', targetPhase)
                 const distance = Math.sqrt((this.x - object.x) ** 2 + (this.y - object.y) ** 2);
                 if (distance < nearestDistance && distance < 400) {
                     nearestObj = object;
