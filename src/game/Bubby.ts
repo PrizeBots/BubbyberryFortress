@@ -1,17 +1,19 @@
 //Bubby.ts
 import { Plant } from './Plant';
-
+import { Tower } from './Tower';
 import { GameObject } from "./GameObject";
+const MAX_HEALTH_BABYBUBBY= 12;
+const MAX_HEALTH_BUBBY = 30;
+
 export class Bubby extends GameObject {
-    // Adjust the attack cooldown time (in milliseconds)
+    // static bubbies: Record<string, Bubby> = {};
+    static objects: Record<string, GameObject> = {};
     private walkingDirection: { x: number, y: number } = { x: 0, y: 0 };
     private walkDuration: number = 0;
     private pauseDuration: number = 0;
     private babyBubbyWidth: number = 16;
     private lastKnownState: Partial<Bubby> = {}; // Store the last known state
-    private objects: Record<string, GameObject>; // Add a property for bubbies
-
-
+    // private objects: Record<string, GameObject>; // Add a property for bubbies
     constructor(
         public type: string,
         public x: number,
@@ -37,9 +39,7 @@ export class Bubby extends GameObject {
         public isMovable: boolean = true,
 
         public plants: Record<string, Plant>,
- 
-
-
+        // public bubbies: Record<string, Plant>,
     ) {
         super(
             type,
@@ -64,8 +64,12 @@ export class Bubby extends GameObject {
 
             false, //remove
             true, //isMovable
+            /// bubbies,
         );
-       // this.bubbies = {};
+        Bubby.objects[id] = this;
+
+
+        // this.bubbies = {};
         //egg hatch timer
         setTimeout(() => {
             if (this && this.phase === 'egg') {
@@ -76,6 +80,7 @@ export class Bubby extends GameObject {
             }
         }, 1000)
     }
+
     private randomizeDirectionAndDuration() {
         // Generate a random walking direction
         const randomAngle = Math.random() * 2 * Math.PI;
@@ -101,25 +106,30 @@ export class Bubby extends GameObject {
         return updates;
     }
     public testupdate(bubbies: Record<string, Bubby>) {
-     //   this.bubbies = bubbies;
+        //   this.bubbies = bubbies;
     }
     public update() {
-   
         super.update();
-
         // const randomX = Math.random() * 4 - 2; // Generates a number between -10 and 10
         // const randomY = Math.random() * 4 - 2; // Generates a number between -10 and 10
+        //Bubbies seek and fight the nearest enemy
+        this.target = null;
         if (this.phase === "bubby") {
-       //  this.target = null;
-         this.target = super.targetClosest(this.objects, 'bubby');
-
+            if (this.team === 'blue') {
+                this.target = super.targetEnemy('red') as Bubby | Tower | Plant | null;
+            } else if (this.team === 'red') {
+                this.target = super.targetEnemy('blue') as Bubby | Tower | Plant | null;
+            }
         }
-
-        if (this.phase === "babyBubby") {
-            this.target = super.targetClosest(this.plants, 'seed');
-            if (this.health >= 20) {
+        //hungry bubbies
+        if (this.phase === "babyBubby" || this.health < MAX_HEALTH_BUBBY/2) {
+            this.target = super.targetClosest(this.plants, 'plant', 'any', 'any');
+            //if (this.health >= 20) {
+            if (this.health >= MAX_HEALTH_BABYBUBBY) {
                 this.phase = 'bubby';
-                this.attackPower=5;
+                this.attackPower = 5;
+                this.speed = 1.5;
+                this.target = null;
             }
         }
         if (this.target) {
@@ -134,6 +144,7 @@ export class Bubby extends GameObject {
                 this.x += unitX * this.speed;
                 this.y += unitY * this.speed;
             }
+        //Idle
         } else {
             if (this.pauseDuration > 0) {
                 // Bubby is currently paused, decrement pause duration
@@ -148,6 +159,5 @@ export class Bubby extends GameObject {
                 this.randomizeDirectionAndDuration();
             }
         }
-
     }
 }

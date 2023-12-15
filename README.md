@@ -7,7 +7,7 @@ Players must raise baby bubbies from eggs and grow them into strong bubbies and 
 Feed your baby bubbies seeds and berries to grow them into bubbies.
 
 bubbies are able to battle, mine metal, harvest berries, repair towers, 
-
+Took care of a bubby and proud of how you raised it? Give it a name!
 
 
 Players click and farm resources to power up their teams 

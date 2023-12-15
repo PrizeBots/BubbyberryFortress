@@ -1,9 +1,15 @@
-//plants.ts
-
 import { GameObject } from "./GameObject";
+const SEED_GROWTH_RATE = 1;
+const MAX_HEALTH_SPROUT = 30;
+const SPROUT_GROWTH_RATE = 2;
+const MAX_HEALTH_BABY_BUSH = 50;
+const BABY_BUSH_GROWTH_RATE = 3;
+const MAX_HEALTH_BUSH = 100;
+const MAX_HEALTH_BERRY= 15;
 
 export class Plant extends GameObject {
-    public plants: Record<string, Plant>
+    public plants: Record<string, Plant>;
+
     constructor(
         public type: string,
         public x: number,
@@ -13,7 +19,7 @@ export class Plant extends GameObject {
         public phase: string,
         public maxHealth: number,
         public shouldRemove: boolean = false,
-
+        
     ) {
         super(
             type,
@@ -36,48 +42,46 @@ export class Plant extends GameObject {
             0, // Set lastAttackTime
             1000, // Set attackCooldown
 
-            false, //remove
-            true, //isMoveable
+            false, // Remove
+            true, // isMoveable
         );
     }
-
+    public berries: {};
     public update() {
         super.update();
-        //grow the seed to a sprout
+        // Grow the seed to a sprout
         if (this.phase === 'seed' || this.phase === 'germinating') {
-            this.health += .03;
-            if (this.health > this.maxHealth / 2) {
+            this.health +=SEED_GROWTH_RATE;
+            if (this.health > MAX_HEALTH_SPROUT / 2) {
                 this.phase = 'germinating';
             }
-            if (this.health >= 30) {
+            if (this.health >= MAX_HEALTH_SPROUT) {
                 this.phase = 'sprout';
-                this.maxHealth = 30;
+                this.maxHealth = MAX_HEALTH_SPROUT;
             }
         }
-        //grow sprout to baby bush
+        // Grow sprout to baby bush
         if (this.phase === 'sprout') {
-            this.health += .05;
-            if (this.health >= 50) {
+            this.health += SPROUT_GROWTH_RATE;
+            if (this.health >= MAX_HEALTH_BABY_BUSH) {
                 this.phase = 'babyBush';
-                this.maxHealth = 50;
+                this.maxHealth = MAX_HEALTH_BABY_BUSH;
                 this.isMovable = false;
             }
         }
-        // grow baby bush to bush and grow some berries
+        // Grow baby bush to bush and grow some berries
         if (this.phase === 'babyBush') {
-            this.health += .05;
-            if (this.health >= 70) {
-                //add a berry
+            this.health += BABY_BUSH_GROWTH_RATE;
+            //grow a berry
+            if (this.health >= MAX_HEALTH_BABY_BUSH) {
+            //     const berryID = `berry_${this.id}_${berries.length + 1}`;
+            //     this.berries[berryID] = 1
+            //   this.health =- MAX_HEALTH_BERRY;
             }
-            if (this.health >= 80) {
-                //add a berry
-            }
-            if (this.health >= 90) {
-                //add a berry
-            }
-            if (this.health >= 100) {
+            //grow into bush
+            if (this.health >= MAX_HEALTH_BUSH) {
                 this.phase = 'bush';
-                this.maxHealth = 100;
+                this.maxHealth = MAX_HEALTH_BUSH;
             }
         }
     }

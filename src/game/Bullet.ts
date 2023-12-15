@@ -18,6 +18,9 @@ export class Bullet {
         public collisionRadius: number = 32,
         public shouldRemove: boolean,
         public isMovable: boolean = true,
+        
+        public collisionCooldown: number = 1000,
+        public lastCollisionTime: number = 0,
     ) {
         this.creationTime = Date.now();
 
