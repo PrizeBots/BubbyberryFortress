@@ -17,6 +17,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private shop: Shop;
     private players: Record<string, Player> = {}; // Track players by their socket ID
     private bubbies: Record<string, Bubby> = {}; // Track bubbies by their UID
+    //private redBubbies: Record<string, Bubby> = {}; // Track bubbies by their UID
+    //private blueBubbies: Record<string, Bubby> = {}; // Track bubbies by their UID
     private plants: Record<string, Plant> = {};
     private towers: Record<string, Tower> = {};
     private bullets: Record<string, Bullet> = {};
@@ -61,7 +63,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                         delete this.bubbies[bubbyId];
                     } else {
                         bubby.testupdate(this.bubbies);
-
                         bubby.update();
                     }
                 }
@@ -199,8 +200,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 console.log("hacker!");
             }
         });
-
     }
+    
     handleDisconnect(client: Socket) {
         // Release control of the bubby if the disconnecting player was controlling one
         for (const bubbyId in this.bubbies) {

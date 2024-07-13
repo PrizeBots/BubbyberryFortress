@@ -32,6 +32,8 @@ export class Tower {
         public ammo: number,
         public shouldRemove: boolean,
         public isMovable: boolean = false,
+        public collisionCooldown: number = 1000, // Set the default cooldown value (adjust as needed)
+        public lastCollisionTime: number = 0,
     ) {
      
         setInterval(() => {

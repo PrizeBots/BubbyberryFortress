@@ -1,6 +1,6 @@
 //GameObject.ts
-// Import the Plant class from the appropriate file
 export class GameObject {
+    static objects: Record<string, GameObject> = {};
     constructor(
         public type: string,
         public x: number,
@@ -24,33 +24,57 @@ export class GameObject {
 
         public shouldRemove: boolean = false,
         public isMovable: boolean = true,
+        public lastCollisionTime: number = 0,
+        public collisionCooldown: number = 1000,
     ) {
-
+        GameObject.objects[id] = this;
     }
+
     //set target
-    public targetClosest(objects: Record<string, GameObject>, targetPhase: string) {
+    public targetEnemy(targetTeam: string) {
         let nearestObj: GameObject | null = null;
         let nearestDistance = Infinity;
-        // console.log(nearestObj)
-        for (const objID in objects) {
-            const object = objects[objID];
-            if (object.phase === targetPhase) {
-                console.log('got one', targetPhase)
+        for (const objID in GameObject.objects) {
+            const object = GameObject.objects[objID];
+            if (this !== object && object.team === targetTeam) {
+              //  console.log(object.type, '' , object.phase)
                 const distance = Math.sqrt((this.x - object.x) ** 2 + (this.y - object.y) ** 2);
                 if (distance < nearestDistance && distance < 400) {
                     nearestObj = object;
                     nearestDistance = distance;
                 }
+                if (this != nearestObj) return nearestObj;
             }
         }
-        return nearestObj;
     }
-
+    //set target
+    public targetClosest(objects: Record<string, GameObject>,
+        targetType: string, targetPhase: string, targetTeam: string) {
+        let nearestObj: GameObject | null = null;
+        let nearestDistance = Infinity;
+        for (const objID in objects) {
+            const object = objects[objID];
+            if (object !== this) {
+                if (targetTeam === 'any') {
+                    const distance = Math.sqrt((this.x - object.x) ** 2 + (this.y - object.y) ** 2);
+                    if (distance < nearestDistance && distance < 400) {
+                        nearestObj = object;
+                        nearestDistance = distance;
+                    }
+                }
+                return nearestObj;
+            }
+        }
+    }
     public destroy() {
         this.shouldRemove = true;
-      //  console.log('an obj has been marked for removal')
-
+        //  console.log('an obj has been marked for removal')
+        // Remove this instance from Bubby.bubbies
+        if (GameObject.objects[this.id]) {
+            delete GameObject.objects[this.id];
+        }
     }
+
     public update() {
         if (this.health <= 0) {
             this.destroy();

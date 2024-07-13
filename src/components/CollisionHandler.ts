@@ -8,7 +8,6 @@ export class CollisionHandler {
   constructor(
   ) {
   }
-
   public static handleCollisions(objects: (Bubby | Plant | Tower | Bullet)[]) {
     //  const objectsToRemove: Plant[] = [];
     for (const obj1 of objects) {
@@ -23,7 +22,6 @@ export class CollisionHandler {
       if (objToRemove.type === 'plant') {
 
       }
-
       //remove from objects pool
       const index = objects.indexOf(objToRemove);
       if (index !== -1) {
@@ -41,6 +39,7 @@ export class CollisionHandler {
     const minDistance = obj1.collisionRadius + obj2.collisionRadius;
     //collision check
     if (distance < minDistance) {
+
       const overlap = minDistance - distance;
       const overlapX = (overlap / distance) * dx;
       const overlapY = (overlap / distance) * dy;
@@ -66,10 +65,10 @@ export class CollisionHandler {
           }
         }
       }
-      //    this.objectsToRemove.push(obj1);
-      //Bubby eats plant
+      //Baby Bubby eats any plant
+      //Bubbies only eat bad guy plants or if they are weak they will eat any.
       else if (obj1 instanceof Bubby && obj2 instanceof Plant) {
-        if (obj1.phase === 'babyBubby' && obj2.health > 0 && obj2.phase != 'germinating') {
+        if (obj1.phase === 'babyBubby' && obj2.health > 0 || obj1.team != obj2.team || obj1.health <= obj1.health/2) {
           const currentTime = Date.now();
           if (currentTime - obj1.lastAttackTime >= obj1.attackCooldown) {
             obj2.health -= obj1.attackPower;
@@ -99,7 +98,8 @@ export class CollisionHandler {
                 this.objectsToRemove.push(obj2);
               }
             }
-          } else if (obj2.phase === 'bubby') {
+          }
+          if (obj2.phase === 'bubby') {
             const currentTime = Date.now();
             if (currentTime - obj2.lastAttackTime >= obj2.attackCooldown) {
               obj1.health -= obj2.attackPower;

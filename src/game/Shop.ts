@@ -13,12 +13,12 @@ export class Shop {
     private eggsSpawned: number = 0;
     private seedsSpawned: number = 0;
     private towersSpawned: number = 0;
-    constructor(private players: Record<string, Player>,
+    constructor(
+        private players: Record<string, Player>,
         private bubbies: Record<string, Bubby>,
         private plants: Record<string, Plant>,
         private towers: Record<string, Tower>
     ) {
-
     }
 
     buyEgg(playerId: string, x: number, y: number): Bubby | null {
@@ -51,7 +51,7 @@ export class Shop {
                 true,//isMovable
 
                 this.plants,
-    
+             //   this.bubbies,
 
             );
             this.bubbies[eggId] = newEgg;

@@ -21,6 +21,9 @@ export default class Bubby extends Phaser.GameObjects.Container {
         this.healthBarContainer = null; // Container for the health bar
         this.create();
         this.scene.add.existing(this);
+        this.target = null;
+        this.targetLine = new Phaser.GameObjects.Graphics(this.scene); // Graphics object for drawing the line
+
     }
 
     create() {
@@ -35,7 +38,7 @@ export default class Bubby extends Phaser.GameObjects.Container {
 
             }
             this.sprite.setScale(2);
-        }else if (this.phase === 'bubby') {
+        } else if (this.phase === 'bubby') {
             if (this.team === 'blue') {
                 this.sprite = this.scene.add.sprite(0, 0, 'bubbyBlue');
             } else {
@@ -44,9 +47,9 @@ export default class Bubby extends Phaser.GameObjects.Container {
             }
             this.sprite.setScale(2);
         }
-  
+
         //give it health bar
-        this.healthBar = new HealthBar(this.scene, this.sprite.height*1.8, this.maxHealth);
+        this.healthBar = new HealthBar(this.scene, this.sprite.height * 1.8, this.maxHealth);
         this.add(this.healthBar);
         //set up bubby and interactions
         this.add(this.sprite);
@@ -66,6 +69,8 @@ export default class Bubby extends Phaser.GameObjects.Container {
 
     update() {
         if (this.sprite) {
+            this.drawTargetLine();
+
             const deltaX = this.x - this.prevX;
             const deltaY = this.y - this.prevY;
             this.prevX = this.x;
@@ -82,4 +87,30 @@ export default class Bubby extends Phaser.GameObjects.Container {
     updateHealth(health) {
         this.healthBar.setHealth(health);
     }
+
+    
+    drawTargetLine() {
+        this.targetLine.clear(); // Clear previous line
+        if (this.target) {
+            // Define colors for each team
+            const teamColors = {
+                blue: 0x0000ff, // Blue color for the blue team
+                red: 0xff0000  // Red color for the red team
+            };
+
+            // Choose color based on the tower's team
+            const lineColor = teamColors[this.team];
+
+            this.targetLine.lineStyle(2, lineColor, 1.0); // Set line style with team color
+            this.targetLine.beginPath();
+            this.targetLine.moveTo(this.x, this.y); // Start at tower's position
+            this.targetLine.lineTo(this.target.x, this.target.y); // Draw to target's position
+            this.targetLine.closePath();
+            this.targetLine.strokePath();
+        }
+        else {
+            // console.log('no target');
+        }
+    }
+
 }
