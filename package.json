@@ -11,6 +11,8 @@
     "start": "nest start",
     "start:server": "nest start",
     "start:client": "cd client && npm run start",
+    "start:all": "run-p start:server start:client",
+    
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
