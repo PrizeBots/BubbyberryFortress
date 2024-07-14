@@ -3,7 +3,7 @@ services:
     name: bubbyberryfortress-server
     env: node
     plan: free
-    buildCommand: cd server && npm install
+    buildCommand: cd src && npm install
     startCommand: npm run start:server
   - type: web
     name: bubbyberryfortress-client
