@@ -10,8 +10,10 @@ async function bootstrap() {
 
   // Use the PORT environment variable or default to 3000
   const port = process.env.PORT || 3000;
+//does this work?
 
-  await app.listen(port, () => {
+  // Bind to 0.0.0.0 to make the server accessible from outside
+  await app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on port ${port}`);
   });
 }

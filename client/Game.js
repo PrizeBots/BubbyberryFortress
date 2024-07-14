@@ -87,8 +87,8 @@ class Game extends Phaser.Scene {
     };
 
     create() {
-        // this.socket = io('http://localhost:3000');
-        this.socket = io('3.134.238.10:3000');
+         this.socket = io('http://localhost:3000');
+       // this.socket = io('3.134.238.10:3000');
 
         // this.socket = io('https://bbf-kn8o.onrender.com');
         this.socketManager = new SocketManager(this);

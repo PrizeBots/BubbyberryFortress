@@ -9,10 +9,11 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:server": "nest start",
-    "start:client": "cd client && npm run start",
-    "start:all": "run-p start:server start:client",
-    
+    "start:server": "nest build && nest start",
+    "start:client": "cd client && npm run build && npm run start",
+    "start:all1": "run-p start:server start:client",
+    "start:all": "concurrently \"npm run start:server\" \"cd client && npm run start\"",
+
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
