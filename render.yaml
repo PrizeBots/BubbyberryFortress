@@ -7,7 +7,7 @@ services:
     startCommand: npm run start:server
   - type: web
     name: bubbyberryfortress-client
-    runtime: static
+    # runtime: static
     env: node
     plan: free
     buildCommand: cd client && npm install
