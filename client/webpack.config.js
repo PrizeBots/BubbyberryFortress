@@ -36,7 +36,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 console.log(`!!! Webpack is packing!!!`);
 
 module.exports = {
-  entry: 'Main.js',
+  entry: './Main.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'), // Output directory
