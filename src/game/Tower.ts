@@ -1,6 +1,6 @@
 // Tower.ts
 import { Bubby } from './Bubby';
-import { eventBus } from '../Components/EventBus'; // Import the event bus
+import { eventBus } from '../components/EventBus'; // Import the event bus
 
 export class Tower {
     private lastAttackTime: number = 0;

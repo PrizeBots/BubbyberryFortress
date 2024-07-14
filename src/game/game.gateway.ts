@@ -1,7 +1,7 @@
 // src/game/game.gateway.ts
 import { WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { eventBus } from '../Components/EventBus'; // Correct the case here
+import { eventBus } from '../components/EventBus'; // Correct the case here
 import { CollisionHandler } from '../components/CollisionHandler'; // Import the event bus
 import { Player } from './Player';
 import { Bubby } from './Bubby';
