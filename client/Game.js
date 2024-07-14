@@ -57,10 +57,10 @@ class Game extends Phaser.Scene {
         this.load.image('egg', './Assets/egg.png');
         this.load.image('babyBubbyRed', './Assets/babyBubbyRed.png');
         this.load.image('bubbyRed', './Assets/bubbyRed.png');
-      //  this.load.image('bigBubbyRed', './Assets/babyBubbyRed.png');
+        //  this.load.image('bigBubbyRed', './Assets/babyBubbyRed.png');
         this.load.image('babyBubbyBlue', './Assets/babyBubbyBlue.png');
         this.load.image('bubbyBlue', './Assets/bubbyBlue.png');
-      //  this.load.image('babyBubbyBlue', './Assets/babyBubbyBlue.png');
+        //  this.load.image('babyBubbyBlue', './Assets/babyBubbyBlue.png');
         //
         this.load.image('fortress', './Assets/fortress.png');
     }
@@ -87,7 +87,9 @@ class Game extends Phaser.Scene {
     };
 
     create() {
-        this.socket = io('http://localhost:3000');
+        // this.socket = io('http://localhost:3000');
+        this.socket = io(' 3.134.238.10');
+
         // this.socket = io('https://bbf-kn8o.onrender.com');
         this.socketManager = new SocketManager(this);
         this.scene.launch('HUD');
@@ -115,7 +117,7 @@ class Game extends Phaser.Scene {
             this.player.x = pointer.worldX;
             this.player.y = pointer.worldY;
             if (this.isBuilding) {
-               /// console.log(this.isBuilding)
+                /// console.log(this.isBuilding)
                 this.placementSprite.x = this.player.x;
                 this.placementSprite.y = this.player.y;
             }
@@ -131,14 +133,14 @@ class Game extends Phaser.Scene {
 
             }
 
-           // console.log('Click x: ', pointer.worldX, 'y: ', pointer.worldY);
+            // console.log('Click x: ', pointer.worldX, 'y: ', pointer.worldY);
             if (this.sound.context.state === 'suspended') {
                 this.sound.context.resume();
             }
         });
         //player is ready to build
         this.socket.on('placeBuilding', () => {
-          //  console.log("we made it")
+            //  console.log("we made it")
             this.isBuilding = true;
             this.placementSprite.visible = true;
         });
@@ -172,13 +174,13 @@ class Game extends Phaser.Scene {
 
         // Sort the array based on the y-coordinate of the objects
         allObjects.sort((a, b) => a.y - b.y);
-    
+
         // Set the depth based on the sorting order
         allObjects.forEach((object, index) => {
             object.setDepth(index);
         });
     }
-    
+
     update() {
         // this.scene.cameras.main.renderer.context.clearRect(
         //     0,
@@ -196,7 +198,7 @@ class Game extends Phaser.Scene {
             this.player.x = pointer.worldX;
             this.player.y = pointer.worldY;
         }
-       // console.log('this.cursors.left.isDown: ', this.cursors.left.isDown)
+        // console.log('this.cursors.left.isDown: ', this.cursors.left.isDown)
         if (this.cursors.left.isDown || this.keysWASD.A.isDown) {
             if (this.cameras.main.scrollX > 0) {
                 this.cameras.main.scrollX -= 10;
@@ -217,8 +219,8 @@ class Game extends Phaser.Scene {
             tower.update();
         }
         for (const projectile of this.projectiles) {
-           // projectile.update();
-          // console.log('projectiles', projectile.id)
+            // projectile.update();
+            // console.log('projectiles', projectile.id)
 
         }
         //const pointer = this.input.activePointer;
