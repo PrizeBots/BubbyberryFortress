@@ -91,6 +91,7 @@ class Game extends Phaser.Scene {
         // this.socket = io('3.134.238.10:3000');
 
         this.socket = io('https://bbf-kn8o.onrender.com');
+        console.log("this.socket = io('https://bbf-kn8o.onrender.com')")
         this.socketManager = new SocketManager(this);
         this.scene.launch('HUD');
         this.fpsText = this.add.text(10, 10, 'FPS: ', { font: '16px Arial', fill: '#ffffff' });
@@ -117,7 +118,7 @@ class Game extends Phaser.Scene {
             this.player.x = pointer.worldX;
             this.player.y = pointer.worldY;
             if (this.isBuilding) {
-                /// console.log(this.isBuilding)
+
                 this.placementSprite.x = this.player.x;
                 this.placementSprite.y = this.player.y;
             }
