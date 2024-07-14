@@ -5,8 +5,9 @@ services:
     plan: free
     buildCommand: cd src && npm install && npm run build
     startCommand: npm run start:server
-  - type: static
+  - type: web
     name: bubbyberryfortress-client
+    runtime: static
     env: node
     plan: free
     buildCommand: cd client && npm install
