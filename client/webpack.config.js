@@ -25,7 +25,7 @@
 //   },
 //   plugins: [
 //     new HtmlWebpackPlugin({
-//       template: 'index.html', // Path to your index.html file
+//       template: './index.html', // Path to your index.html file
 //     }),
 //   ],
 // };
@@ -52,7 +52,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'client', 'index.html'), // Ensure this path is correct
+      template: './index.html', // Ensure this path is correct
     }),
   ],
 };
