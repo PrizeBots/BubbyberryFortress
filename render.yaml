@@ -9,5 +9,5 @@ services:
     name: bubbyberryfortress-client
     env: node
     plan: free
-    buildCommand: cd client && npm install && npm run build
+    buildCommand: cd client && npm install
     startCommand: npm run start:client
