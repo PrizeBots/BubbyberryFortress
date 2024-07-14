@@ -1,7 +1,7 @@
 // webpack.config.js
 
 const path = require('path');
-
+console.log(`!!! Webpack is packing!!!`);
 module.exports = {
   entry: './Main.js', 
   output: {
