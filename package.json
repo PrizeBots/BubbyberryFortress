@@ -10,10 +10,9 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start1": "npx nest start",
     "start": "node dist/main",
-    "start:server": "npm install --force && npx nest build && npx nest start",
+    "start:server": "npm install && npx nest build && npx nest start",
     "start:client": "cd client && npm run build && npm run start",
     "start:all1": "run-p start:server start:client",
-    "start:all": "concurrently \"npm run start:server\" \"cd client && npm run start\"",
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -22,8 +21,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "postbuild": "cd client && npm run start"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
+  
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
