@@ -6,9 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "npx nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start1": "nest start",
+    "start1": "npx nest start",
     "start": "node dist/main",
     "start:server": "npm install --force && npx nest build && npx nest start",
     "start:client": "cd client && npm run build && npm run start",
