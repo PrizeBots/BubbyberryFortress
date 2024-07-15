@@ -89,8 +89,8 @@ class Game extends Phaser.Scene {
 
     create() {
         // this.socket = io('http://localhost:3000');
-        this.socket = io('wss://bbf-kn8o.onrender.com');
-        console.log("SOCKET CONNECTED")
+        this.socket = io('http://bbf-kn8o.onrender.com');
+       
         this.socketManager = new SocketManager(this);
         this.scene.launch('HUD');
         this.fpsText = this.add.text(10, 10, 'FPS: ', { font: '16px Arial', fill: '#ffffff' });
