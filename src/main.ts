@@ -9,7 +9,6 @@ async function bootstrap() {
   app.use(cors({
     origin: 'https://bbf-client.onrender.com', // Replace with your client app's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: false,
   }));
   
   const port = process.env.PORT || 3000;
