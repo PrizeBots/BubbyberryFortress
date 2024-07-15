@@ -1,15 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as cors from 'cors';
 import { IoAdapter } from '@nestjs/platform-socket.io';
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+import { NestExpressApplication } from '@nestjs/platform-express';
+import * as cors from 'cors';
 
-  // Enable CORS
+async function bootstrap() {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Enable CORS for all origins
   app.use(cors({
     origin: '*', // Allow all origins
-    // origin: 'https://bbf-client.onrender.com', // Replace with your client app's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }));
   
   const port = process.env.PORT || 3000;
