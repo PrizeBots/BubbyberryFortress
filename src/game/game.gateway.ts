@@ -26,6 +26,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private teamCounts: Record<'blue' | 'red', number> = { blue: 0, red: 0 }; // Track team counts
     public objects: (Bubby | Plant | Tower | Bullet)[] = [];
     constructor() {
+        console.log("GAME SERVER CONSTRUCTOR!!")
         eventBus.on('towerShot', (data: any) => {
             const projectileID = `projectile_${data.id}_${this.bulletsSpawned++}`;
             // console.log(data.team)
