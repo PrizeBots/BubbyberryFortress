@@ -5,10 +5,15 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as cors from 'cors';
 
 async function bootstrap() {
-  // const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors();
+
+  // Enable CORS and configure it to accept requests from your client domain
+  app.enableCors({
+    origin: 'https://bbf-client.onrender.com', // replace with your client's URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
   const port = process.env.PORT || 3000;
   console.log(`Using port: ${port}`);  // Log the port for verification
 
