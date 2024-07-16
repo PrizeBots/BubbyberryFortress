@@ -5,15 +5,10 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as cors from 'cors';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Enable CORS for all origins
-  app.use(cors({
-    origin: '*', // Allow all origins
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }));
-  
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.enableCors();
   const port = process.env.PORT || 3000;
   console.log(`Using port: ${port}`);  // Log the port for verification
 
