@@ -15,6 +15,7 @@ export class Bubby extends GameObject {
     private lastKnownState: Partial<Bubby> = {}; // Store the last known state
     // private objects: Record<string, GameObject>; // Add a property for bubbies
     constructor(
+        public ownerName: string,
         public type: string,
         public x: number,
         public y: number,
@@ -42,6 +43,7 @@ export class Bubby extends GameObject {
         // public bubbies: Record<string, Plant>,
     ) {
         super(
+            ownerName,
             type,
             x,
             y,

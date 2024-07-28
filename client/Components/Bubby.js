@@ -2,8 +2,9 @@ import Phaser from 'phaser';
 import HealthBar from './HealthBar';
 
 export default class Bubby extends Phaser.GameObjects.Container {
-    constructor(scene, team, id, x, y, phase, maxHealth) {
+    constructor(scene, ownerName, team, id, x, y, phase, maxHealth) {
         super(scene, x, y);
+        this.ownerName = ownerName;
         this.scene = scene;
         this.x = x;
         this.y = y;
@@ -27,6 +28,7 @@ export default class Bubby extends Phaser.GameObjects.Container {
     }
 
     create() {
+        console.log("Bubby is owned by, ", this.ownerName);
         //See which kind of bubby we are creating
         if (this.phase === 'egg') {
             this.sprite = this.scene.add.sprite(0, 0, 'egg');
@@ -51,6 +53,13 @@ export default class Bubby extends Phaser.GameObjects.Container {
         //give it health bar
         this.healthBar = new HealthBar(this.scene, this.sprite.height * 1.8, this.maxHealth);
         this.add(this.healthBar);
+        // Set up name tag
+        this.nameTag = this.scene.add.text(0, this.sprite.height / 2 + 10, this.ownerName, {
+            fontSize: '16px',
+            color: '#ffffff',
+            align: 'center'
+        }).setOrigin(0.5, 0);
+        this.add(this.nameTag);
         //set up bubby and interactions
         this.add(this.sprite);
         this.scene.bubbies.push(this);
@@ -88,7 +97,7 @@ export default class Bubby extends Phaser.GameObjects.Container {
         this.healthBar.setHealth(health);
     }
 
-    
+
     drawTargetLine() {
         this.targetLine.clear(); // Clear previous line
         if (this.target) {

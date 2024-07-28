@@ -1,7 +1,4 @@
-npm run start:all in the src folder starts the client and master server
-
-
-Welcome to Bubby Berry Fortress! lofi chill vibes to you, bubby bros!
+Welcome to Bubby Berry Fortress!
 
 Bubbies are soft body creatures that depend on the players for survival and leadership.
 

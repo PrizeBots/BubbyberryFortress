@@ -27,6 +27,7 @@ export class Shop {
             player.coins -= this.eggPrice;
             const eggId = `egg_${playerId}_${this.eggsSpawned++}`;
             const newEgg = new Bubby(
+                player.name,
                 'bubby',
                 x,
                 y,
@@ -63,8 +64,11 @@ export class Shop {
         const player = this.players[playerId];
         if (player && player.coins >= this.seedPrice) {
             player.coins -= this.seedPrice;
+            const ownerName = this.players[playerId].name;
+            console.log(ownerName, " JUST BOUGHT A PLANT!")
             const seedId = `plant_${playerId}_${this.seedsSpawned++}`;
             const newSeed = new Plant(
+                ownerName,
                 'plant',
                 x,
                 y,

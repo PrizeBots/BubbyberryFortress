@@ -55,7 +55,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.objects = [];
         setInterval(() => {
             //update bubbies
-        //    const updatedBubbies: Record<string, Bubby> = {};
+            //    const updatedBubbies: Record<string, Bubby> = {};
 
             for (const bubbyId in this.bubbies) {
                 if (this.bubbies.hasOwnProperty(bubbyId)) {
@@ -105,104 +105,122 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             //emit player updates - current when mouse moves
         }, 40); //interval
     }
+
     //welcome new player!
     handleConnection(client: Socket) {
-        const blueTeamCount = Object.values(this.players).filter((player) => player.team === 'blue').length;
-        const redTeamCount = Object.values(this.players).filter((player) => player.team === 'red').length;
-        const team = blueTeamCount <= redTeamCount ? 'blue' : 'red';
-        let coins = 1000;
-        // Add the new player to the list with the determined team
-        this.players[client.id] = { x: 0, y: 0, team, coins, isBuilding: false }; // Initialize with default position and team
-        if (team === 'blue') {
-            this.teamCounts.blue++;
-        } else {
-            this.teamCounts.red++;
-        }
-        //set up newly connected player
-        this.server.to(client.id).emit('initialize', { team, coins }); // Send team assignment and coins to the new client
+
         this.server.emit('updatePlayersList', this.players); // Send the updated player list to all clients
         this.server.emit('updateBubbiesList', this.bubbies);
         //a player wants to move something, lets see if they are owner and if we can let them
-        client.on('moveObject', (data: { objID: string; x: number; y: number }) => {
-            const obj = this.objects.find((obj) => obj.id === data.objID);
-            if (obj && obj.isMovable) {
-                //console.log(obj.type)
-                // Check the type of the object (buddy or plant) and handle accordingly
-                if (obj instanceof Bubby) {
-                    // Handle moving a Bubby
-                    obj.x = data.x;
-                    obj.y = data.y;
-                    this.server.emit('updateBubbiesList', this.bubbies);
-                } else if (obj instanceof Plant) {
-                    //   console.log('got a plant here')
-                    // Handle moving a Plant
-                    obj.x = data.x;
-                    obj.y = data.y;
-                    this.server.emit('updatePlants', this.plants);
+
+        //Register new player once they send their name
+        client.on('newName', (data: { name: string }) => {
+            console.log(data.name, " = data.newName");
+            // Update the player's name
+          //  this.players[client.id].name = data.name;
+         
+            // Broadcast the player's name
+            const blueTeamCount = Object.values(this.players).filter((player) => player.team === 'blue').length;
+            const redTeamCount = Object.values(this.players).filter((player) => player.team === 'red').length;
+            const team = blueTeamCount <= redTeamCount ? 'blue' : 'red';
+            let coins = 1000;
+            // Add the new player to the list with the determined team
+            this.players[client.id] = { name: data.name, x: 0, y: 0, team, coins, isBuilding: false, isInGame: true }; // Initialize with default position and team
+            console.log(this.players[client.id].name, " has joined the game");
+            if (team === 'blue') {
+                this.teamCounts.blue++;
+            } else {
+                this.teamCounts.red++;
+            }
+            //set up newly connected player
+            this.server.to(client.id).emit('initialize', { team, coins }); // Send team assignment and coins to the new client
+        });
+        //Only let connected clients that are in the game play
+        // if (this.players[client.id].isInGame) {
+
+        //make sure its either their object or their teams object
+            client.on('moveObject', (data: { objID: string; x: number; y: number }) => {
+                const obj = this.objects.find((obj) => obj.id === data.objID);
+                if (obj && obj.isMovable) {
+                    //console.log(obj.type)
+                    // Check the type of the object (buddy or plant) and handle accordingly
+                    if (obj instanceof Bubby) {
+                        // Handle moving a Bubby
+                        obj.x = data.x;
+                        obj.y = data.y;
+                        this.server.emit('updateBubbiesList', this.bubbies);
+                    } else if (obj instanceof Plant) {
+                        //   console.log('got a plant here')
+                        // Handle moving a Plant
+                        obj.x = data.x;
+                        obj.y = data.y;
+                        this.server.emit('updatePlants', this.plants);
+                    }
+                } else {
+                    // Object not found, log the issue for debugging
+                    console.log('Object not found for objID:', data.objID);
                 }
-            } else {
-                // Object not found, log the issue for debugging
-                console.log('Object not found for objID:', data.objID);
-            }
-        });
-        //move player hands
-        client.on('mousemove', (data: { x: number; y: number }) => {
-            // Update the player's position
-            this.players[client.id] = { ...this.players[client.id], x: data.x, y: data.y };
-            // Broadcast the player's movement
-            client.broadcast.emit('playerMove', { id: client.id, x: data.x, y: data.y });
-        });
+            });
+            //move player hands
+            client.on('mousemove', (data: { x: number; y: number }) => {
+                // Update the player's position
+                this.players[client.id] = { ...this.players[client.id], x: data.x, y: data.y };
+                // Broadcast the player's movement
+                client.broadcast.emit('playerMove', { id: client.id, x: data.x, y: data.y });
+            });
 
-        //player clicked
-        client.on('click', (data: { x: number; y: number }) => {
-            console.log('total objects on server: ', this.objects.length)
-        });
+            //player clicked
+            client.on('click', (data: { x: number; y: number }) => {
+                //console.log('total objects on server: ', this.objects.length)
+            });
 
-        //Shopping
-        client.on('buyEgg', (data: { x: number; y: number }) => {
-            const newEgg = this.shop.buyEgg(client.id, data.x, data.y);
-            if (newEgg) {
-                this.objects.push(this.bubbies[newEgg.id]);
-                this.server.emit('spawnEgg', newEgg);
-                this.server.to(client.id).emit('updateCoins', this.players[client.id].coins);
-            } else {
-                //  console.log("Insufficient coins for egg purchase");
-            }
-        });
-        client.on('buySeed', (data: { x: number; y: number }) => {
-            const newSeed = this.shop.buySeed(client.id, data.x, data.y);
-            if (newSeed) {
-                this.objects.push(this.plants[newSeed.id]);
-                this.server.emit('spawnSeed', newSeed);
-                this.server.to(client.id).emit('updateCoins', this.players[client.id].coins);
-            } else {
-                // console.log("Insufficient coins for seed purchase");
-            }
-        });
-        client.on('buyTower', (data: { x: number; y: number }) => {
-            const buyTower = this.shop.buyTower(client.id);
-            // console.log('buy tower0 ', buyTower)
-            if (buyTower) {
-                // console.log('this.players[client.id].isBuilding')
-                this.players[client.id].isBuilding = true;
-                //this.objects.push(this.plants[newTower.id]);
-                this.server.emit('placeBuilding');
-                this.server.to(client.id).emit('updateCoins', this.players[client.id].coins);
-            } else {
-                console.log("Insufficient coins for tower purchase");
-            }
-        });
-        client.on('placeTower', (data: { x: number; y: number }) => {
-            if (this.players[client.id].isBuilding) {
-                const newTower = this.shop.placeTower(client.id, data.x, data.y);
-                this.objects.push(this.towers[newTower.id]);
-            }
-            else {
-                console.log("hacker!");
-            }
-        });
+            //Shopping
+            client.on('buyEgg', (data: { x: number; y: number }) => {
+                const newEgg = this.shop.buyEgg(client.id, data.x, data.y);
+                if (newEgg) {
+                    this.objects.push(this.bubbies[newEgg.id]);
+                    this.server.emit('spawnEgg', newEgg);
+                    this.server.to(client.id).emit('updateCoins', this.players[client.id].coins);
+                } else {
+                    //  console.log("Insufficient coins for egg purchase");
+                }
+            });
+            client.on('buySeed', (data: { x: number; y: number }) => {
+                const newSeed = this.shop.buySeed(client.id, data.x, data.y);
+                if (newSeed) {
+                    this.objects.push(this.plants[newSeed.id]);
+                    this.server.emit('spawnSeed', newSeed);
+                    this.server.to(client.id).emit('updateCoins', this.players[client.id].coins);
+                } else {
+                    // console.log("Insufficient coins for seed purchase");
+                }
+            });
+            client.on('buyTower', (data: { x: number; y: number }) => {
+                const buyTower = this.shop.buyTower(client.id);
+                // console.log('buy tower0 ', buyTower)
+                if (buyTower) {
+                    // console.log('this.players[client.id].isBuilding')
+                    this.players[client.id].isBuilding = true;
+                    //this.objects.push(this.plants[newTower.id]);
+                    this.server.emit('placeBuilding');
+                    this.server.to(client.id).emit('updateCoins', this.players[client.id].coins);
+                } else {
+                    console.log("Insufficient coins for tower purchase");
+                }
+            });
+            client.on('placeTower', (data: { x: number; y: number }) => {
+                if (this.players[client.id].isBuilding) {
+                    const newTower = this.shop.placeTower(client.id, data.x, data.y);
+                    this.objects.push(this.towers[newTower.id]);
+                }
+                else {
+                    console.log("hacker!");
+                }
+            });
+      //  }
+
     }
-    
+
     handleDisconnect(client: Socket) {
         // Release control of the bubby if the disconnecting player was controlling one
         for (const bubbyId in this.bubbies) {
@@ -218,8 +236,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.teamCounts[team]--;
         // Broadcast the updated team counts to all clients
         this.server.emit('updateTeamCounts', this.teamCounts);
+
+        console.log(this.players[client.id].name, " has left the game");
+
         // Broadcast the player disconnection to all clients
         this.server.emit('playerDisconnected', client.id);
+
         // Remove the player from the list
         delete this.players[client.id];
     }

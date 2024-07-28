@@ -7,6 +7,8 @@ export class Berry extends GameObject {
     private bulletLifetime: number;
  
     constructor(
+        public ownerName: string,
+
         public type: string,
         public x: number,
         public y: number,
@@ -17,6 +19,7 @@ export class Berry extends GameObject {
         public shouldRemove: boolean = false,
     ) {
         super(
+            ownerName,
             type,
             x,
             y,

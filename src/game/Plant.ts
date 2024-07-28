@@ -1,9 +1,9 @@
 import { GameObject } from "./GameObject";
-const SEED_GROWTH_RATE = 1;
+const SEED_GROWTH_RATE = .1;
 const MAX_HEALTH_SPROUT = 30;
-const SPROUT_GROWTH_RATE = 2;
+const SPROUT_GROWTH_RATE = .2;
 const MAX_HEALTH_BABY_BUSH = 50;
-const BABY_BUSH_GROWTH_RATE = 3;
+const BABY_BUSH_GROWTH_RATE = .3;
 const MAX_HEALTH_BUSH = 100;
 const MAX_HEALTH_BERRY= 15;
 
@@ -11,6 +11,7 @@ export class Plant extends GameObject {
     public plants: Record<string, Plant>;
 
     constructor(
+        public ownerName: string,
         public type: string,
         public x: number,
         public y: number,
@@ -22,6 +23,7 @@ export class Plant extends GameObject {
         
     ) {
         super(
+            ownerName,
             type,
             x,
             y,

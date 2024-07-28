@@ -2,6 +2,7 @@
 export class GameObject {
     static objects: Record<string, GameObject> = {};
     constructor(
+        public ownerName: string,
         public type: string,
         public x: number,
         public y: number,

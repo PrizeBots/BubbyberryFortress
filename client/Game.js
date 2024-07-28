@@ -88,18 +88,18 @@ class Game extends Phaser.Scene {
     };
 
     create() {
-        // this.socket = io('http://localhost:3000');
-        this.socket = io('https://bbf-kn8o.onrender.com');
-       
+        this.socket = io('http://localhost:3000');
+        //this.socket = io('https://bbf-kn8o.onrender.com');
+
         this.socketManager = new SocketManager(this);
         this.socket.on('connect', () => {
             console.log('!!!Connected to server!!!');
         });
-    
+
         this.socket.on('disconnect', () => {
             console.log('!!!Disconnected from server!!!');
         });
-
+        this.showNameModal();
         this.scene.launch('HUD');
         this.fpsText = this.add.text(10, 10, 'FPS: ', { font: '16px Arial', fill: '#ffffff' });
         this.time.delayedCall(0, () => {
@@ -173,6 +173,24 @@ class Game extends Phaser.Scene {
             if (this.players[playerId]) {
                 this.players[playerId].destroy();
                 delete this.players[playerId];
+            }
+        });
+    }
+    showNameModal() {
+        const modal = document.getElementById('nameModal');
+        const input = document.getElementById('playerNameInput');
+        const button = document.getElementById('submitNameButton');
+
+        modal.style.display = 'block';
+
+        button.addEventListener('click', () => {
+
+            const playerName = input.value.trim();
+            if (playerName) {
+                console.log(playerName+ " is being sent to server!")
+
+                this.socket.emit('newName', { name: playerName });
+                modal.style.display = 'none';
             }
         });
     }

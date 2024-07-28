@@ -43,7 +43,7 @@ class SocketManager {
 
         //Create new object
         this.socket.on('spawnEgg', (newEgg) => {
-            const newBubby = new Bubby(this.game, newEgg.team, newEgg.id, newEgg.x, newEgg.y, 'egg', newEgg.maxHealth);
+            const newBubby = new Bubby(this.game, newEgg.ownerName, newEgg.team, newEgg.id, newEgg.x, newEgg.y, 'egg', newEgg.maxHealth);
         });
         this.socket.on('spawnSeed', (newSeed) => {
             const newPlant = new Plant(this.game, newSeed.team, newSeed.id, newSeed.x, newSeed.y, 'seed', newSeed.maxHealth);
