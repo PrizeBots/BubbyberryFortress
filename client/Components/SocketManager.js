@@ -135,7 +135,8 @@ class SocketManager {
                             }
                         }
                     } else {
-                        const newBubby = new Bubby(this.game, updatedBubby.team, bubbyID, updatedBubby.x, updatedBubby.y, updatedBubby.phase, updatedBubby.maxHealth);
+                       // console.log("bubby doesnt exist in your client list. Adding it now.")
+                        const newBubby = new Bubby(this.game, updatedBubby.ownerName, updatedBubby.team, bubbyID, updatedBubby.x, updatedBubby.y, updatedBubby.phase, updatedBubby.maxHealth);
                     }
                 }
             }
@@ -168,8 +169,8 @@ class SocketManager {
                             }
                         }
                     } else {
-                        console.log("i didnt have this plant, making it now")
-                        console.log(updatedPlant)
+                       // console.log("i didnt have this plant, making it now")
+                      //  console.log(updatedPlant)
                         const newPlant = new Plant(this.game, updatedPlant.team, plantID,
                             updatedPlant.x, updatedPlant.y, updatedPlant.phase, updatedPlant.maxHealth);
                     }

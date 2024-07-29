@@ -23,7 +23,7 @@ export default class Seed extends Phaser.GameObjects.Container {
         this.createSprites();
         this.scene.plants.push(this);
 
-        console.log('plant phase? ', this.phase)
+       // console.log('plant phase? ', this.phase)
     }
     createSprites() {
         //See which kind of bubby we are creating
