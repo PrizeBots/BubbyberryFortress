@@ -51,6 +51,6 @@ var config = {
 console.log('Is Mobile:', isMobile);
 var game = new Phaser.Game(config);
 
-window.addEventListener('resize', () => {
-    game.scale.resize(window.innerWidth, window.innerHeight);
-});
+// window.addEventListener('resize', () => {
+//     game.scale.resize(window.innerWidth, window.innerHeight);
+// });
