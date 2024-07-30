@@ -16,7 +16,7 @@ class HUD extends Phaser.Scene {
         });
         this.events.on('updateCoins', this.updateCoins, this);
         this.events.on('updateHUD', this.updateHUD, this);
-        const seedButton = this.add.image(this.game.config.width/2, 30, 'seedButton');
+        const seedButton = this.add.image(this.game.config.width / 2, 30, 'seedButton');
         seedButton.setInteractive();
         seedButton.on('pointerdown', () => {
             this.game.events.emit('seedButtonDown');
@@ -28,7 +28,7 @@ class HUD extends Phaser.Scene {
             this.game.events.emit('eggButtonDown');
         });
         eggButton.setScale(2)
-        const buildButton = this.add.image(seedButton.x+75, 30, 'buildButton');
+        const buildButton = this.add.image(seedButton.x + 75, 30, 'buildButton');
         buildButton.setInteractive();
         buildButton.on('pointerdown', () => {
             this.game.events.emit('buildButtonDown');
@@ -42,6 +42,25 @@ class HUD extends Phaser.Scene {
     updateHUD() {
         const fps = Math.round(this.game.loop.actualFps);
         this.FPSText.setText('FPS: ' + fps);
+    }
+
+    showOnScreenControls() {
+        const leftButton = this.add.rectangle(50, this.scale.height - 50, 80, 80, 0x000000, 0.5).setInteractive();
+        const rightButton = this.add.rectangle(this.scale.width - 50, this.scale.height - 50, 80, 80, 0x000000, 0.5).setInteractive();
+        const game = this.scene.get('Game'); // Replace 'MainScene' with the actual key of your main game scene
+        const cursors = game.cursors;
+        leftButton.on('pointerdown', () => {
+            this.game.events.emit('leftButtonDown');
+        });
+        leftButton.on('pointerup', () => {
+            this.game.events.emit('leftButtonUp');
+        });
+        rightButton.on('pointerdown', () => {
+            this.game.events.emit('rightButtonDown');
+        });
+        rightButton.on('pointerup', () => {
+            this.game.events.emit('rightButtonUp');
+        });
     }
 }
 

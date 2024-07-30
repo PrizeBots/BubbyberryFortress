@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <title>Bubby Berry Fortress</title>
-    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-
-    <body style="background-color: #191919; margin: 0; padding: 0; overflow: hidden;">
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
-    <script type="module" src="/dist/bundle.js"></script>
-
-    <div id="nameModal">
-        <div id="nameModalContent">
-            <p>Please enter a name to play</p>
-            <input type="text" id="playerNameInput" placeholder="Enter your name">
-            <button id="submitNameButton">Submit</button>
+    <div id="gameContainer">
+        <div id="nameModal">
+            <div id="nameModalContent">
+                <h2>Enter a player name to connect</h2>
+                <input type="text" id="playerNameInput" placeholder="Your player name">
+                <button id="submitNameButton">Connect</button>
+            </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
+    <script type="module" src="/dist/bundle.js"></script>
 </body>
+
 </html>

@@ -86,11 +86,32 @@ class Game extends Phaser.Scene {
         const worldY = cameraView.y + this.player.y;
         this.socket.emit('buyTower', { x: worldX, y: worldY });
     };
-
+    handleLeftButtonDown() {
+        this.cursors.left.isDown = true;
+    };
+    handleLeftButtonUp() {
+        this.cursors.left.isDown = false;
+    };
+    handleRightButtonDown() {
+        this.cursors.right.isDown = true;
+    };
+    handleRightButtonUp() {
+        this.cursors.right.isDown = false;
+    };
     create() {
-        this.socket = io('http://localhost:3000');
-        //this.socket = io('https://bbf-kn8o.onrender.com');
+        // Show on-screen controls if the device is mobile or tablet
+        const isMobile = this.game.isMobile;
+        console.log('Game scene isMobile:', isMobile);
+        if (isMobile) {
+            this.scene.get('HUD').showOnScreenControls();
+            console.log('Showing on-screen controls for mobile device');
+        } else {
+            console.log('Not a mobile device');
+            console.log(this.game.config.isMobile);
+        }
 
+       // this.socket = io('http://localhost:3000');
+        this.socket = io('https://bbf-kn8o.onrender.com');
         this.socketManager = new SocketManager(this);
         this.socket.on('connect', () => {
             console.log('!!!Connected to server!!!');
@@ -107,6 +128,10 @@ class Game extends Phaser.Scene {
             this.game.events.on('seedButtonDown', this.handleSeedButton, this);
             this.game.events.on('eggButtonDown', this.handleEggButton, this);
             this.game.events.on('buildButtonDown', this.handleBuildButton, this);
+            this.game.events.on('leftButtonDown', this.handleLeftButtonDown, this);
+            this.game.events.on('leftButtonUp', this.handleLeftButtonUp, this);
+            this.game.events.on('rightButtonDown', this.handleRightButtonDown, this);
+            this.game.events.on('rightButtonUp', this.handleRightButtonUp, this);
         });
 
         this.arena = new Arena(this, this.arenaWidth, this.screenWidth, this.screenHeight);
@@ -176,24 +201,24 @@ class Game extends Phaser.Scene {
             }
         });
     }
+
     showNameModal() {
         const modal = document.getElementById('nameModal');
         const input = document.getElementById('playerNameInput');
         const button = document.getElementById('submitNameButton');
 
-        modal.style.display = 'block';
+        modal.style.display = 'flex'; // Ensure the modal is displayed
 
         button.addEventListener('click', () => {
-
             const playerName = input.value.trim();
             if (playerName) {
-                console.log(playerName+ " is being sent to server!")
-
+                // Send the player name to the server
                 this.socket.emit('newName', { name: playerName });
-                modal.style.display = 'none';
+                modal.style.display = 'none'; // Hide the modal after submission
             }
         });
     }
+
     sortAllObjectsByDepth() {
         // Create an array of all objects that need sorting
         const allObjects = [...this.bubbies, ...this.towers, ...this.plants]; // Add other arrays as needed

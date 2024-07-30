@@ -1,21 +1,32 @@
-/* Existing styles */
-head {
-    background-color: #333333; /* Set the background color to dark gray */
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-    overflow: hidden; /* Hide overflow to prevent scrollbars */
+/* Other styles */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
-/* Modal styles */
-#nameModal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
+#gameContainer {
+    position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
+}
+
+#nameModal {
+    display: none; /* Hide the modal by default */
+    position: absolute; /* Use absolute positioning to center within the container */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust the position to truly center */
+    z-index: 1000; /* Ensure it appears above other content */
+    background-color: rgba(0, 0, 0, 0.4); /* Darken the background */
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
