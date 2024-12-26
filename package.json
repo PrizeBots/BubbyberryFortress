@@ -12,7 +12,7 @@
     "start": "node dist/main",
     "start:server": "npm install && npx nest build && npx nest start",
     "start:client": "cd client && npm install && npm run build && npm run start",
-    "start:all1": "run-p start:server start:client",
+    "start:all1": "npm install && run-p start:server start:client",
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
