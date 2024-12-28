@@ -16,7 +16,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const port = process.env.PORT || 10000;
+  const port = process.env.PORT || 3000;
   console.log(`Using port: ${port}`);  // Log the port for verification
 
   app.useWebSocketAdapter(new SocketIoAdapter(app));
