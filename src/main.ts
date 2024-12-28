@@ -23,21 +23,8 @@ async function bootstrap() {
 
   await app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on port ${port}`);
-    @Controller()
-    class TestController {
-      @Get('/')
-      getRoot() {
-        return { message: 'Server is running!' };
-      }
-    }
-
-    // Include the controller in your AppModule
-    @Module({
-      controllers: [TestController],
-    })
-    class AppModule { }
   });
-
+  
 }
 
 bootstrap();
