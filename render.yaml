@@ -7,7 +7,7 @@ services:
     startCommand: npm run start:server
     envVars:
       - key: PORT
-        value: 10000
+        value: 3000
 
   - type: web
     name: bubbyberryfortress-client
