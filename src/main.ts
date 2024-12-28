@@ -16,13 +16,14 @@ async function bootstrap() {
   //   credentials: true,
   // });
 
-  const port = process.env.PORT || 10000;
+  const port =10000;
   console.log(`Using port: ${port}`);  // Log the port for verification
 
   app.useWebSocketAdapter(new SocketIoAdapter(app));
 
   await app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on port ${port}`);
+    
   });
   
 }
