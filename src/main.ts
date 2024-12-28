@@ -10,13 +10,13 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Enable CORS and configure it to accept requests from your client domain
-  app.enableCors({
-    origin: 'https://bbf-kn8o.onrender.com', // replace with your client's URL
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true,
-  });
+  // app.enableCors({
+  //   origin: 'https://bbf-kn8o.onrender.com', // replace with your client's URL
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  //   credentials: true,
+  // });
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 10000;
   console.log(`Using port: ${port}`);  // Log the port for verification
 
   app.useWebSocketAdapter(new SocketIoAdapter(app));
