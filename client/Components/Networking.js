@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
 export function initializeNetworking(player, players, updatePlayersList) {
-    const socket = io('http://localhost:3000'); // Adjust the URL as needed
+    const socket = io('https://bbf-kn8o.onrender.com'); // Adjust the URL as needed
     socket.on('connect', () => {
         socket.emit('getPlayersList', { x: player.x, y: player.y });
     });

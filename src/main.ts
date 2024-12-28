@@ -11,7 +11,7 @@ async function bootstrap() {
 
   // Enable CORS and configure it to accept requests from your client domain
   app.enableCors({
-    origin: 'https://bbf-client.onrender.com', // replace with your client's URL
+    origin: 'https://bbf-kn8o.onrender.com', // replace with your client's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
