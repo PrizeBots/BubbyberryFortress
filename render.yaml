@@ -1,12 +1,14 @@
 services:
- # Start MaSter Server
   - type: web
     name: bubbyberryfortress-server
     env: node
     plan: free
     buildCommand: npm install
     startCommand: npm run start:server
-# Start Game Client Server
+    envVars:
+      - key: PORT
+        value: 10000
+
   - type: web
     name: bubbyberryfortress-client
     env: node
