@@ -110,7 +110,7 @@ class Game extends Phaser.Scene {
             console.log(this.game.config.isMobile);
         }
 
-        this.socket = io('http://localhost:3000');
+        this.socket = io('http://localhost:10000');
        // this.socket = io('https://bbf-kn8o.onrender.com');
         this.socketManager = new SocketManager(this);
         this.socket.on('connect', () => {
