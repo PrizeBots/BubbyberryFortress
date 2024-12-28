@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SocketIoAdapter } from './socket-io.adapter'; // Adjust the path accordingly
-
+import { Controller, Get, Module } from '@nestjs/common';
 import * as cors from 'cors';
 
 async function bootstrap() {
@@ -16,14 +16,28 @@ async function bootstrap() {
   //   credentials: true,
   // });
 
-  const port = process.env.PORT || 10000;
+  const port = process.env.PORT || 3000;
   console.log(`Using port: ${port}`);  // Log the port for verification
 
   app.useWebSocketAdapter(new SocketIoAdapter(app));
 
   await app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running on port ${port}`);
+    @Controller()
+    class TestController {
+      @Get('/')
+      getRoot() {
+        return { message: 'Server is running!' };
+      }
+    }
+
+    // Include the controller in your AppModule
+    @Module({
+      controllers: [TestController],
+    })
+    class AppModule { }
   });
+
 }
 
 bootstrap();
