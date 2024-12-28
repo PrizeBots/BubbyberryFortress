@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start1": "npx nest start",
     "start": "node dist/main",
-    "start:server": "npm install && npx nest build && npx nest start",
+    "start:server": "npm install && npx nest build && npm start",
     "start:client": "cd client && npm install && npm run build && npm run start",
     "start:all1": "run-p start:server start:client",
     "start:all": "concurrently --names \"SERVER,CLIENT\" --prefix-colors \"blue,green\" \"npm run start:server\" \"npm run start:client\"",
