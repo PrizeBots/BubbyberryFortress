@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start1": "npx nest start",
     "start": "node dist/main",
-    "clientStart": "cd client && webpack serve",
+    "clientStart": "cd client && npm run build",
     "serverStart": "npx nest start",
     "start:server": "npm install && npx nest build && npx nest start",
     "start:client": "cd client && npm install && npm run build && npm run start",
