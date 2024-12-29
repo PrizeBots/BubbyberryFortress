@@ -111,7 +111,7 @@ class Game extends Phaser.Scene {
         }
 
         const port = process.env.PORT || 3000;
-        this.socket = io(`http://localhost:${port}`);
+       // this.socket = io(`http://localhost:${port}`);
         console.log("CLIENT ON WHAT PORT")
        // this.socket = io('https://bbf-kn8o.onrender.com');
         this.socketManager = new SocketManager(this);
