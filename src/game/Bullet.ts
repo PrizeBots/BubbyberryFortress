@@ -25,7 +25,7 @@ export class Bullet {
         this.creationTime = Date.now();
 
         setInterval(() => {
-            shouldRemove = true;
+            this.shouldRemove = true;
         }, 1000);
     }
     public test() {
