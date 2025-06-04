@@ -106,6 +106,8 @@ class Game extends Phaser.Scene {
         console.log('Requesting player name');
         this.showNameModal();
         this.socket.on('connect', () => {
+            console.log('Socket connected:', this.socket.id);
+            console.log('Requesting player list from server');
             this.socket.emit('getPlayersList', { x: 0, y: 0 });
         });
         this.socket.on('updatePlayersList', (playerList) => {
@@ -222,9 +224,13 @@ class Game extends Phaser.Scene {
             const playerName = input.value.trim();
             console.log('Entered player name:', playerName);
             if (playerName) {
+                console.log('Sending newName to server');
                 // Send the player name to the server
                 this.socket.emit('newName', { name: playerName });
                 modal.style.display = 'none'; // Hide the modal after submission
+                console.log('Name modal hidden after submission');
+            } else {
+                console.log('No name entered; modal remains visible');
             }
         });
     }
