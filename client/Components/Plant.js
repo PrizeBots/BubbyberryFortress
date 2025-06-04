@@ -21,11 +21,6 @@ export default class Seed extends Phaser.GameObjects.Container {
     create() {
         this.createSprites();
         this.scene.plants.push(this);
-<<<<<<< HEAD
-
-       // console.log('plant phase? ', this.phase)
-=======
->>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
     }
     createSprites() {
         //See which kind of bubby we are creating
@@ -45,26 +40,11 @@ export default class Seed extends Phaser.GameObjects.Container {
         this.add(this.healthBar);
         //set up bubby and interactions
         this.add(this.sprite);
-<<<<<<< HEAD
-        this.scene.plants.push(this);
-
-        if (this.phase === 'seed' || this.phase === 'germinating' || this.phase === 'sprout') {
-            this.sprite.setInteractive();
-            this.scene.input.setDraggable(this.sprite);
-            this.sprite.on('drag', (pointer, dragX, dragY) => {
-                this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
-            });
-        };
-
-
-=======
- 
         this.sprite.setInteractive();
         this.scene.input.setDraggable(this.sprite);
         this.sprite.on('drag', (pointer, dragX, dragY) => {
             this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
         });
->>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
     }
 
     changePhase(newPhase) {
