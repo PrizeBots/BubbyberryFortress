@@ -28,14 +28,11 @@ export default class Bubby extends Phaser.GameObjects.Container {
     }
 
     create() {
-<<<<<<< HEAD
-       // console.log("Bubby is owned by, ", this.ownerName);
-=======
+        // console.log("Bubby is owned by, ", this.ownerName);
         this.createSprites();
         this.scene.bubbies.push(this);
     }
     createSprites() {
->>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
         //See which kind of bubby we are creating
         if (this.phase === 'egg') {
             this.sprite = this.scene.add.sprite(0, 0, 'egg');
@@ -78,12 +75,9 @@ export default class Bubby extends Phaser.GameObjects.Container {
     changePhase(newPhase) {
         this.sprite.destroy();
         this.healthBar.destroy();
-<<<<<<< HEAD
         this.nameTag.destroy();
-        this.create();
-=======
+        this.phase = newPhase;
         this.createSprites();
->>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
     }
     update() {
         if (this.sprite) {

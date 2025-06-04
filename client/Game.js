@@ -1,9 +1,6 @@
 import Phaser from 'phaser';
 import io from 'socket.io-client';
-import { setUpArena } from './Components/Arena';
-import SocketManager from './Components/SocketManager';
 import Player from './Components/Player';
-import SocketManager from './Components/SocketManager';
 import Bubby from './Components/Bubby';
 import Plant from './Components/Plant';
 import Tower from './Components/Tower';
@@ -103,6 +100,36 @@ class Game extends Phaser.Scene {
 
         this.scene.launch('HUD');
         this.fpsText = this.add.text(10, 10, 'FPS: ', { font: '16px Arial', fill: '#ffffff' });
+
+        // establish socket connection
+        this.socket = io();
+        this.showNameModal();
+        this.socket.on('connect', () => {
+            this.socket.emit('getPlayersList', { x: 0, y: 0 });
+        });
+        this.socket.on('updatePlayersList', (playerList) => {
+            for (const playerId in playerList) {
+                if (!this.players[playerId]) {
+                    const { x, y, team } = playerList[playerId];
+                    const circleColor = team === 'blue' ? 0x0000ff : 0xff0000;
+                    const otherPlayer = this.add.circle(x, y, 10, circleColor);
+                    otherPlayer.playerId = playerId;
+                    otherPlayer.team = team;
+                    this.players[playerId] = otherPlayer;
+                }
+            }
+        });
+        this.socket.on('initialize', (data) => {
+            const team = data.team;
+            const coins = data.coins;
+            const circleColor = team === 'blue' ? 0x0000ff : 0xff0000;
+            this.player = this.add.circle(400, 300, 10, circleColor);
+            this.player.playerId = this.socket.id;
+            this.player.team = team;
+            this.player.coins = coins;
+            this.players[this.socket.id] = this.player;
+            this.scene.get('HUD').events.emit('updateCoins', coins);
+        });
         this.time.delayedCall(0, () => {
             this.scene.get('HUD').events.emit('updateCoins', 0);
             this.game.events.on('seedButtonDown', this.handleSeedButton, this);
