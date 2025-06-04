@@ -23,6 +23,7 @@ export default class Tower extends Phaser.GameObjects.Container {
         this.create();
         this.scene.add.existing(this);
         this.ammo = 0;
+<<<<<<< HEAD
         this.target = null;
         this.targetLine = new Phaser.GameObjects.Graphics(this.scene); // Graphics object for drawing the line
         this.scene.add.existing(this.targetLine);
@@ -31,16 +32,41 @@ export default class Tower extends Phaser.GameObjects.Container {
     create() {
         if (this.phase === 'arrow') {
             this.sprite = this.scene.add.sprite(0, 0, 'tower');
+=======
+    }
+
+    create() {
+        //console.log(this.phase)
+        //See which kind of bubby we are creating
+        if (this.phase === 'arrow') {
+            this.sprite = this.scene.add.sprite(0, 0, 'tower');
+            // this.sprite = this.scene.add.sprite(0, 0, 'tower');
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
         } else if (this.phase === 'bombTower') {
             if (this.team === 'blue') {
                 // this.sprite = this.scene.add.sprite(0, 0, 'bomb');
             }
         }
+<<<<<<< HEAD
         this.add(this.sprite);
         this.healthBar = new HealthBar(this.scene, this.sprite.height / 2 + 20, this.maxHealth);
         this.add(this.healthBar);
         // this.healthBar = new HealthBar(this.scene, this.sprite.height / 2 + 20, this.maxHealth);
         this.scene.towers.push(this);
+=======
+        //give it health bar
+
+        //set up bubby and interactions
+        this.add(this.sprite);
+        // this.healthBar = new HealthBar(this.scene, this.sprite.height / 2 + 20, this.maxHealth);
+        // this.add(this.healthBar);
+        // this.scene.towers.push(this);
+       // this.sprite.setInteractive();
+       // this.scene.input.setDraggable(this.sprite);
+        // this.sprite.on('drag', (pointer, dragX, dragY) => {
+        //     this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
+        // });
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
     }
 
     changePhase(newPhase) {
@@ -92,6 +118,10 @@ export default class Tower extends Phaser.GameObjects.Container {
     }
 
     updateHealth(health) {
+<<<<<<< HEAD
         ///   this.healthBar.setHealth(health);
+=======
+       // this.healthBar.setHealth(health);
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
     }
 }

@@ -1,7 +1,10 @@
 import Bubby from './Bubby';
 import Plant from './Plant';
 import Tower from './Tower';
+<<<<<<< HEAD
 import Projectile from './Projectile';
+=======
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
 class SocketManager {
     constructor(game) {
         this.game = game;
@@ -37,6 +40,7 @@ class SocketManager {
             this.game.scene.get('HUD').events.emit('updateCoins', coins);
         });
 
+<<<<<<< HEAD
         this.socket.on('updateObjects', (update) => {
             console.log(update)
         });
@@ -44,11 +48,17 @@ class SocketManager {
         //Create new object
         this.socket.on('spawnEgg', (newEgg) => {
             const newBubby = new Bubby(this.game, newEgg.ownerName, newEgg.team, newEgg.id, newEgg.x, newEgg.y, 'egg', newEgg.maxHealth);
+=======
+        //Create new object
+        this.socket.on('spawnEgg', (newEgg) => {
+            const newBubby = new Bubby(this.game, newEgg.team, newEgg.id, newEgg.x, newEgg.y, 'egg', newEgg.maxHealth);
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
         });
         this.socket.on('spawnSeed', (newSeed) => {
             const newPlant = new Plant(this.game, newSeed.team, newSeed.id, newSeed.x, newSeed.y, 'seed', newSeed.maxHealth);
         });
         this.socket.on('buildTower', (newTower) => {
+<<<<<<< HEAD
             //console.log('newTower.team ', newTower.team, "newTower.id ",newTower.id )
             const newArrowTower = new Tower(this.game, newTower.team, newTower.id, newTower.x, newTower.y, 'tower', newTower.maxHealth);
         });
@@ -87,6 +97,15 @@ class SocketManager {
             }
         });
 
+=======
+            const newArrowTower = new Tower(this.game, newTower.team, newTower.id, newTower.x, newTower.y, 'tower', newTower.maxHealth);
+        });
+        this.socket.on('arrowUpdate', (arrow) => {
+            console.log('arrow update: ', arrow)
+            ///const newArrowTower = new Tower(this.game, newTower.team, newTower.id, newTower.x, newTower.y, 'tower', newTower.maxHealth);
+        });
+        //Game Server Updates
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
         this.socket.on('updatePlayersList', (playerList) => {
             for (const playerId in playerList) {
                 if (!this.game.players[playerId]) {
@@ -99,6 +118,7 @@ class SocketManager {
                 }
             }
         });
+<<<<<<< HEAD
         this.socket.on('updateBubbies', (bubbiesList) => {
             const serverBubbyIDs = new Set(Object.keys(bubbiesList));
             // Iterate through the client's projectiles
@@ -114,6 +134,9 @@ class SocketManager {
             }
 
             // console.log('update bubbies')
+=======
+        this.socket.on('updateBubbiesList', (bubbiesList) => {
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
             for (const bubbyID in bubbiesList) {
                 if (bubbiesList.hasOwnProperty(bubbyID)) {
                     const updatedBubby = bubbiesList[bubbyID];
@@ -122,7 +145,10 @@ class SocketManager {
                         bubby.x = updatedBubby.x;
                         bubby.y = updatedBubby.y;
                         bubby.updateHealth(updatedBubby.health);
+<<<<<<< HEAD
                       //  console.log('hp: ',updatedBubby.health)
+=======
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
                         //catch a phase change
                         if (bubby.phase !== updatedBubby.phase) {
                             bubby.phase = updatedBubby.phase;
@@ -130,6 +156,7 @@ class SocketManager {
                                 bubby.changePhase('egg');
                             } else if (bubby.phase === 'babyBubby') {
                                 bubby.changePhase('babyBubby');
+<<<<<<< HEAD
                             }else if (bubby.phase === 'bubby') {
                                 bubby.changePhase('bubby');
                             }
@@ -137,6 +164,12 @@ class SocketManager {
                     } else {
                        // console.log("bubby doesnt exist in your client list. Adding it now.")
                         const newBubby = new Bubby(this.game, updatedBubby.ownerName, updatedBubby.team, bubbyID, updatedBubby.x, updatedBubby.y, updatedBubby.phase, updatedBubby.maxHealth);
+=======
+                            }
+                        }
+                    } else {
+                        const newBubby = new Bubby(this.game, updatedBubby.team, bubbyID, updatedBubby.x, updatedBubby.y, updatedBubby.phase, updatedBubby.maxHealth);
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
                     }
                 }
             }
@@ -146,7 +179,11 @@ class SocketManager {
                 if (plants.hasOwnProperty(plantID)) {
                     const updatedPlant = plants[plantID];
                     const plant = this.game.plants.find((p) => p.id === plantID);
+<<<<<<< HEAD
                     if (plant && updatedPlant) {
+=======
+                    if (plant) {
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
                         plant.x = updatedPlant.x;
                         plant.y = updatedPlant.y;
                         // console.log(updatedPlant.health)
@@ -158,6 +195,7 @@ class SocketManager {
                         //catch a phase change
                         if (plant.phase !== updatedPlant.phase) {
                             plant.phase = updatedPlant.phase;
+<<<<<<< HEAD
                             if (plant.phase === 'germinating') {
                                 plant.changePhase('germinating');
                             } else if (plant.phase === 'sprout') {
@@ -173,6 +211,17 @@ class SocketManager {
                       //  console.log(updatedPlant)
                         const newPlant = new Plant(this.game, updatedPlant.team, plantID,
                             updatedPlant.x, updatedPlant.y, updatedPlant.phase, updatedPlant.maxHealth);
+=======
+                            if (plant.phase === 'egg') {
+                                plant.changePhase('egg');
+                            } else if (plant.phase === 'babyBubby') {
+                                plant.changePhase('babyBubby');
+                            }
+                        }
+                    } else {
+                        // console.log("i didnt have this plant, making it now")
+                        const newPlant = new Plant(this.game, updatedPlant.team, plantID, updatedPlant.x, updatedPlant.y, updatedPlant.phase, updatedPlant.maxHealth);
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
                     }
                 }
             }
@@ -180,6 +229,7 @@ class SocketManager {
         this.socket.on('updateTowers', (towers) => {
             for (const towerID in towers) {
                 if (towers.hasOwnProperty(towerID)) {
+<<<<<<< HEAD
                     const updatedTower = towers[towerID];
                     const tower = this.game.towers.find((t) => t.id === towerID);
                     if (tower) {
@@ -188,6 +238,13 @@ class SocketManager {
                         tower.y = updatedTower.y;
                         tower.target = updatedTower.target;
                         ///console.log(tower.target, ' is the target')
+=======
+                    const updatedTower= towers[towerID];
+                    const tower = this.game.towers.find((t) => t.id === towerID);
+                    if (tower) {
+                        tower.x = updatedTower.x;
+                        tower.y = updatedTower.y;
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
                         // console.log(updatedPlant.health)
                         tower.updateHealth(updatedTower.health);
                         if (updatedTower.health <= 0) {
@@ -195,6 +252,7 @@ class SocketManager {
                             return;
                         }
                         //catch a phase change
+<<<<<<< HEAD
                         // if (tower.phase !== updatedTower.phase) {
                         //     tower.phase = updatedTower.phase;
                         //     if (tower.phase === 'egg') {
@@ -205,6 +263,18 @@ class SocketManager {
                         // }
                     } else {
                         //   console.log("i didnt have this Tower, making it now")
+=======
+                        if (tower.phase !== updatedTower.phase) {
+                            tower.phase = updatedTower.phase;
+                            if (tower.phase === 'egg') {
+                                tower.changePhase('egg');
+                            } else if (plant.phase === 'babyBubby') {
+                                tower.changePhase('babyBubby');
+                            }
+                        }
+                    } else {
+                        // console.log("i didnt have this plant, making it now")
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
                         const newTower = new Tower(this.game, updatedTower.team, towerID, updatedTower.x, updatedTower.y, updatedTower.phase, updatedTower.maxHealth);
                     }
                 }

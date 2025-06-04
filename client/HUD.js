@@ -14,9 +14,26 @@ class HUD extends Phaser.Scene {
             font: '16px Arial',
             fill: '#000000',
         });
+        this.bText = this.add.text(650, 5, '', {
+            font: '10px Arial',
+            fill: '#000000',
+        });
+        this.pText = this.add.text(650, 15, '', {
+            font: '10px Arial',
+            fill: '#000000',
+        });
+        this.tText = this.add.text(650, 25, '', {
+            font: '10px Arial',
+            fill: '#000000',
+        });
+
         this.events.on('updateCoins', this.updateCoins, this);
         this.events.on('updateHUD', this.updateHUD, this);
+<<<<<<< HEAD
         const seedButton = this.add.image(this.game.config.width / 2, 30, 'seedButton');
+=======
+        const seedButton = this.add.image(this.game.config.width/2, 30, 'seedButton');
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
         seedButton.setInteractive();
         seedButton.on('pointerdown', () => {
             this.game.events.emit('seedButtonDown');
@@ -39,9 +56,19 @@ class HUD extends Phaser.Scene {
     updateCoins(coins) {
         this.playerCoinsText.setText('Coins: ' + coins.toString());
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
     updateHUD() {
         const fps = Math.round(this.game.loop.actualFps);
+        const b =    this.scene.get('Game').bubbies.length;
+        const p = this.scene.get('Game').plants.length;
+        const t = this.scene.get('Game').towers.length;
         this.FPSText.setText('FPS: ' + fps);
+        this.bText.setText('b: ' + b);
+        this.pText.setText('p: ' + p);
+        this.tText.setText('t: ' + t);
     }
 
     showOnScreenControls() {

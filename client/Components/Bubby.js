@@ -28,7 +28,14 @@ export default class Bubby extends Phaser.GameObjects.Container {
     }
 
     create() {
+<<<<<<< HEAD
        // console.log("Bubby is owned by, ", this.ownerName);
+=======
+        this.createSprites();
+        this.scene.bubbies.push(this);
+    }
+    createSprites() {
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
         //See which kind of bubby we are creating
         if (this.phase === 'egg') {
             this.sprite = this.scene.add.sprite(0, 0, 'egg');
@@ -62,21 +69,22 @@ export default class Bubby extends Phaser.GameObjects.Container {
         this.add(this.nameTag);
         //set up bubby and interactions
         this.add(this.sprite);
-        this.scene.bubbies.push(this);
         this.sprite.setInteractive();
         this.scene.input.setDraggable(this.sprite);
         this.sprite.on('drag', (pointer, dragX, dragY) => {
             this.scene.socket.emit('moveObject', { objID: this.id, x: pointer.worldX, y: pointer.worldY });
         });
     }
-
     changePhase(newPhase) {
         this.sprite.destroy();
         this.healthBar.destroy();
+<<<<<<< HEAD
         this.nameTag.destroy();
         this.create();
+=======
+        this.createSprites();
+>>>>>>> f94b2b8cf1600d6e917f8fb4d3044b83e4ca4c9e
     }
-
     update() {
         if (this.sprite) {
             this.drawTargetLine();
@@ -93,7 +101,6 @@ export default class Bubby extends Phaser.GameObjects.Container {
             }
         }
     }
-
     updateHealth(health) {
         this.healthBar.setHealth(health);
     }

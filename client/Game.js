@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import io from 'socket.io-client';
 import { setUpArena } from './Components/Arena';
+import SocketManager from './Components/SocketManager';
 import Player from './Components/Player';
 import SocketManager from './Components/SocketManager';
 import Bubby from './Components/Bubby';
@@ -86,42 +87,20 @@ class Game extends Phaser.Scene {
         const worldY = cameraView.y + this.player.y;
         this.socket.emit('buyTower', { x: worldX, y: worldY });
     };
-    handleLeftButtonDown() {
-        this.cursors.left.isDown = true;
-    };
-    handleLeftButtonUp() {
-        this.cursors.left.isDown = false;
-    };
-    handleRightButtonDown() {
-        this.cursors.right.isDown = true;
-    };
-    handleRightButtonUp() {
-        this.cursors.right.isDown = false;
-    };
+
+
+    calculateFPS() {
+        const currentTime = performance.now();
+        const deltaTime = currentTime - this.lastUpdateTime;
+        const fps = 1000 / deltaTime; // Calculate FPS based on deltaTime
+
+        console.log("FPS: ", fps); // Log FPS to the console
+
+        this.lastUpdateTime = currentTime;
+    }
+
     create() {
-        // Show on-screen controls if the device is mobile or tablet
-        const isMobile = this.game.isMobile;
-        console.log('Game scene isMobile:', isMobile);
-        if (isMobile) {
-            this.scene.get('HUD').showOnScreenControls();
-            console.log('Showing on-screen controls for mobile device');
-        } else {
-            console.log('Not a mobile device');
-            console.log(this.game.config.isMobile);
-        }
 
-        this.socket = io('http://localhost:3000');
-        console.log("CLIENT ON WHAT PORT")
-       // this.socket = io('https://bbf-kn8o.onrender.com');
-        this.socketManager = new SocketManager(this);
-        this.socket.on('connect', () => {
-            console.log('!!!Connected to server!!!');
-        });
-
-        this.socket.on('disconnect', () => {
-            console.log('!!!Disconnected from server!!!');
-        });
-        this.showNameModal();
         this.scene.launch('HUD');
         this.fpsText = this.add.text(10, 10, 'FPS: ', { font: '16px Arial', fill: '#ffffff' });
         this.time.delayedCall(0, () => {
@@ -151,7 +130,7 @@ class Game extends Phaser.Scene {
             this.player.x = pointer.worldX;
             this.player.y = pointer.worldY;
             if (this.isBuilding) {
-
+                console.log(this.isBuilding)
                 this.placementSprite.x = this.player.x;
                 this.placementSprite.y = this.player.y;
             }
@@ -162,19 +141,17 @@ class Game extends Phaser.Scene {
                 this.isBuilding = false;
                 this.placementSprite.visible = false;
                 this.socket.emit('placeTower', { x: this.player.x, y: this.player.y });
-            } else {
-                this.socket.emit('click', { x: this.player.x, y: this.player.y });
 
             }
-
-            // console.log('Click x: ', pointer.worldX, 'y: ', pointer.worldY);
+            console.log('Click x: ', pointer.worldX, 'y: ', pointer.worldY);
             if (this.sound.context.state === 'suspended') {
                 this.sound.context.resume();
             }
         });
         //player is ready to build
         this.socket.on('placeBuilding', () => {
-            //  console.log("we made it")
+            console.log('placeBuilding')
+
             this.isBuilding = true;
             this.placementSprite.visible = true;
         });
@@ -234,23 +211,14 @@ class Game extends Phaser.Scene {
     }
 
     update() {
-        // this.scene.cameras.main.renderer.context.clearRect(
-        //     0,
-        //     0,
-        //     this.screenWidth,
-        //     this.screenHeight
-        // );
-        this.arena.update();
-        this.scene.get('HUD').events.emit('updateHUD');
-        this.sortAllObjectsByDepth();
-
+        this.scene.get('HUD').events.emit('updateFPS');
 
         const pointer = this.input.activePointer;
         if (this.player && pointer) {
             this.player.x = pointer.worldX;
             this.player.y = pointer.worldY;
         }
-        // console.log('this.cursors.left.isDown: ', this.cursors.left.isDown)
+
         if (this.cursors.left.isDown || this.keysWASD.A.isDown) {
             if (this.cameras.main.scrollX > 0) {
                 this.cameras.main.scrollX -= 10;
@@ -267,14 +235,7 @@ class Game extends Phaser.Scene {
         for (const bubby of this.bubbies) {
             bubby.update();
         }
-        for (const tower of this.towers) {
-            tower.update();
-        }
-        for (const projectile of this.projectiles) {
-            // projectile.update();
-            // console.log('projectiles', projectile.id)
 
-        }
         //const pointer = this.input.activePointer;
         if (this.player && pointer) {
             this.socket.emit('mousemove', { x: this.player.x, y: this.player.y });
