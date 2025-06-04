@@ -11,7 +11,9 @@ export class SocketIoAdapter extends IoAdapter {
     const server = super.createIOServer(port, {
       ...options,
       cors: {
-        origin: 'https://bbf-client.onrender.com', // Replace with your client's URL
+        // Allow connections from any origin during development.
+        // In production you may want to restrict this to specific domains.
+        origin: '*',
         methods: ['GET', 'POST'],
         credentials: true,
       },
