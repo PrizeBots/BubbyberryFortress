@@ -109,6 +109,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     //welcome new player!
     handleConnection(client: Socket) {
         console.log('Client connected:', client.id);
+        console.log('Sending existing player and bubbies lists');
         this.server.emit('updatePlayersList', this.players); // Send the updated player list to all clients
         this.server.emit('updateBubbiesList', this.bubbies);
         //a player wants to move something, lets see if they are owner and if we can let them
@@ -127,6 +128,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             // Add the new player to the list with the determined team
             this.players[client.id] = { name: data.name, x: 0, y: 0, team, coins, isBuilding: false, isInGame: true }; // Initialize with default position and team
             console.log(this.players[client.id].name, "has joined the game on team", team);
+            console.log('Current players:', this.players);
             if (team === 'blue') {
                 this.teamCounts.blue++;
             } else {
