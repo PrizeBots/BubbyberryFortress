@@ -103,6 +103,7 @@ class Game extends Phaser.Scene {
 
         // establish socket connection
         this.socket = io();
+        console.log('Requesting player name');
         this.showNameModal();
         this.socket.on('connect', () => {
             this.socket.emit('getPlayersList', { x: 0, y: 0 });
@@ -120,6 +121,7 @@ class Game extends Phaser.Scene {
             }
         });
         this.socket.on('initialize', (data) => {
+            console.log('Received initialization data:', data);
             const team = data.team;
             const coins = data.coins;
             const circleColor = team === 'blue' ? 0x0000ff : 0xff0000;
@@ -212,10 +214,13 @@ class Game extends Phaser.Scene {
         const input = document.getElementById('playerNameInput');
         const button = document.getElementById('submitNameButton');
 
+        console.log('Displaying name modal');
         modal.style.display = 'flex'; // Ensure the modal is displayed
 
         button.addEventListener('click', () => {
+            console.log('Connect button clicked');
             const playerName = input.value.trim();
+            console.log('Entered player name:', playerName);
             if (playerName) {
                 // Send the player name to the server
                 this.socket.emit('newName', { name: playerName });

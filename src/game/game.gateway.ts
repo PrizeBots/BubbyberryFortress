@@ -108,14 +108,14 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     //welcome new player!
     handleConnection(client: Socket) {
-
+        console.log('Client connected:', client.id);
         this.server.emit('updatePlayersList', this.players); // Send the updated player list to all clients
         this.server.emit('updateBubbiesList', this.bubbies);
         //a player wants to move something, lets see if they are owner and if we can let them
 
         //Register new player once they send their name
         client.on('newName', (data: { name: string }) => {
-            console.log(data.name, " = data.newName");
+            console.log('Received newName from', client.id, 'name:', data.name);
             // Update the player's name
           //  this.players[client.id].name = data.name;
          
@@ -126,7 +126,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             let coins = 1000;
             // Add the new player to the list with the determined team
             this.players[client.id] = { name: data.name, x: 0, y: 0, team, coins, isBuilding: false, isInGame: true }; // Initialize with default position and team
-            console.log(this.players[client.id].name, " has joined the game");
+            console.log(this.players[client.id].name, "has joined the game on team", team);
             if (team === 'blue') {
                 this.teamCounts.blue++;
             } else {
@@ -134,6 +134,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
             }
             //set up newly connected player
             this.server.to(client.id).emit('initialize', { team, coins }); // Send team assignment and coins to the new client
+            console.log('Initialization data sent to', client.id);
         });
         //Only let connected clients that are in the game play
         // if (this.players[client.id].isInGame) {
@@ -222,6 +223,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     handleDisconnect(client: Socket) {
+        console.log('Client disconnected:', client.id);
         // Release control of the bubby if the disconnecting player was controlling one
         for (const bubbyId in this.bubbies) {
             const bubby = this.bubbies[bubbyId];
